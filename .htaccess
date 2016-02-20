@@ -1,0 +1,16 @@
+options +FollowSymlinks
+
+#Fix safari 9 connection lost
+BrowserMatch "Safari" nokeepalive
+
+RewriteEngine on
+
+RewriteCond %{HTTP_USER_AGENT} libwww-perl.*
+RewriteRule .* – [F,L]
+
+#admin virtual folder 
+RewriteRule ^admin/(.*)$ o3_cms/admin/$1 [QSA]
+
+#seo redirect
+RewriteCond $1 !^(index\.php|o3/|o3_cms/|cache/|robots\.txt)
+RewriteRule ^(.*)$ index.php/$1 [L]
