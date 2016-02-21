@@ -27,6 +27,10 @@ global $o3_cms;
 </head>
 <body>	
 
+	<div style="position: fixed; width: 100%; height: 30px;">
+		111111111111111111111111111
+	</div>
+
 	<h1>Pages</h1>
 	<ul>
 		<li><a href="/frontpage" target="_top">Frontpage</a></li>

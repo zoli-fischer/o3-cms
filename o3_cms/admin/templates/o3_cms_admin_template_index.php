@@ -32,24 +32,32 @@
 	?>
 
 </head>
-<body>	
+<body class="<?php echo o3_ua_body_classes(); ?>">	
 
-	<div class="o3-cms-table" id="o3-cms-main">
-		<div class="o3-cms-row">
-			<div class="o3-cms-cell o3-cms-bg-light-gray" id="o3-cms-toolbar">
-				1
-			</div>
-		</div>
-		<div class="o3-cms-row">
-			<div class="o3-cms-cell o3-cms-valign-top o3-cms-bg-white" id="o3-cms-content">
-				
-				<div id="o3-cms-frame">
-					<iframe src="<?php echo o3_current_url(); ?>?o3_cms_ignore_admin"></iframe>
+	<div id="o3-cms-wrapper">
+		<div class="o3-cms-table" id="o3-cms-main">
+			<div class="o3-cms-row">
+				<div class="o3-cms-cell o3-cms-bg-light-gray" id="o3-cms-toolbar">
+					<button>Toggle left menu</button>
 				</div>
-
 			</div>
-		</div>
-	</div>	
-	
+			<div class="o3-cms-row">
+				<div class="o3-cms-cell o3-cms-valign-top o3-cms-bg-light-white" id="o3-cms-content">
+					<div>
+					
+						<div id="o3-cms-frame">
+							<iframe src="<?php echo o3_current_url(); ?>?o3_cms_ignore_admin"></iframe>
+						</div>
+
+						<div class="o3-cms-bg-light-gray" id="o3-cms-left-menu">
+							
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</div>	
+	</div>
+
 </body>
 </html>
