@@ -28,17 +28,17 @@ body, html {
 
 .o3-cms-bg-light-gray {
 	background-color: #505b62;
-	background-image: url(/admin/res/pattern-light-gray.jpg); 
+	/* background-image: url(/admin/res/pattern-light-gray.jpg); */
 }
 
 .o3-cms-bg-white {
 	background-color: #ffffff;
-	background-image: url(/admin/res/pattern-white.jpg); 
+	/* background-image: url(/admin/res/pattern-white.jpg); */
 }
 
 /* TABLE */
 
-.o3-cms-table { display: table; }
+.o3-cms-table { display: table; border-collapse: collapse; background: #ff00ff }
 .o3-cms-row { display: table-row; }
 .o3-cms-cell { display: table-cell; vertical-align: middle; }
 

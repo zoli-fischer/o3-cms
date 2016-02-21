@@ -63,7 +63,7 @@ o3\config\def('O3_MYSQLI_DEBUG_QUERIES', O3_CMS_MYSQLI_DEBUG_QUERIES );
 /** TEMPLATES **/
 
 /** The location of the directory with template files */
-o3\config\def('O3_TEMPLATE_DIR', '/template' );   
+o3\config\def('O3_TEMPLATE_DIR', O3_CMS_ROOT_DIR.'/theme/templates' );   
 
 /** The location of the directory with template controller files */
 o3\config\def('O3_TEMPLATE_CONTROLLER_DIR', O3_TEMPLATE_DIR.'/controller' );   

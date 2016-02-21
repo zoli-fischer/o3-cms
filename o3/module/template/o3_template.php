@@ -72,6 +72,7 @@ class o3_template {
 			call_user_func_array( array( $this, 'template' ), $args );
 		}		
 
+
 		//get template contents
 		//if ( count($this->templates) ) {
 			
@@ -144,7 +145,7 @@ class o3_template {
 		//full path to template
 		$template_file = $this->template_dir.'/'.$templatename.'.php';
 		$is_template_file = ( is_file($template_file) && is_readable($template_file) );
-
+		
 		//full path to controller
 		$controller_file = $this->template_controller_dir.'/'.$templatename.'.php';
 		$is_controller_file = ( is_file($controller_file) && is_readable($controller_file) );

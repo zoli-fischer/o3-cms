@@ -33,6 +33,14 @@ class o3_cms_page extends o3_cms_object {
 		$this->template = new o3_cms_template( $this->get('template_id') );
 	}
 
+	/*
+	* Return template 
+	* @void pointer Pointer to template object
+	*/
+	public function template() {
+		return $this->template;
+	}
+
 }
 
 ?>

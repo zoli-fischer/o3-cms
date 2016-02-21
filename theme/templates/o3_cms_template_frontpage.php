@@ -1,10 +1,15 @@
+<?php
+
+global $o3_cms;
+
+?>
 <!DOCTYPE HTML>
 <html lang="en">
 <head>
 
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<meta charset="utf-8" />
-	<title></title>
+	<title><?php echo o3_html($o3_cms->page()->get('title')); ?></title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui" />
 	<meta name="handheldfriendly" content="true" />
 	
@@ -18,38 +23,19 @@
 		<script src="https://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js"></script> 
 	<![endif]-->
 
-	<?php
-
-		//global css
-		$this->parent->head_less( O3_CMS_ADMIN_DIR.'/css/global.css' );
-
-		//require js
-		$this->parent->body_res('jquery,o3_device,o3_valid,o3_no_css,knockout');
-
-		//require template js and css/less
-		$this->require_js_css();
-
-	?>
 
 </head>
 <body>	
 
-	<div class="o3-cms-table" id="o3-cms-main">
-		<div class="o3-cms-row">
-			<div class="o3-cms-cell o3-cms-bg-light-gray" id="o3-cms-toolbar">
-				1
-			</div>
-		</div>
-		<div class="o3-cms-row">
-			<div class="o3-cms-cell o3-cms-valign-top o3-cms-bg-white" id="o3-cms-content">
-				
-				<div id="o3-cms-frame">
-					<iframe src="<?php echo o3_current_url(); ?>?o3_cms_ignore_admin"></iframe>
-				</div>
-
-			</div>
-		</div>
-	</div>	
+	<h1>Pages</h1>
+	<ul>
+		<li><a href="/frontpage" target="_top">Frontpage</a></li>
+		<li><a href="/contact" target="_top">Contact</a></li>
+	</ul>
 	
+	<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+	<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+	<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
 </body>
 </html>
