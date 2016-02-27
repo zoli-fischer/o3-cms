@@ -20,6 +20,7 @@ o3_popup = function( opts ) {
 						showOverlay: true,
 						overlayColor: '#000000',
 						overlayOpacity: 0.3,
+						animate: true,
 						showAnimation: 'scale',
 						hideAnimation: 'scale',
 						hideAnimationTime: 220,
@@ -31,7 +32,8 @@ o3_popup = function( opts ) {
 						clearOnClose: true, //set empty content on close
 						closeOnEsc: true, //close on pressing esc
 						disabled: false, //disable pop		
-						dragable: true, //allow draging		
+						dragable: true, //allow draging
+						swffix: false, //set in front of swf, no drag, animation available
 						//events
 						onafterclose: null,
 						onbeforeclose: null,
@@ -52,10 +54,10 @@ o3_popup = function( opts ) {
 							   content: [] //list of items in the footer
 							 }, opts.footer );
 
-	t.opts.body = jQuery.extend({ type: 'html', //html, url
-							 src: '' // type html - html code, type url - load content from url
+	t.opts.body = jQuery.extend({ type: 'html', //html, url, iframe
+							 src: '' // type html - html code, type url, iframe - load content from url
 						   }, opts.body );
-
+	
 	//popup container
 	t.$container = null;
 	
@@ -108,9 +110,18 @@ o3_popup = function( opts ) {
 
 	//on submit event
 	t.onsubmit = t.opts.onsubmit;
+	
+	//dragable
+	t.swffix = t.opts.swffix;
+
+	//animation allowed
+	t.animate = t.opts.animate && !t.swffix;
 
 	//dragable
-	t.dragable = t.opts.dragable;
+	t.dragable = t.opts.dragable && !t.swffix;
+
+	//to show overlay
+	t.showOverlay = t.opts.showOverlay;
 
 	//drag event initialized
 	t.is_drag_init = false;
@@ -126,6 +137,28 @@ o3_popup = function( opts ) {
 	t.marginLeft = 0;
 	t.width = -1;
 	t.height = -1;	
+
+	//resize popup
+	t.resize = function( width, height ) {		
+		t.opts.width = width;
+		t.opts.height = height;
+
+		if ( t.swffix )
+			t.$overlay.addClass('o3_popup_container_iframe').css( { 
+				width: t.opts.width, 
+	  		    height: t.opts.height
+		  	} );
+
+		t.$container.css( { width: t.opts.width, 
+	  		                height: t.opts.height } );
+
+		t.$body.css( { width: t.opts.width } );
+
+		//force resize
+		t.width = -1;
+		t.height = -1;		
+		t.handle_wnd_resize();
+	};
 
 	//handle window resize
 	t.handle_wnd_resize = function() {	
@@ -154,15 +187,16 @@ o3_popup = function( opts ) {
  
 			};
 			
-			t.$container.css( { 	
+			var css = { 	
 	  			height: height, 
 	  			width: width,
 	  			marginTop: t.marginTop,
 	  			marginLeft: t.marginLeft,
 	  			left: left, 
 				top: top				 
-		  	} );
-
+		  	};
+			t.$container.css( css );
+			
 			//resize body
 		  	t.$body.css( { width: width,
 	  		               height: t.$container.height() 
@@ -174,7 +208,16 @@ o3_popup = function( opts ) {
 		  	t.init_drag();
 
 		  	//fix. position fixed width/height
-		  	t.$overlay.css( { 'width': wnd_width, 'height': wnd_height } );
+		  	if ( !t.swffix ) {
+		  		t.$overlay.css( { 'width': wnd_width, 'height': wnd_height } );
+		  	} else {		  		
+		  		t.$overlay.css( { 		  			
+		  			'left': ( ( wnd_width - width ) / 2 )+'px', 
+		  			'top': ( ( wnd_height - height ) / 2 )+'px',
+		  			'width': width+'px',
+		  			'height': height+'px'
+		  		} );
+		  	}
 		  	t.$container_outer.css( { 'width': wnd_width, 'height': wnd_height } );
 
 
@@ -196,14 +239,20 @@ o3_popup = function( opts ) {
 	   	
 	   	//create overlay	
 	   	t.$overlay = jQuery('<iframe class="o3_popup_overlay" allowtransparency="true"></iframe>').appendTo('body');	
-		t.$overlay.css( { backgroundColor: t.opts.overlayColor, 
-	  		              opacity: t.opts.overlayOpacity } );
-
+	   	if ( !t.swffix ) {
+			t.$overlay.css( { backgroundColor: t.opts.overlayColor, 
+		  		              opacity: t.opts.overlayOpacity } );
+		} else {
+			t.$overlay.addClass('o3_popup_container_iframe').css( { 
+				width: t.opts.width, 
+	  		    height: t.opts.height
+		  	} );
+		}
 
 		//t.className += jQuery.trim(t.showAnimationClass()+' '+t.hideAnimationClass());
 
 		t.$container_outer = jQuery('<div class="o3_popup_container_outer"></div>').appendTo('body');		  	
-
+		
 	   	//create cotainer
 	  	t.$container = jQuery('<div class="o3_popup_container '+t.htmlsafe(t.className)+'"></div>').appendTo(t.$container_outer);	
 	  	t.$container.css( { width: t.opts.width, 
@@ -344,6 +393,9 @@ o3_popup = function( opts ) {
 	  		case 'html':
 		  		t.$body_container.html( t.opts.body.src );
 	  			break;
+	  		case 'iframe':
+		  		t.$body_iframe = jQuery('<iframe class="o3_popup_body_iframe"></iframe>').appendTo(t.$body);
+		  		break;
 	  		case 'url':
 		  		break;
 	  	};
@@ -395,25 +447,37 @@ o3_popup = function( opts ) {
 
 			
 			//show overlay
-			t.$overlay.stop().css('display',t.opts.showOverlay ? 'block' : 'none').animate({ opacity: t.opts.overlayOpacity }, jQuery(window).width() > t.mobileWndWidthLimit ? t.opts.fadeInSpeed : 0, function() {});			
+			if ( !t.swffix ) {
+				t.$overlay.stop().css('display',t.showOverlay ? 'block' : 'none').animate({ opacity: t.opts.overlayOpacity }, jQuery(window).width() > t.mobileWndWidthLimit ? t.opts.fadeInSpeed : 0, function() {});			
+			} else {
+				t.$overlay.css('display', 'block');
+			}
+
 			t.$container_outer.css('display', 'block');
 
 			//show container
-			t.$container
-			.removeClass( t.hideAnimationClass() )
-			.removeClass( t.hideAnimationClass( true ) )
-			.removeClass( t.showAnimationClass( true ) )
-			.addClass( t.showAnimationClass() )			
-			.css('display','block');
-			
-			setTimeout(function(){
-				t.$container.addClass( t.showAnimationClass( true ) );
+			if ( t.animate ) {
+				t.$container
+				.removeClass( t.hideAnimationClass() )
+				.removeClass( t.hideAnimationClass( true ) )
+				.removeClass( t.showAnimationClass( true ) )
+				.addClass( t.showAnimationClass() )			
+				.css('display','block');
+
 				setTimeout(function(){
-					t.$container.removeClass( t.showAnimationClass() );
-				}, 300 );
-			},50);
-			/*addClass( t.showAnimationClass( true ) )*/;
-			/*.animate({ opacity: 1 }, jQuery(window).width() > t.mobileWndWidthLimit ? t.opts.fadeInSpeed : 0, function() {})*/;
+					t.$container.addClass( t.showAnimationClass( true ) );
+					setTimeout(function(){
+						t.$container.removeClass( t.showAnimationClass() );
+					}, 300 );
+				},50);
+				/*addClass( t.showAnimationClass( true ) )*/;
+				/*.animate({ opacity: 1 }, jQuery(window).width() > t.mobileWndWidthLimit ? t.opts.fadeInSpeed : 0, function() {})*/;
+			} else {
+				t.$container.css( {
+					'display': 'block',
+					'opacity': 1
+				});
+			}
 
 			//set visible flag
 			t.visible = true;
@@ -474,26 +538,43 @@ o3_popup = function( opts ) {
 		if ( t.onbeforeload )
 			t.onbeforeload.call( t );
 
-		if ( t.opts.body.type == 'url' ) {
+		if ( t.opts.body.type == 'url' || t.opts.body.type == 'iframe' ) {
 			
 			if ( !t.loaded ) {
 				if ( !t.loading && t.opts.body.src != '' ) {
 					//show loading
 					t.showLoad();
 
-					//load
-					this.$body_container.load( t.opts.body.src, function( responseText, textStatus, XMLHttpRequest ) {
 
-																  //hide loading
-																  t.showLoad( false );
+					if ( t.opts.body.type == 'url' ) {
+						//load
+						t.$body_container.load( t.opts.body.src, function( responseText, textStatus, XMLHttpRequest ) {
 
-																  //flag loaded
-																  t.loaded = true;
+																	  //hide loading
+																	  t.showLoad( false );
 
-																  if ( t.onafterload )
-																  	 t.onafterload.call( t, responseText, textStatus, XMLHttpRequest );
+																	  //flag loaded
+																	  t.loaded = true;
 
-																});
+																	  if ( t.onafterload )
+																	  	 t.onafterload.call( t, responseText, textStatus, XMLHttpRequest );
+
+																	});
+					} else {
+
+						t.$body_iframe.bind('load error',function(){							
+							//hide loading
+							t.showLoad( false );
+
+							//flag loaded
+							t.loaded = true;
+
+							if ( t.onafterload )
+								t.onafterload.call( t );
+						});
+						t.$body_iframe.attr('src',t.opts.body.src);
+
+					}
 				};
 			} else {
 				if ( t.onafterload )
@@ -515,22 +596,34 @@ o3_popup = function( opts ) {
 			t.visible = false;
 
 			//show overlay
-			t.$overlay.stop().animate({ opacity: 0 }, jQuery(window).width() > t.mobileWndWidthLimit ? t.opts.fadeOutSpeed : 0, function() { jQuery(this).css('display','none'); });						
+			if ( !t.swffix ) {
+				t.$overlay.stop().animate({ opacity: 0 }, jQuery(window).width() > t.mobileWndWidthLimit ? t.opts.fadeOutSpeed : 0, function() { jQuery(this).css('display','none'); });						
+			} else {
+				t.$overlay.css('display','none');
+			}
 
-			//show container 
-			t.$container.removeClass( t.showAnimationClass() ).addClass( t.hideAnimationClass() ).addClass( t.hideAnimationClass( true ) );
+			//hide container 
+			if ( t.animate ) {
+				t.$container.removeClass( t.showAnimationClass() ).addClass( t.hideAnimationClass() ).addClass( t.hideAnimationClass( true ) );
 
-			if ( t.opts.hideAnimation != '' ) {
-				setTimeout( function() {
+				if ( t.opts.hideAnimation != '' ) {
+					setTimeout( function() {
+						t.$container.css('display','none');
+						t.$container_outer.css('display', 'none');
+					}, t.opts.hideAnimationTime );
+				} else {
 					t.$container.css('display','none');
 					t.$container_outer.css('display', 'none');
-				}, t.opts.hideAnimationTime );
-			} else {
-				t.$container.css('display','none');
-				t.$container_outer.css('display', 'none');
-			};
+				};
 
-			/*stop().animate({ opacity: 0 }, jQuery(window).width() > t.mobileWndWidthLimit ? t.opts.fadeOutSpeed : 0, function() { jQuery(this).css('display','none'); })*/;	
+				/*stop().animate({ opacity: 0 }, jQuery(window).width() > t.mobileWndWidthLimit ? t.opts.fadeOutSpeed : 0, function() { jQuery(this).css('display','none'); })*/;	
+			} else {
+				t.$container.css({
+					'display': 'none',
+					'opacity': 0
+				});
+				t.$container_outer.css('display', 'none');
+			}
 
 			//inc z index
 			o3_popup_zindex--;
@@ -612,10 +705,12 @@ o3_popup = function( opts ) {
 	t.after_close = function() {
 		if ( t.opts.clearOnClose ) {
 			//set empty content on close
-			this.$body_container.html('');
+			t.$body_container.html('');
+			if ( typeof t.$body_iframe != 'undefined' )
+				t.$body_iframe.attr('src','');
 			t.loaded = false;
 		};
-
+		
 		//run handler
 		if ( t.onafterclose != null )
 			t.onafterclose.call( t );
@@ -688,10 +783,12 @@ o3_popup.prototype.drag_move = function( event ) {
 
 	//lt ie 9 user css left top else use css transform
 	if ( /MSIE/i.test(navigator.userAgent) && parseFloat((navigator.userAgent.toLowerCase().match(/.*(?:rv|ie)[\/: ](.+?)([ \);]|$)/) || [])[1]) < 9 ) {
-		this.$container.css( { 'left': pos.left, 'top': pos.top } );
+		var css = { 'left': pos.left, 'top': pos.top };
+		this.$container.css( css );		
 	} else {
-		var translate = 'translate('+pos.left+'px,'+pos.top+'px)';
-		this.$container.css( { '-ms-transform': translate, '-webkit-transform': translate, 'transform': translate } );
+		var translate = 'translate('+pos.left+'px,'+pos.top+'px)',
+			css = { '-ms-transform': translate, '-webkit-transform': translate, 'transform': translate }; 
+		this.$container.css( css );		
 	};
 
 };
@@ -714,12 +811,13 @@ o3_popup.prototype.drag_end = function( event ) {
 	this.marginTop = ( this.coffset.top - ( navigator.userAgent.match(/(iPad|iPhone|iPod)/g) &&  parseInt(v[1], 10) < 7 ? 0 : Math.max( jQuery('body').scrollTop(), jQuery('html').scrollTop() ) ) );
 	this.marginLeft = ( this.coffset.left - ( navigator.userAgent.match(/(iPad|iPhone|iPod)/g) &&  parseInt(v[1], 10) < 7 ? 0 : Math.max( jQuery('body').scrollLeft(), jQuery('html').scrollLeft() ) ) );
 
-	this.$container.css( { 'left': '0px', 
-						   'top': '0px',
-						   '-ms-transform': translate, 
-						   '-webkit-transform': translate, 
-						   'transform': translate
-						  } );
+	var css = { 'left': '0px', 
+			   'top': '0px',
+			   '-ms-transform': translate, 
+			   '-webkit-transform': translate, 
+			   'transform': translate
+			};
+	this.$container.css( css );
 
 	this.handle_wnd_resize();
 };

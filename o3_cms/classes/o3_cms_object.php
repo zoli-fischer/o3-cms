@@ -1,6 +1,25 @@
 <?php
 
 /**
+ * O3 CMS Objects interface
+ *
+ * @package o3 cms
+ * @link    todo: add url
+ * @author  Zotlan Fischer <zlf@web2it.dk>
+ * @license http://opensource.org/licenses/gpl-license.php GNU Public License
+ */
+
+interface o3_cms_object_interface  {
+		
+	/*
+	* Load object with id
+	* @param id object id to select
+	*/
+	public function load( $id );
+
+}
+
+/**
  * O3 CMS Object class
  *
  * @package o3 cms
@@ -9,7 +28,7 @@
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
-class o3_cms_object {
+abstract class o3_cms_object implements o3_cms_object_interface {
 
 	/** array | boolean Data of the object. Null if no object data. */	
 	protected $data = null;
@@ -24,14 +43,12 @@ class o3_cms_object {
 	}
 
 	/*
-	* Load object with id
-	* @param id object id to select
+	* Re-load object with the current id
 	*/
-	public function load( $id ) {
-		if ( !$this->is() ) 
-			return false;
+	public function reload() {
+		$this->load( $this->get('id') );
 	}
-
+	
 	/**
 	 * Check for valid object data
 	 * @return boolean
@@ -50,6 +67,13 @@ class o3_cms_object {
 	 */	
 	public function get( $index, $value = '' ) {
 		return $this->is() && property_exists( $this->data, $index ) ? $this->data->{$index} : $value;
+	}
+
+	/*
+	* Check if object is deleted
+	*/
+	public function is_deleted() {
+		return !( $this->is() && $this->get('deleted') == 0 );
 	}
 
 }

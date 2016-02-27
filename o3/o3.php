@@ -18,8 +18,9 @@ if ( !defined('O3') )
 
 PHP_VERSION >= 5.3 or die("O3 requires PHP 5.3.0+");
 
-/** The root of your O3 installation */
-define("O3_DIR", str_replace(DIRECTORY_SEPARATOR, '/', realpath(dirname(__FILE__))));
+if ( !defined('O3_DIR') )
+	/** The root of your O3 installation */
+	define("O3_DIR", str_replace(DIRECTORY_SEPARATOR, '/', realpath(dirname(__FILE__))));
 
 //load O3 global configs
 require_once(O3_DIR.'/config.php');
@@ -75,7 +76,10 @@ class o3 {
 
 		//create list of html head frameworks
 		//jquery
-		$this->head_framework( 'jquery', array( array( O3_URL.'/resource/js/lib/jquery/jquery-latest.min.js', O3_RES_DIR.'/js/lib/jquery/jquery-latest.min.js' ) ) );			
+		$this->head_framework( 'jquery', array( array( O3_URL.'/resource/js/lib/jquery/jquery-latest.min.js', O3_RES_DIR.'/js/lib/jquery/jquery-latest.min.js' ) ) );
+
+		//jquery
+		$this->head_framework( 'jquery2', array( array( O3_URL.'/resource/js/lib/jquery/jquery2-latest.min.js', O3_RES_DIR.'/js/lib/jquery/jquery2-latest.min.js' ) ) );
 		
 		//knockout
 		$this->head_framework( 'knockout', array( array( O3_URL.'/resource/js/lib/knockout/knockout-latest.js', O3_RES_DIR.'/js/lib/knockout/knockout-latest.js' ),
@@ -105,6 +109,11 @@ class o3 {
 		//bootstrap no css
 		$this->head_framework( 'bootstrap_no_css', array( array( O3_URL.'/resource/js/lib/bootstrap/3-latest/js/bootstrap.min.js', O3_RES_DIR.'/js/lib/bootstrap/3-latest/js/bootstrap.min.js' ) ) );
 
+		//bootstrap o3 trimmed version
+		$this->head_framework( 'o3_bootstrap', array( array( O3_URL.'/resource/js/lib/bootstrap/3-latest/js/bootstrap.min.js', O3_RES_DIR.'/js/lib/bootstrap/3-latest/js/bootstrap.min.js' ),
+											     	  array( O3_URL.'/resource/js/lib/bootstrap/3-latest/css/bootstrap.o3.css', O3_RES_DIR.'/js/lib/bootstrap/3-latest/css/bootstrap.o3.css', 'stylesheet' ) ) );
+
+
 		//o3
 		$this->head_framework( 'o3', array( array( O3_URL.'/resource/js/o3.js', O3_RES_DIR.'/js/o3.js' ),
 											array( O3_URL.'/resource/css/o3.css', O3_RES_DIR.'/css/o3.css', 'stylesheet' ) ) );
@@ -119,30 +128,30 @@ class o3 {
 		$this->head_framework( 'o3_all', array( array( 'o3,o3_date,o3_route,o3_native,o3_string,o3_touch,o3_valid' ) ) );
 
 	    //o3_table
-	    $this->head_framework( 'o3_table', array( array( 'jquery,knockout,o3' ),
+	    $this->head_framework( 'o3_table', array( //array( 'knockout,o3' ),
 	    										  array( O3_URL.'/resource/js/o3_table/o3_table.js', O3_RES_DIR.'/js/o3_table/o3_table.js' ),
 											      array( O3_URL.'/resource/js/o3_table/o3_table.css', O3_RES_DIR.'/js/o3_table/o3_table.css', 'stylesheet' ) ) );
 
 		//o3_popup
-		$this->head_framework( 'o3_popup', array( array( 'jquery,o3,o3_touch' ),
+		$this->head_framework( 'o3_popup', array( //array( 'jquery,o3,o3_touch' ),
 												  array( O3_URL.'/resource/js/o3_popup/o3_popup.js', O3_RES_DIR.'/js/o3_popup/o3_popup.js' ),
 												  array( O3_URL.'/resource/js/o3_popup/o3_popup.css', O3_RES_DIR.'/js/o3_popup/o3_popup.css', 'stylesheet' ) ) );
 
 		//o3_popup no css
-		$this->head_framework( 'o3_popup_no_css', array( array( 'jquery,o3_no_css,o3_touch' ),
-												  array( O3_URL.'/resource/js/o3_popup/o3_popup.js', O3_RES_DIR.'/js/o3_popup/o3_popup.js' ) ) );
+		$this->head_framework( 'o3_popup_no_css', array( //array( 'jquery,o3_no_css,o3_touch' ),
+												  		 array( O3_URL.'/resource/js/o3_popup/o3_popup.js', O3_RES_DIR.'/js/o3_popup/o3_popup.js' ) ) );
 
 		//o3_popup
-		$this->head_framework( 'o3_popnote', array( array( 'jquery,o3' ),
+		$this->head_framework( 'o3_popnote', array( //array( 'jquery,o3' ),
 												    array( O3_URL.'/resource/js/o3_popnote/o3_popnote.js', O3_RES_DIR.'/js/o3_popnote/o3_popnote.js' ),
 												    array( O3_URL.'/resource/js/o3_popnote/o3_popnote.css', O3_RES_DIR.'/js/o3_popnote/o3_popnote.css', 'stylesheet' ) ) );
 
 		//o3_popup
-		$this->head_framework( 'o3_popnote_no_css', array( array( 'jquery,o3_no_css' ),
-												    array( O3_URL.'/resource/js/o3_popnote/o3_popnote.js', O3_RES_DIR.'/js/o3_popnote/o3_popnote.js' ) ) );
+		$this->head_framework( 'o3_popnote_no_css', array( //array( 'jquery,o3_no_css' ),
+												    	   array( O3_URL.'/resource/js/o3_popnote/o3_popnote.js', O3_RES_DIR.'/js/o3_popnote/o3_popnote.js' ) ) );
 
 		//o3_scrolltop
-		$this->head_framework( 'o3_scrolltop', array( array( 'jquery,o3' ),
+		$this->head_framework( 'o3_scrolltop', array( //array( 'jquery,o3' ),
 												      array( O3_URL.'/resource/js/o3_scrolltop/o3_scrolltop.js', O3_RES_DIR.'/js/o3_scrolltop/o3_scrolltop.js' ),
 												      array( O3_URL.'/resource/js/o3_scrolltop/o3_scrolltop.css', O3_RES_DIR.'/js/o3_scrolltop/o3_scrolltop.css', 'stylesheet' ) ) );
 
@@ -150,13 +159,13 @@ class o3 {
 		$this->head_framework( 'o3_scrolltop_js', array( array( O3_URL.'/resource/js/o3_scrolltop/o3_scrolltop.js', O3_RES_DIR.'/js/o3_scrolltop/o3_scrolltop.js' ) ) );
 
 		//o3_popup
-		$this->head_framework( 'o3_tooltip', array( array( 'jquery,o3' ),
+		$this->head_framework( 'o3_tooltip', array( //array( 'jquery,o3' ),
 												    array( O3_URL.'/resource/js/o3_tooltip/o3_tooltip.js', O3_RES_DIR.'/js/o3_tooltip/o3_tooltip.js' ),
 												    array( O3_URL.'/resource/js/o3_tooltip/o3_tooltip.css', O3_RES_DIR.'/js/o3_tooltip/o3_tooltip.css', 'stylesheet' ) ) );
 
 		//o3_popup no css
-		$this->head_framework( 'o3_tooltip_no_css', array( array( 'jquery,o3_no_css' ),
-												    array( O3_URL.'/resource/js/o3_tooltip/o3_tooltip.js', O3_RES_DIR.'/js/o3_tooltip/o3_tooltip.js' ) ) );
+		$this->head_framework( 'o3_tooltip_no_css', array( //array( 'jquery,o3_no_css' ),
+												    	   array( O3_URL.'/resource/js/o3_tooltip/o3_tooltip.js', O3_RES_DIR.'/js/o3_tooltip/o3_tooltip.js' ) ) );
 
 
 
@@ -473,6 +482,16 @@ class o3 {
 		}
 	}
 
+	/** Inject resource css inline, only if css is minimizes */
+	protected $inlince_css = false;
+
+	/**
+	* Change inlince_css value
+	*/
+	public function inlince_css( $value ) {
+		$this->inlince_css = $value === true;
+	} 
+
 	/** array List of inline content to insert in html head */ 
 	public $head_inlines = array(); 
 	
@@ -563,9 +582,13 @@ class o3 {
 
 			if ( $is_mini_css ) {
 				if ( count($css) > 0 ) {
-					$url = $this->mini->css_cache_url( $css );
-					$code_css .= '<link rel="stylesheet" type="text/css" href="'.$url.'" />';
-					isset($this->manifest) ? $this->manifest->cache($url) : ''; //add url to cache manifest
+					if ( $this->inlince_css ) {
+						$inline_css .= '<style>'.file_get_contents( O3_CACHE_DIR.'/'.$this->mini->css_cache( $css ) ).'</style>';
+					} else {
+						$url = $this->mini->css_cache_url( $css );
+						$code_css .= '<link rel="stylesheet" type="text/css" href="'.$url.'" />';
+						isset($this->manifest) ? $this->manifest->cache($url) : ''; //add url to cache manifest
+					}
 				}
 			} else {
 				if ( count($css) > 0 )
@@ -658,9 +681,13 @@ class o3 {
 
 			if ( $is_mini ) {
 				if ( count($css) > 0 ) {
-					$url = $this->mini->css_cache_url( $css );
-					$code_css .= '<link rel="stylesheet" type="text/css" href="'.$url.'" />';
-					isset($this->manifest) ? $this->manifest->cache($url) : ''; //add url to cache manifest
+					if ( $this->inlince_css ) {
+						$inline_css .= '<style>'.file_get_contents( O3_CACHE_DIR.'/'.$this->mini->css_cache( $css ) ).'</style>';
+					} else {
+						$url = $this->mini->css_cache_url( $css );
+						$code_css .= '<link rel="stylesheet" type="text/css" href="'.$url.'" />';
+						isset($this->manifest) ? $this->manifest->cache($url) : ''; //add url to cache manifest
+					}
 				}
 				if ( count($js) > 0 ) {
 					$url = $this->mini->js_cache_url( $js );

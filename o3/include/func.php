@@ -264,7 +264,7 @@ function o3_compare_uri( $uri1, $uri2, $flag = O3_COMPARE_URI_ALL ) {
 	$uri2_parts = parse_url($uri2);
 	$uri2_parts['query'] = isset($uri2_parts['query']) ? $uri2_parts['query'] : '';
 	$uri2_parts['fragment'] = isset($uri2_parts['fragment']) ? $uri2_parts['fragment'] : '';
-	$uri2_parts['path'] = isset($uri2_parts['path']) ? $uri2_parts['path'] : '';
+	$uri2_parts['path'] = isset($uri2_parts['path']) ? $uri2_parts['path'] : '';	
 
 	//check scheme
 	if ( ( $flag & O3_COMPARE_URI_SCHEME ) && $uri1_parts['scheme'] != $uri2_parts['scheme']  )

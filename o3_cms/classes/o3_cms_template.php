@@ -1,6 +1,6 @@
 <?php
 
-//Require page class
+//Require object class
 require_once(O3_CMS_DIR.'/classes/o3_cms_object.php');
 
 //Require page class
@@ -22,8 +22,8 @@ class o3_cms_template extends o3_cms_object {
 	* @param id Template id to select
 	*/
 	public function load( $id ) {
-		parent::load($id);
-		$this->data = o3_cms_templates::get_by_id( $id );	
+		if ( $id > 0 )
+			$this->data = o3_with(new o3_cms_templates())->get_by_id( $id );	
 	}
 
 	/*

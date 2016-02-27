@@ -102,7 +102,7 @@ class o3_debug {
 	 * @param int $errline Line number the error was raised at
 	 * @param array $errcontext Array of every variable that existed in the scope the error was triggered in. User error handler must not modify error context. 
 	 *
-	 * @return booleandie_
+	 * @return boolean
 	 */ 
 	public function errorHandler( $errno, $errstr, $errfile, $errline, $errcontext ) {
 

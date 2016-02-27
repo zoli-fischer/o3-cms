@@ -4,24 +4,8 @@
 
 /* MAIN FRAME */
 
-#o3-cms-wrapper {
-	width: 100%;
-	height: 100%;
-	overflow: hidden;
-}
-
-#o3-cms-main {
-	width: 100%;
-	height: 100%;	
-}
-
 .o3-cms-cell {
 	height: 100%;
-}
-
-#o3-cms-toolbar {
-	height: 50px;
-	border-bottom: 1px solid #999;	
 }
 
 #o3-cms-content {
@@ -121,4 +105,63 @@
 		}
 	}
 	
+}
+
+/* TOOLBAR */
+
+#o3-cms-topbar {
+	height: 50px;
+	border-bottom: 1px solid #999;
+	padding: 0 20px; 
+
+	> ul {
+		display: block;
+		padding: 0px;
+		margin: 0px;
+		float: left;	
+
+		> li {
+			display: inline-block;
+			
+			> a {
+				height: 49px;
+				line-height: 49px;	
+				display: block;
+				padding: 0 20px 0px 0px; 
+				font-size: 16px;
+				color: #fff;
+				text-decoration: none;
+
+				-webkit-transition: all .3s ease-in-out;
+				-moz-transition: all .3s ease-in-out;
+				-ms-transition: all .3s ease-in-out;
+				-o-transition: all .3s ease-in-out;
+				transition: all .3s ease-in-out;
+
+				i {
+					font-size: 24px;
+					position: relative;
+					top: 3px;
+					margin-right: 3px;
+				}
+
+				&:hover,
+				&:focus {
+					color: lighten( #505b62, 50% );
+				}
+			}
+		}
+	}
+
+	> ul:last-child {
+		float: right;
+
+		> li {
+			> a {	
+				padding: 0 0px 0px 15px; 
+				font-size: 12px;
+			}
+		} 
+	}
+
 }

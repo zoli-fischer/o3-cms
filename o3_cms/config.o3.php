@@ -10,6 +10,8 @@ o3\config\def('O3_URL',O3_CMS_URL.'/o3');
 /** The location of the O3 cache directory */
 o3\config\def("O3_CACHE_DIR", O3_CMS_ROOT_DIR."/cache");
 
+/** The location of the directory with json language files */
+o3\config\def("O3_LANG_DIR", O3_CMS_DIR.'/langs' );
 
 /*URL*/
 
@@ -20,8 +22,8 @@ o3\config\def("O3_CACHE_URL", O3_CMS_URL.'/cache');
 /** O3 Admin utility */
 
 /** Username and password used by the admin utility in www/ */
-o3\config\def( "O3_ADMIN_USERNAME", "" );
-o3\config\def( "O3_ADMIN_PASSWORD", "" );
+o3\config\def( "O3_ADMIN_USERNAME", "test" );
+o3\config\def( "O3_ADMIN_PASSWORD", "test" );
 
 
 /** OPTIMIZE, MINIMIZE & CACHE */
@@ -66,13 +68,13 @@ o3\config\def('O3_MYSQLI_DEBUG_QUERIES', O3_CMS_MYSQLI_DEBUG_QUERIES );
 o3\config\def('O3_TEMPLATE_DIR', O3_CMS_ROOT_DIR.'/theme/templates' );   
 
 /** The location of the directory with template controller files */
-o3\config\def('O3_TEMPLATE_CONTROLLER_DIR', O3_TEMPLATE_DIR.'/controller' );   
+o3\config\def('O3_TEMPLATE_CONTROLLER_DIR', O3_TEMPLATE_DIR.'/controllers' );   
 
 /** The location of the directory with view files */
-o3\config\def('O3_TEMPLATE_VIEW_DIR', O3_TEMPLATE_DIR.'/view' );   
+o3\config\def('O3_TEMPLATE_VIEW_DIR', O3_TEMPLATE_DIR.'/views' );   
 	
 /** The location of the directory with view controller files */
-o3\config\def('O3_TEMPLATE_VIEW_CONTROLLER_DIR', O3_TEMPLATE_VIEW_DIR.'/controller' );
+o3\config\def('O3_TEMPLATE_VIEW_CONTROLLER_DIR', O3_TEMPLATE_VIEW_DIR.'/controllers' );
 
 
 

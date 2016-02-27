@@ -43,9 +43,8 @@ if( !isset($_SERVER['DOCUMENT_ROOT']) ) {
   $_SERVER['DOCUMENT_ROOT'] = str_replace( '\\', '/', substr($path, 0, 0-strlen($_SERVER['PHP_SELF'])));
 }
 
-if ( !defined('O3_DIR') )
-  /** The root of your O3 installation */
-  define("O3_DIR", str_replace(DIRECTORY_SEPARATOR, '/', realpath(dirname(__FILE__))));
+/** The root of your O3 installation */
+def("O3_DIR", str_replace(DIRECTORY_SEPARATOR, '/', realpath(dirname(__FILE__))));
 
 //load O3 custom config
 def("O3_CUSTOM_CONFIG", O3_DIR.'/config.custom.php');

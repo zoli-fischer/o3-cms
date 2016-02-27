@@ -1,5 +1,8 @@
 <?php
 
+//Require objects class
+require_once(O3_CMS_DIR.'/classes/o3_cms_objects.php');
+
 //Require page class
 require_once(O3_CMS_DIR.'/classes/o3_cms_template.php');
 
@@ -12,30 +15,19 @@ require_once(O3_CMS_DIR.'/classes/o3_cms_template.php');
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
-class o3_cms_templates {
+class o3_cms_templates extends o3_cms_objects {
 
 	/*
-	* Constructor
+	* Use as a constructor
 	*/
-	function __construct() { }
+	public function init() {}
 
-
-	/**
-	* Select login data by client id and type
-	*
-	* @param integer $client_id 	
-	* @return mixed False if not found, login id if found
-	*/		
-	public static function get_by_id( $client_id ) {
-		global $o3;
-		$sql = "SELECT * FROM ".$o3->mysqli->tablename("templates")." WHERE id = ".$o3->mysqli->escape_string($client_id);
-		$result = $o3->mysqli->query( $sql );
-		if ( $result->num_rows == 1 )
-			return $result->fetch_object();
-		return false;
+	/*
+	* Table name where are the objects
+	*/
+	public function tablename_index() {
+		return 'templates';
 	}
-
-	 
 
 }
 

@@ -44,7 +44,7 @@ class o3_lang {
 	public $collections = array();
 	
 	/** string Path to the folder with language json-s */
-	public $lang_dir = O3_LANG_DIR; 
+	public $lang_dir = O3_LANG_DIR;
 	
 	/** string URL to langauage javascript file*/
 	public $lang_js_url = O3_LANG_JS_URL;
@@ -111,6 +111,26 @@ class o3_lang {
   	$this->list = array();
 	$this->current = '';
 	$this->collections = array();
+  }
+
+
+  /**
+  * Available languages
+  */
+  public function languages() {
+  	$return = array();
+	$path = o3_read_path($this->lang_dir);
+	foreach ( $path as $key => $value ) {
+		if ( $value['extension'] == 'json' && preg_match("/^[a-z]*$/", $value['filename']) ) {
+			$data = json_decode(file_get_contents($value['path']),true);
+			$return[$value['filename']] = array( 
+					'index' => $value['filename'],
+					'name' => isset($data['o3_lang_display_name']) ? $data['o3_lang_display_name'][0] : '',
+					'current' => $this->current == $value['filename']
+				);		
+		}
+	}	
+	return $return;
   }
   
   //load collection

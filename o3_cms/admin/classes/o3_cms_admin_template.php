@@ -1,7 +1,8 @@
 <?php
 
-//Require controller class
+//Require controllers classes
 require_once("o3_cms_admin_template_controller.php");
+require_once("o3_cms_admin_template_view_controller.php");
 
 /**
  * O3 Admin tempalte class

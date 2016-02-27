@@ -3,7 +3,7 @@
 
 
 /**
- * Base class for template template's controller
+ * Base class for template's controller
  *
  * @category module
  * @package o3_template
