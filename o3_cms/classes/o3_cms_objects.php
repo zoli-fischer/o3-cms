@@ -74,6 +74,36 @@ abstract class o3_cms_objects implements o3_cms_objects_interface {
 		return false;
 	}
 
+
+	/**
+	* Retrun array of row selected from table
+	*
+	* @param string $field_list Default value: *
+	* @param string $where (optional) Default value: '' 
+	* @param string $order_by (optional) Default value: ''
+	* @param string $limit (optional) Default value: ''
+	*
+	* @return mixed Array of rows
+	*/
+	public function select( $field_list = '*', $where = '', $order_by = '', $limit = '' ) {
+		$return = '';
+		$sql = "SELECT $field_list FROM ".$this->o3->mysqli->escape_string($this->tablename());
+		if ( $where != '' )
+			$sql .= " WHERE $where ";
+		if ( $order_by != '' )
+			$sql .= " ORDER BY $order_by ";		
+		if ( $limit != '' )
+			$sql .= " LIMIT $limit ";
+				
+		$result = $this->o3->mysqli->query( $sql );
+		if ( $result->num_rows > 0 ) {
+			while ( $row = $result->fetch_object() ) {
+				$return[] = $row;
+			}
+		}
+		return $return;
+	}
+
 }
 
 ?>

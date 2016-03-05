@@ -16,6 +16,7 @@ interface o3_cms_object_interface  {
 	* @param id object id to select
 	*/
 	public function load( $id );
+ 
 
 }
 

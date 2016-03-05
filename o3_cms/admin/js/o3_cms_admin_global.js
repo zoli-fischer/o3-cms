@@ -46,40 +46,44 @@ function o3_cms_user_ajax_call( name, data, success, error, fails ) {
 	function toggle($element) {
 		if ( $element.hasClass('open') ) {
 			hide($element);
+			$(document).off('mouseup touchend',mouseup);
+			jQuery("#o3-cms-frame iframe").contents().find('body').off('mouseup touchend',mouseup);
 		} else {    	
 			show($element);
+			$(document).on('mouseup touchend',mouseup);
+			jQuery("#o3-cms-frame iframe").contents().find('body').on('mouseup touchend',mouseup);
 		};
 	};
 
-  $(document).on('click', '[data-o3-cms-toggle="open"]', function (e) {
-    var $this = $(this);
-		
-    if (!$this.attr('data-o3-cms-target')) 
-    	e.preventDefault();
+	function mouseup(e){
+		var $elements = $('[o3-cms-aria-opened="true"]');
+		$elements.each(function(){
+			var $this = $(this),  			
+				target = e.target,
+				inTarget = false;
+			
+			if ( target == $this[0] )
+				inTarget = true;
 
-    toggle($this);
-
-  });
-
-  $(document).on('mouseup',function(e){
-  	var $elements = $('[o3-cms-aria-opened="true"]');
-  	$elements.each(function(){
-  		var $this = $(this),  			
-  			target = e.target,
-  			inTarget = false;
-  		
- 		if ( target == $this[0] )
- 			inTarget = true;
-
-  		while ( target = target.parentNode )
+			while ( target = target.parentNode )
 			if ( target == $this[0] )			
 				inTarget = true;
 
-  		if ( !inTarget )
+			if ( !inTarget )
 			hide($this);  		
 
-  	});
-  });
+		});
+	}
+
+	$(document).on('click', '[data-o3-cms-toggle="open"]', function (e) {
+		var $this = $(this);
+			
+		if (!$this.attr('data-o3-cms-target')) 
+			e.preventDefault();
+
+		toggle($this);
+
+	});
 
 
 }(jQuery);

@@ -15,13 +15,42 @@
 	<script src="https://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js"></script> 
 <![endif]-->
 
+<link rel="shortcut icon" href="/res/icons/favicon.ico" type="image/x-icon" />
+<link rel="apple-touch-icon" href="/res/icons/apple-touch-icon.png" />
+<link rel="apple-touch-icon" sizes="57x57" href="/res/icons/apple-touch-icon-57x57.png" />
+<link rel="apple-touch-icon" sizes="72x72" href="/res/icons/apple-touch-icon-72x72.png" />
+<link rel="apple-touch-icon" sizes="76x76" href="/res/icons/apple-touch-icon-76x76.png" />
+<link rel="apple-touch-icon" sizes="114x114" href="/res/icons/apple-touch-icon-114x114.png" />
+<link rel="apple-touch-icon" sizes="120x120" href="/res/icons/apple-touch-icon-120x120.png" />
+<link rel="apple-touch-icon" sizes="144x144" href="/res/icons/apple-touch-icon-144x144.png" />
+<link rel="apple-touch-icon" sizes="152x152" href="/res/icons/apple-touch-icon-152x152.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="/res/icons/apple-touch-icon-180x180.png" />
+
+<link href='https://fonts.googleapis.com/css?family=Slabo+13px%7CMontserrat:400,700' rel='stylesheet' type='text/css'>
+
 <?php
 	
 	//inline css
-	$this->parent->parent->inlince_css( true );
+	$this->parent->parent->inlince_css( false );
 
 	//require js
-	$this->parent->parent->body_res('jquery2,o3_bootstrap');
+	$this->parent->parent->body_res('jquery2,o3_bootstrap,awesome');
+
+	//parallax
+	$this->parent->parent->head_css(O3_CMS_THEME_DIR.'/lib/parallax/jquery.rd-parallax.css');
+	$this->parent->parent->body_js(O3_CMS_THEME_DIR.'/lib/parallax/jquery.rd-parallax.js');
+
+	//smooth scroll
+	$this->parent->parent->body_js(O3_CMS_THEME_DIR.'/lib/jquery.mousewheel.min.js');
+	$this->parent->parent->body_js(O3_CMS_THEME_DIR.'/lib/jquery.smoothscroll.min.js');	
+
+	//mobile nav
+	$this->parent->parent->head_css(O3_CMS_THEME_DIR.'/lib/rd-navbar/rd-navbar.css');
+	$this->parent->parent->body_js(O3_CMS_THEME_DIR.'/lib/rd-navbar/rd-navbar.js');	
+
+	//wow
+	$this->parent->parent->head_css(O3_CMS_THEME_DIR.'/lib/animate.css');
+	$this->parent->parent->body_js(O3_CMS_THEME_DIR.'/lib/wow.js');	
 
 	//require template and global js and css/less
 	$this->parent->require_js_css();

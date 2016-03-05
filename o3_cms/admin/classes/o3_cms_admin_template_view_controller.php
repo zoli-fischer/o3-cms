@@ -22,7 +22,8 @@ class o3_cms_admin_template_view_controller extends o3_template_view_controller 
 	 * @param string $template_file File path to template
 	 */
 	public function __construct() {
-
+		global $o3, $o3_cms;
+		
 		//o3 ref
 		$this->o3 = &$o3;
 

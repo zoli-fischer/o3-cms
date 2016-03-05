@@ -15,28 +15,14 @@
 	<div id="o3-cms-wrapper">
 		<div class="o3-cms-table" id="o3-cms-main">
 			<div class="o3-cms-row">
-				<div class="o3-cms-cell o3-cms-bg-light-gray" id="o3-cms-langbar">
-					
-					<ul>
-						<li>
-							<a href="<?php echo $this->o3_cms->page_url(); ?>"><i class="fa fa-globe"></i> <span>{o3_lang:o3-cms-frontpage}</span></a>
-						</li>
-						<li class="o3-cms-dropdown">
-							<a href="#o3-cms-dropdown-languages" data-o3-cms-toggle="open"><i class="fa fa-language"></i> <span>{o3_lang:o3-cms-language}: {o3_lang:o3_lang_display_name}</span></a>
-							<ul class="o3-cms-dropdown-list o3-cms-bg-light-gray" id="o3-cms-dropdown-languages">
-								<?php
-								//print language list								
-								foreach ( $this->languages() as $key => $value ) {
-									?>									
-									<li>
-										<a href="<?php echo o3_html($value['url']); ?>"><?php echo o3_html($value['name']); ?></a>
-									</li>
-									<?php
-								}
-								?>
-							</ul>
-						</li>
-					</ul>
+				<div class="o3-cms-cell o3-cms-top-bar">
+
+					<?php 
+
+						//load topbar
+						$this->view( 'o3_cms_view_topbar' );
+
+					?>
 
 				</div>
 			</div>

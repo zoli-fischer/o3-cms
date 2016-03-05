@@ -16,12 +16,134 @@
     font-size: inherit;
 	font-family: inherit;
 }
-
+	
 body, html {
-	font-size: 16px;
+	font-size: 14px;
 	font-family: 'Lato', sans-serif;
 	width: 100%;
 	height: 100%;
+}
+
+/* VIEWPORT */
+/* 
+xs <= 480
+sm <= 640
+md <= 768
+lg <= 1024
+xl <= 1280
+*/
+
+@-ms-viewport {
+  width: device-width;
+}
+
+.visible-xs,
+.visible-sm,
+.visible-md,
+.visible-lg,
+.visible-xl {
+  display: none !important;
+}
+
+.visible-xs {
+	&:-inline,
+	&:-inline-block {
+		display: none !important;
+	}
+
+	@media (max-width: 480px) {
+		display: block !important;
+
+		&:-inline { display: inline !important; }
+		&:-inline-block { display: inline-block !important; }
+	}
+}
+
+.visible-sm {
+	&:-inline,
+	&:-inline-block {
+		display: none !important;
+	}
+
+	@media (min-width: 481px) and (max-width: 640px) {
+		display: block !important;
+
+		&:-inline { display: inline !important; }
+		&:-inline-block { display: inline-block !important; }
+	}
+}
+
+.visible-md {
+	&:-inline,
+	&:-inline-block {
+		display: none !important;
+	}
+
+	@media (min-width: 641px) and (max-width: 768px) {
+		display: block !important;
+
+		&:-inline { display: inline !important; }
+		&:-inline-block { display: inline-block !important; }
+	}
+}
+
+.visible-lg {
+	&:-inline,
+	&:-inline-block {
+		display: none !important;
+	}
+
+	@media (min-width: 769px) and (max-width: 1024px) {
+		display: block !important;
+
+		&:-inline { display: inline !important; }
+		&:-inline-block { display: inline-block !important; }
+	}
+}
+
+.visible-xl {
+	&:-inline,
+	&:-inline-block {
+		display: none !important;
+	}
+
+	@media (min-width: 1025px) {
+		display: block !important;
+
+		&:-inline { display: inline !important; }
+		&:-inline-block { display: inline-block !important; }
+	}
+}
+
+
+@media (max-width: 480px) {
+  .hidden-xs {
+    display: none !important;
+  }
+}
+
+@media (min-width: 481px) and (max-width: 640px) {
+  .hidden-sm {
+    display: none !important;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 768px) {
+  .hidden-md {
+    display: none !important;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .hidden-lg {
+    display: none !important;
+  }
+}
+
+@media (min-width: 1280px) {
+  .hidden-xl {
+    display: none !important;
+  }
 }
 
 /* CLEAR FIX */
@@ -35,14 +157,20 @@ body, html {
 
 /* BG PATTER */
 
-.o3-cms-bg-light-gray {
-	background-color: #505b62;
-	/* background-image: url(/admin/res/pattern-light-gray.jpg); */
+.o3-cms-bg-black {
+	background-color: #000000;	
+}
+
+.o3-cms-bg-color {
+	background-color: #0078d7;		
+}
+
+.o3-cms-bg-light-color {
+	background-color: #e6f2fb;		
 }
 
 .o3-cms-bg-white {
-	background-color: #ffffff;
-	/* background-image: url(/admin/res/pattern-white.jpg); */
+	background-color: #ffffff;	
 }
 
 /* ALIGNMENT*/
@@ -76,6 +204,178 @@ body, html {
 	height: 100%;	
 }
 
+/* TOP BAR */
+.o3-cms-top-bar {
+	height: 90px;
+
+	> div:first-child {
+		height: 50px;
+	}
+
+	.o3-cms-module-btn {
+		display: inline-block;
+		width: 50px;
+		height: 50px;
+		line-height: 50px;
+		background: #0078d7;
+		text-align: center;
+		color: #fff;
+		font-size: 22px;
+
+		&:hover {
+			background: darken(#0078d7,20%);
+		}
+	}
+
+	.o3-cms-logo {
+		display: inline-block;
+		height: 50px;
+		line-height: 50px;
+		font-size: 22px;
+		color: #ffffff;
+		padding-left: 15px;
+	}
+
+	.o3-cms-global-tools {
+		float: right;
+		display: block;
+		padding: 0px;
+		margin: 0px;
+
+		> li {
+			display: inline-block;
+
+			> a {
+				text-align: center;
+				display: inline-block;
+				color: #ffffff;
+				text-decoration: none;
+				min-width: 50px;
+				height: 50px;
+				line-height: 50px;
+				padding: 0 15px;
+				border-left: 1px solid #4c4c4c;
+				position: relative;
+				z-index: 3; 
+
+				i {
+					font-size: 22px;
+					position: relative;
+					top: 2px;
+				}
+
+				span {
+					float: right;
+					display: block;
+					max-width: 200px;
+					padding-left: 7px;
+					text-overflow: ellipsis;					
+					white-space: nowrap;
+					overflow: hidden;
+					line-height: auto;
+				}
+
+				&:hover {
+					background: darken( #0078d7, 20% );
+					border-color: darken( #e6f2fb, 60% );
+				}
+
+				&.open {
+					color: #000000;
+					background: #ffffff;
+					border-color: #ffffff;
+				}
+			}
+
+			.o3-cms-dropdown-list {
+				position: relative;
+
+				> div {
+					position: absolute; 
+					right: -1px;
+					background: #ffffff;
+					border: 1px solid #eaeaea;
+					box-shadow: 0px 0px 6px #999;
+					margin-left: -1px;
+					margin-top: 0px;
+					z-index: 2;
+					min-width: 160px;
+					color: #0078d7;
+
+					p {
+						padding: 10px 20px;
+					}
+
+					> ul {
+						padding: 0px;
+						margin: 0px;
+
+						> li {
+							display: block;
+
+							> a {
+								display: block;
+								padding: 12px 30px;
+								color: #000;
+								text-decoration: none;
+
+								&:hover { 
+									background: #eaeaea;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+
+	> div:last-child {
+		height: 40px;
+
+		.o3-cms-secondary-tools:last-child {
+			float: right;		
+		}
+	}
+
+	.o3-cms-secondary-tools {
+		padding: 0px;
+		margin: 0 5px;
+		float: left;
+		height: 40px;
+
+		> li {
+			display: inline-block;
+
+			a {
+				display: inline-block;
+				height: 40px;
+				line-height: 40px;
+				padding: 0 10px;
+				color: #000000;
+				text-decoration: none;
+
+				i {
+					font-size: 16px;
+					position: relative;
+					top: 0px;
+					color: darken( #0078d7, 20% );
+				}
+
+				span {
+					padding-left: 3px;				
+				}
+
+				&:hover {
+					background: darken( #e6f2fb, 5% );
+				}
+			}
+		}
+	}
+	
+}
+
 /* FORM */
 
 .o3-cms-field {
@@ -89,9 +389,10 @@ body, html {
 		display: block;
 		width: 100%;
 		margin: 5px 0px; 
-		padding: 7px 5px;
-		background: #fff;
-		border: 1px solid #505b62;
+		border: 1px solid #bababa;
+		color: #000000;
+		background: #ffffff;
+		padding: 5px 7px; 
 
 		-webkit-transition: all .3s ease-in-out;
 		-moz-transition: all .3s ease-in-out;
@@ -100,18 +401,16 @@ body, html {
 		transition: all .3s ease-in-out;
  
 		&:focus {
-			-webkit-box-shadow: inset 1px 1px 1px 0px #505b62;
-			-moz-box-shadow: inset 1px 1px 1px 0px #505b62;
-			box-shadow: inset 1px 1px 1px 0px #505b62;
+			border: 1px solid #000000;
 		}
 	}
 }
 
 .o3-cms-btn {
-	border: 2px solid #505b62;
-	color: #505b62;
+	border: 1px solid #0078d7;
+	color: #0078d7;
 	background: #ffffff;
-	padding: 5px 20px;
+	padding: 5px 10px;
 	cursor: pointer;
 
 	-webkit-transition: all .3s ease-in-out;
@@ -122,17 +421,19 @@ body, html {
 
 	&:hover,
 	&:focus {
-		background: lighten(#505b62,20%);
+		background: lighten(#000000,20%);
 		color: #ffffff; 
 	}
 
 	&[type=submit] {
 		color: #ffffff;
-		background: #505b62;
+		background: #0078d7;
+		font-weight: bold;
 
 		&:hover,
 		&:focus {
-			background: darken(#505b62,20%);
+			background: darken(#0078d7,20%);
+			border-color: darken(#0078d7,20%);
 			color: #ffffff; 
 		}
 	}
