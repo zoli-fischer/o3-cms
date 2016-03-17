@@ -32,6 +32,7 @@
             var nav = this;
             nav.createDOM();
             nav.createListeners();
+            return this;
         },
 
         createDOM: function () {
@@ -44,13 +45,38 @@
                 .append($('<div/>', {
                     'class': settings.panelClass
                 })
-                    .append($('<button/>', {
+                .append($('<button/>', {
                         'class': settings.toggleClass
-                    }).append($('<span/>')))
-                    .append($('<h2/>', {
-                        'class': settings.titleClass,
-                        'html': '<img src="/res/header-logo-small.png" alt="" />'
-                    })));
+                }).append($('<span/>')))
+                .append($('<h2/>', {
+                    'class': settings.titleClass,
+                    'html': '<a href="/#"><img src="/res/header-logo-small.png" alt="" /></a>'
+                })));
+
+            $('.rd-mobilemenu_ul a').click(function(e){
+                
+                var o = $('.' + settings.cntClass);
+                $('.'+settings.toggleClass).toggleClass('active');
+
+                if (o.hasClass('active')) {
+                    $('.'+settings.toggleClass).removeClass('active');
+                    o.removeClass('active');
+                    $('body').undelegate('*', 'mousewheel', nav.scroll);
+                    $('body').undelegate('*', 'touchmove', nav.scroll);
+                    $('body').undelegate('*', 'touchend', nav.touchend);
+                    $('body').undelegate('*', 'touchstart', nav.close);
+                    $('body').undelegate('*:not(.' + settings.toggleClass + ' span)', 'click', nav.close);
+                } else {
+                    $('.'+settings.toggleClass).addClass('active');
+                    o.addClass('active');
+                    $('body').delegate('*', 'mousewheel', nav.scroll);
+                    $('body').delegate('*', 'touchmove', nav.scroll);
+                    $('body').delegate('*', 'touchend', nav.touchend);
+                    $('body').delegate('*', 'touchstart', {type: type}, nav.close);
+                    $('body').delegate('*:not(.' + settings.toggleClass + ' span)', 'click', {type: type}, nav.close);
+                }
+
+            });
         },
 
         createNavDOM: function () {
@@ -241,6 +267,7 @@
         }
     };
 
+    /*
     $.fn.rdparallax = function (option) {
         var o = this;
         if (o.length) {
@@ -248,15 +275,16 @@
         }
         return o;
     };
+    */
 
     window.RDMobilemenu_autoinit = function (selector) {
         var o = $(selector);
         if (o.length) {
-            new RDMobileMenu(o[0]).init();
+            return new RDMobileMenu(o[0]).init();
         }
     };
 })(jQuery);
 
 $(document).ready(function () {
-    RDMobilemenu_autoinit('[data-type="navbar"]');
+    window.rdmobielnav = RDMobilemenu_autoinit('[data-type="navbar"]');
 });

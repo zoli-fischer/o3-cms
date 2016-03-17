@@ -165,12 +165,17 @@ ko.extenders.o3_isValid = function (target, validator) {
         return validator(target());
     });
 
+    target.isDisabled = false;
+    target.o3_disableValidate = function( value ) {
+        target.isDisabled = value;
+    };
+
     //Just a convienient wrapper to bind against for error displays
     //Will only show errors if validation is active AND invalid
     target.o3_showError = ko.computed( {
-        read: function () {        
+        read: function () {
             //This intentionally does NOT short circuit, to establish dependency
-            if ( target.isActive() )
+            if ( target.isActive() && !target.isDisabled )
                 return !target.o3_isValid();           
             return false;
         },

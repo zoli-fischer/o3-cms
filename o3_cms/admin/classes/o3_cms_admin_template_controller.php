@@ -113,6 +113,14 @@ class o3_cms_admin_template_controller extends o3_template_controller {
 	public function require_js_css() {
 		$name = $this->name();
 
+		//add o3 cms css
+		if ( file_exists(O3_CMS_DIR.'/css/o3_cms.less') )
+			$this->parent->head_less( O3_CMS_DIR.'/css/o3_cms.less' );
+	
+		//add o3 cms js
+		if ( file_exists(O3_CMS_DIR.'/js/o3_cms.js') )
+			$this->parent->body_js( O3_CMS_DIR.'/js/o3_cms.js' );
+		
 		//add global css
 		if ( file_exists(O3_CMS_ADMIN_DIR.'/css/o3_cms_admin_global.less') )
 			$this->parent->head_less( O3_CMS_ADMIN_DIR.'/css/o3_cms_admin_global.less' );

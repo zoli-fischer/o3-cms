@@ -104,6 +104,32 @@ abstract class o3_cms_objects implements o3_cms_objects_interface {
 		return $return;
 	}
 
+
+	/**
+	 * Insert row
+	 *	 
+	 * @param mixed $values Value to set
+	 * @return mixed False on error, insert id on success
+	 */
+  	public function insert( $values ) {
+		if ( $result = $this->o3->mysqli->insert( $this->o3->mysqli->escape_string($this->tablename()), $values ) )		 
+			$row_id = $this->o3->mysqli->insert_id;
+
+		return isset($row_id) && $row_id > 0 ? $row_id : false;		
+	}
+
+	/**
+	 * Update row
+	 *
+	 * @param array $values List of values
+	 * @param array $condition List of conditions
+	 *
+	 * @return boolean
+	 */
+  	public function update( $values, $conditions ) {
+		return $this->o3->mysqli->update( $this->o3->mysqli->escape_string($this->tablename()), $values, $conditions );
+	}
+
 }
 
 ?>

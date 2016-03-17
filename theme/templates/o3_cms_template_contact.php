@@ -75,12 +75,12 @@
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col-sm-12">
-				<section class="parallax top-container" data-mobile="false" data-url="/res/parallax4.jpg" data-speed="3">
+				<section class="parallax top-container" data-mobile="false" data-url="/res/parallax6.jpg" data-speed="3">
 
 					<div class="container">
 		        		<div class="row">
 		            		<div class="col-md-10 col-md-offset-1">
-		            			<h1>Contact information</h1>
+		            			<h1>Contact</h1>
 		            		</div>
 		            	</div>
 		            </div>
@@ -88,7 +88,7 @@
 				</section>
 			</div>
 		</div>
-	</div>
+	</div> 
 	-->
 
 	<section id="contact-information">

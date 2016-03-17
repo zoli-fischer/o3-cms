@@ -1,4 +1,4 @@
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<!--<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />-->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui" />
 <meta name="handheldfriendly" content="true" />
@@ -28,13 +28,18 @@
 
 <link href='https://fonts.googleapis.com/css?family=Slabo+13px%7CMontserrat:400,700' rel='stylesheet' type='text/css'>
 
+<script 
+	ref="logged_user" 
+	data-user-id="<?php echo o3_html($this->parent->logged_user()->get('id')); ?>"
+	data-user-name="<?php echo o3_html($this->parent->logged_user()->get('username')); ?>"></script>
+
 <?php
 	
 	//inline css
 	$this->parent->parent->inlince_css( false );
 
 	//require js
-	$this->parent->parent->body_res('jquery2,o3_bootstrap,awesome');
+	$this->parent->parent->body_res('jquery2,o3_bootstrap,o3,o3_device,o3_valid,awesome,knockout');
 
 	//parallax
 	$this->parent->parent->head_css(O3_CMS_THEME_DIR.'/lib/parallax/jquery.rd-parallax.css');
@@ -51,6 +56,14 @@
 	//wow
 	$this->parent->parent->head_css(O3_CMS_THEME_DIR.'/lib/animate.css');
 	$this->parent->parent->body_js(O3_CMS_THEME_DIR.'/lib/wow.js');	
+	
+	//on scroll change hash
+	$this->parent->parent->body_js(O3_CMS_THEME_DIR.'/lib/jquery.scroll-anchor.js');	
+
+	//snafer webpage KO app
+	$this->parent->parent->body_js(O3_CMS_THEME_DIR.'/js/snafer/snafer.logged.user.app.js');
+	$this->parent->parent->body_js(O3_CMS_THEME_DIR.'/js/snafer/snafer.signinup.app.js');
+	$this->parent->parent->body_js(O3_CMS_THEME_DIR.'/js/snafer/snafer.page.app.js');
 
 	//require template and global js and css/less
 	$this->parent->require_js_css();

@@ -56,8 +56,38 @@ class o3_cms_template_controller extends o3_template_controller {
 	public function after_load() {
 
 		//handle ajax calls
-		//$this->ajax();
+		$this->ajax();
 
+	}
+
+	protected $ajax_result = null;
+
+	/**
+	* Ajax call handler
+	*/
+	public function ajax() {		
+		if ( isset($_POST['o3_cms_template_ajax']) ) {
+			$ajax_name = 'ajax_'.o3_post('o3_cms_template_ajax_name');
+
+			//todo - private, public
+
+			//ajax result
+			$this->ajax_result = new o3_ajax_result();
+
+			//set default as fail
+			$this->ajax_result->error();
+
+			if ( method_exists( $this, $ajax_name ) ) {
+				$this->{$ajax_name}();
+			} else {
+				//set default as fail
+				$this->o3->debug->_( "Method '$ajax_name' not defined in ".get_class($this)."." );
+			}
+
+			//flush
+			$this->ajax_result->flush();
+
+		}
 	}
 	
 	/*
@@ -96,6 +126,14 @@ class o3_cms_template_controller extends o3_template_controller {
 	*/
 	public function require_js_css() {
 		$name = $this->name();
+
+		//add o3 cms css
+		if ( file_exists(O3_CMS_DIR.'/css/o3_cms.less') )
+			$this->parent->head_less( O3_CMS_DIR.'/css/o3_cms.less' );
+	
+		//add o3 cms js
+		if ( file_exists(O3_CMS_DIR.'/js/o3_cms.js') )
+			$this->parent->body_js( O3_CMS_DIR.'/js/o3_cms.js' );
 
 		//add global css
 		if ( file_exists(O3_CMS_THEME_DIR.'/css/o3_cms_global.less') )

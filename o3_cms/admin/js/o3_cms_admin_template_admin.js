@@ -30,8 +30,7 @@
 				password: $password.val()
 			},
 			function(){ 
-				//no action, system redirect to frontpage
-				alert('1');
+				//no action, system redirect to frontpage				
 			}, 
 			function(){
 				$this.find('input,button').prop('disabled', false);

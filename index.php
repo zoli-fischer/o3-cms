@@ -30,6 +30,6 @@ require_once(O3_CMS_DIR.'/classes/o3_cms.php');
 
 //Create global O3 cms instance and flush the template buffer
 o3_with($o3_cms = new o3_cms())->flush();
-
+ 
 
 ?>

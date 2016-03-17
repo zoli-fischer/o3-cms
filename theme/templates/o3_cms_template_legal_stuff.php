@@ -18,17 +18,16 @@
 		$this->view( 'o3_cms_template_view_header' );
 
 	?>
-	
-	<!--
+	 
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col-sm-12">
-				<section class="parallax top-container" data-mobile="false" data-url="/res/parallax2.jpg" data-speed="3">
+				<section class="parallax top-container" data-mobile="false" data-url="/res/parallax5.jpg" data-speed="3">
 
 					<div class="container">
 		        		<div class="row">
 		            		<div class="col-md-10 col-md-offset-1">
-		            			
+		            			<h1>Terms & Policies</h1>
 		            		</div>
 		            	</div>
 		            </div>
@@ -36,44 +35,75 @@
 				</section>
 			</div>
 		</div>
-	</div>
-	-->
+	</div>  
 
 	<section id="legal-stuff">
 		<div class="container">
 			<div class="row">
-				<div class="col-sm-12">
-				
-					<h1>Legal stuff</h1>
-					<div class="clearfix-lg"></div>
-				
-				</div>
-				<div class="col-md-6"> 			
-					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec venenatis porta tortor ut consequat. Fusce dignissim quis nunc nec convallis. Quisque mattis felis interdum, ullamcorper ante non, suscipit risus. Phasellus ultrices tristique massa vitae bibendum. Sed viverra est nisi, sed facilisis dui euismod et. Vivamus sit amet augue ac urna ullamcorper tincidunt non vitae sem. Curabitur mattis diam lacus, nec auctor lectus tincidunt eget. Ut ac rutrum massa, sit amet scelerisque justo. Nam felis tortor, vulputate nec venenatis vel, interdum vestibulum arcu. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-					<p><br></p>
-					<p>Curabitur et ipsum faucibus orci facilisis consequat. Mauris dignissim semper dolor, id aliquet elit accumsan ac. Sed sollicitudin vestibulum metus, eget varius dui rhoncus et. Nullam iaculis suscipit consequat. Phasellus vel dolor dignissim, euismod sapien ut, laoreet sem. Nullam eget pulvinar metus. Ut mauris mauris, accumsan et aliquet quis, sagittis et neque. Etiam eu efficitur dui. Nullam scelerisque tortor tellus, id luctus nisl sagittis lobortis. Cras imperdiet consequat nibh sit amet lobortis.</p>
+				<div class="col-md-8 col-md-offset-2">
+				  
+
+					<br /><br /><br />
+					<h3>Cras convallis faucibus ex, sed eleifend elit rhoncus et. Nunc molestie volutpat eleifend. </h3>
+					<br />
+					<p>Donec volutpat tempus sapien et vehicula. Nullam nec tempus erat. Maecenas vitae egestas velit. Suspendisse potenti. Suspendisse potenti. Sed blandit mauris a felis commodo, eget iaculis ligula gravida. Integer luctus erat purus, et maximus quam facilisis eu.</p>
+
 					
-					<div class="clearfix-lg"></div>
+					<div class="clearfix-xl"></div>
 
 				</div>
-				<div class="col-md-6">
-					
-					<ul class="pdf-list">
-						<li>
-							<a href="#"><i class="fa fa-file-pdf-o"></i>Terms of Service</a>
-						</li>
-						<li>
-							<a href="#"><i class="fa fa-file-pdf-o"></i>Privacy Policy</a>
-						</li>
-						<li>
-							<a href="#"><i class="fa fa-file-pdf-o"></i>Notice and Take Down Policy</a>
-						</li>
-						<li>
-							<a href="#"><i class="fa fa-file-pdf-o"></i>Cookie Policy</a>
-						</li>
-					</ul>
+			</div>
+		</div>
+	</section>
 
-					<div class="clearfix-lg"></div>
+	<section id="legal-stuff-pdf">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12">
+
+
+					<div class="row">
+						<div class="col-sm-4 item-1 wow fadeInUp" data-wow-duration="1s" data-wow-delay=".3s">
+							<a href="">
+								<div class="circle">
+									<i class="fa fa-file-pdf-o"></i>
+								</div>
+								<div class="clearfix-m"></div>
+								<h5>Terms of Service</h5>
+							</a>
+						</div>	
+						<div class="col-sm-4 item-2 wow fadeInUp" data-wow-duration="1s" data-wow-delay=".5s">
+							<a href="">
+								<div class="circle">
+									<i class="fa fa-file-pdf-o"></i>
+								</div>
+								<div class="clearfix-m"></div>
+								<h5>Privacy Policy</h5>
+							</a>
+						</div>
+						<div class="col-sm-4 item-3 wow fadeInUp" data-wow-duration="1s" data-wow-delay=".7s">
+							<a href="">
+								<div class="circle">
+									<i class="fa fa-file-pdf-o"></i>
+								</div>
+								<div class="clearfix-m"></div>
+								<h5>Notice and Take Down Policy</h5>
+							</a>
+						</div>
+					</div> 
+
+					<div class="row">
+						<div class="col-sm-4 item-1 wow fadeInUp" data-wow-duration="1s" data-wow-delay=".3s">
+							<a href="">
+								<div class="circle">
+									<i class="fa fa-file-pdf-o"></i>
+								</div>
+								<div class="clearfix-m"></div>
+								<h5>Cookie Policy</h5>
+							</a>
+						</div>	
+					</div> 
+					
 
 				</div>
 			</div>

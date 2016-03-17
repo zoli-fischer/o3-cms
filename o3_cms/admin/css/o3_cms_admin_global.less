@@ -1,29 +1,3 @@
-* {
-	text-rendering: optimizelegibility;
-	-moz-text-size-adjust: none; /* Firefox - none | auto | <percentage> */
-	-ms-text-size-adjust: 100%; /* IE 10+ - <percentage> */
-	-webkit-text-size-adjust: none; /* Webkit - none | auto | <percentage> */
-	text-size-adjus: none; /* none | auto | <percentage> */	
-	padding: 0px;
-	margin: 0px;
-	font-weight: normal;
-	outline: 0;
-	-webkit-tap-highlight-color: rgba(0,0,0,0);
-	resize: none;
-	-webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-    font-size: inherit;
-	font-family: inherit;
-}
-	
-body, html {
-	font-size: 14px;
-	font-family: 'Lato', sans-serif;
-	width: 100%;
-	height: 100%;
-}
-
 /* VIEWPORT */
 /* 
 xs <= 480
@@ -32,10 +6,6 @@ md <= 768
 lg <= 1024
 xl <= 1280
 */
-
-@-ms-viewport {
-  width: device-width;
-}
 
 .visible-xs,
 .visible-sm,
@@ -146,15 +116,6 @@ xl <= 1280
   }
 }
 
-/* CLEAR FIX */
-
-.clearfix { clear: both; overflow: hidden; }
-.clearfix-xs { clear: both; overflow: hidden; height: 10px; }
-.clearfix-sm { clear: both; overflow: hidden; height: 15px; }
-.clearfix-m { clear: both; overflow: hidden; height: 30px; }
-.clearfix-lg { clear: both; overflow: hidden; height: 50px; }
-.clearfix-xl { clear: both; overflow: hidden; height: 80px; }
-
 /* BG PATTER */
 
 .o3-cms-bg-black {
@@ -172,24 +133,6 @@ xl <= 1280
 .o3-cms-bg-white {
 	background-color: #ffffff;	
 }
-
-/* ALIGNMENT*/
-
-.align-left { text-align: left; }
-.align-center { text-align: center; }
-.align-right { text-align: right; }
-
-.float-left { float: left; } 
-.float-none { float: none; }
-.float-right { float: right; }
-
-/* TABLE */
-
-.o3-cms-table { display: table; border-collapse: collapse; }
-.o3-cms-row { display: table-row; }
-.o3-cms-cell { display: table-cell; vertical-align: middle; }
-
-.o3-cms-valign-top { vertical-align: top;  }
 
 /* MAIN FRAME */
 
@@ -435,27 +378,6 @@ xl <= 1280
 			background: darken(#0078d7,20%);
 			border-color: darken(#0078d7,20%);
 			color: #ffffff; 
-		}
-	}
-}
-
-/* DROPDOWN MENU */
-
-.o3-cms-dropdown {
-	position: relative;
-
-	.o3-cms-dropdown-list {
-		display: none;
-		position: absolute;
-
-		&.open {
-			display: block;
-		}
-	}
-
-	&.open {
-		.o3-cms-dropdown-list {
-			display: block;
 		}
 	}
 }

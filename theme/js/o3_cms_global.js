@@ -11,7 +11,6 @@ jQuery(document).ready(function(){
 	};
 	*/
 
-
 	//animate on scroll
 	if ((navigator.userAgent.toLowerCase().indexOf('msie') == -1 ) || (isIE() && isIE() > 9)) {
         if (!jQuery('body').hasClass('mobile')) {
@@ -19,4 +18,19 @@ jQuery(document).ready(function(){
         };
     };
 
+    //init global app
+	ko.applyBindings( window.snafer = new snaferPageApp(), jQuery('html')[0] );
+
 });
+
+//show sign in form
+function show_sign_in_form() {
+	if ( typeof window.snafer != 'undefined' )
+		window.snafer.sign_in_up.show_sign_in_form();
+};
+
+//show sign up form
+function show_sign_up_form() {
+	if ( typeof window.snafer != 'undefined' )
+		window.snafer.sign_in_up.show_sign_up_form();
+};
