@@ -6,6 +6,9 @@ require_once(O3_CMS_DIR.'/classes/o3_cms_object.php');
 //Require users class
 require_once(O3_CMS_THEME_DIR.'/classes/snafer_users.php');
 
+//Require country class
+require_once(O3_CMS_THEME_DIR.'/classes/snafer_country.php');
+
 /**
  * O3 Snafer User class
  *
@@ -30,13 +33,27 @@ define('SNAFER_PAYPAL','paypal');
 
 class snafer_user extends o3_cms_object {
 
+	protected $country = false;
+
 	/*
 	* Load user with id
 	* @param id User id to select
 	*/
 	public function load( $id ) {				
-		if ( $id > 0 )
+		if ( $id > 0 ) {
 			$this->data = o3_with(new snafer_users())->get_by_id( $id );			
+
+			//load country
+			if ( $this->is() ) {
+				$this->country = new snafer_country( $this->get('country_id') );
+
+				//if country not found load default country
+				if ( !$this->country->is() )
+					$this->country = new snafer_country( DEFAULT_COUNTRY );
+
+			}
+
+		}
 	}
 
 	/**
@@ -161,40 +178,32 @@ class snafer_user extends o3_cms_object {
 	}
 
 	/*
+	* Get country object
+	*/
+	public function country() {
+		return $this->country;
+	}
+
+	/*
 	* Format date by the users country
 	*/
 	public function format_date( $date ) {
-		$date = explode( '-', $date );
-		return date( 'm/d/Y', mktime( 0, 0, 0, $date[1], $date[2], $date[0]) );
+		return $this->country->format_date( $date );
 	}
 
 	/*
 	* Format number by the users country
 	*/
 	public function format_number( $nubmer ) {
-		return number_format( $nubmer, 2, ',', '.' );
+		return $this->country->format_number( $nubmer );
 	}
-
-	/*
-	* Return currency by the users country
-	*/
-	public function currency() {
-		return 'kr';
-	}	
 
 	/*
 	* Display monthly price with currency and formated value
 	*/
 	public function monthly_price() {
-		return $this->currency().' '.$this->format_number( 99 );
+		return $this->country->monthly_price();
 	}
-
-	/*
-	* Get country name
- 	*/
- 	public function country() {
- 		return $this->get('country');		
- 	}
 
  	/*
  	* Check if user's subscription's type is premium

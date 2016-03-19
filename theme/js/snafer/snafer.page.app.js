@@ -17,6 +17,12 @@ function snaferPageApp() {
 	//change password form
 	self.change_password = typeof snaferChagnePasswordApp == 'function' ? new snaferChagnePasswordApp({ parent: self }) : null;
 
+	//edit profile form
+	self.edit_profile = typeof snaferEditProfileApp == 'function' ? new snaferEditProfileApp({ parent: self }) : null;
+
+	//edit billing info form
+	self.edit_billing_information = typeof snaferEditBillingInfoApp == 'function' ? new snaferEditBillingInfoApp({ parent: self }) : null;
+
 	//utils
 
 	//ajax call

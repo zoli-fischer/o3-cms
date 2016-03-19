@@ -30,7 +30,7 @@ function snaferChagnePasswordApp( opts ) {
 	//fields
 	self.fields = {
 		password: {
-			value: ko.observable(0),
+			value: ko.observable(''),
 			$: null,
 			default: '',
 			validate: function(str){ return jQuery.trim(str).length >= 4; },
@@ -75,8 +75,9 @@ function snaferChagnePasswordApp( opts ) {
 			//set loading flag
 			self.loading( true );
 
-			//clear success message
+			//clear messages
 			self.success_msg('');
+			self.error_msg('');
 
 			//create data
 			var data  = {};
@@ -100,19 +101,20 @@ function snaferChagnePasswordApp( opts ) {
 					//reset form
 					self.reset_form();
 
-					//got to page top
-					$('.logo-holder a').click();
+					//got to document top
+					scrollTop();
 				}, 
 				function( data ){ 
 					
 					//set loading flag
 					self.loading( false );
 					
-					if ( typeof data != 'undefined' && typeof data.data != 'undefined'  )
-						if ( typeof data.data.password != 'undefined' ) {
-							self.fields.password.error( true );
-							return;
-						};
+					if ( typeof data != 'undefined' && typeof data.data != 'undefined' && typeof data.data.password != 'undefined' ) {
+						self.fields.password.error( true );
+						return;
+					} else {
+						self.fields.password.error( false );						
+					};
 
 					self.error_msg('An error occurred. Please try again.');
 				}, 
@@ -134,7 +136,8 @@ function snaferChagnePasswordApp( opts ) {
 
 		//init fields
 		for ( prop in fields ) {
-			fields[prop].value('');
+			if ( typeof self.fields[prop].default !== 'undefined' )
+				fields[prop].value( self.fields[prop].default );
 			fields[prop].error(false);
 			fields[prop].$.blur();	
 		} 
@@ -150,8 +153,7 @@ function snaferChagnePasswordApp( opts ) {
 			//bind html elements
 			fields[prop].$ = self.$form.find("*[name="+prop+"]");			
 			if ( typeof fields[prop].$.val() != 'undefined' ) {
-				fields[prop].default = fields[prop].$.val();
-				fields[prop].value(fields[prop].default);
+				fields[prop].value(fields[prop].$.val());
 			};
 		};	
 	}();

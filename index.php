@@ -29,7 +29,13 @@ o3_header_encoding();
 require_once(O3_CMS_DIR.'/classes/o3_cms.php');
 
 //Create global O3 cms instance and flush the template buffer
-o3_with($o3_cms = new o3_cms())->flush();
+$o3_cms = new o3_cms();
+
+//load theme index file if exists
+@include(O3_CMS_THEME_DIR.'/index.php');
+
+//flush buffer
+$o3_cms->flush();
  
 
 ?>

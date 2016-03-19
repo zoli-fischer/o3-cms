@@ -34,3 +34,8 @@ function show_sign_up_form() {
 	if ( typeof window.snafer != 'undefined' )
 		window.snafer.sign_in_up.show_sign_up_form();
 };
+
+//scroll to top
+function scrollTop() {
+	jQuery("html, body").scrollTop(0);
+};

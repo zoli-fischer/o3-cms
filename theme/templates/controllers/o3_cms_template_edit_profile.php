@@ -22,6 +22,39 @@ class o3_cms_template_edit_profile extends snafer_template_controller {
 
 	}
 
+	public function ajax_edit_profile() {
+
+		//check if user logged and he/she is the sender
+		if ( $this->logged_user()->validate_ajax( $this->ajax_result ) ) {
+			
+			//check if current password is correct
+			if ( $this->logged_user()->get('password') === o3_sha3($this->ajax_result->value('password')) ) {
+
+				//update profile
+				if ( $this->logged_user()->update( array(
+						'email' => $this->ajax_result->value('email'),
+						'bday' => $this->ajax_result->value('bday'),
+						'gender' => $this->ajax_result->value('gender'),
+						'mobile' => $this->ajax_result->value('mobile'),
+						'country_id' => $this->ajax_result->value('country_id')
+					) ) )
+					$this->ajax_result->success();
+
+			} else {
+
+				//send password error
+				$this->ajax_result->data( 'password', true );
+
+	
+				//set error
+				$this->ajax_result->error();
+
+			}
+
+		}
+
+	}
+
 }
 
 ?>

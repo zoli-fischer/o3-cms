@@ -35,19 +35,20 @@
 
 					<div class="clearfix-lg"></div>
 	 		
-		 			<form id="change-password-form" class="col-md-8 col-md-offset-2 col-sm-8 col-sm-offset-2 gray-box" data-bind="submit: change_password.submit" autocomplete="nope">
+		 			<div id="change-password-form" class="form col-md-8 col-md-offset-2 col-sm-8 col-sm-offset-2 gray-box">
 
-			 			<div class="success-msg" data-bind="text: change_password.success_msg(), visible: change_password.success_msg() != ''"></div>
+			 			<div class="success-msg" data-bind="text: change_password.success_msg(), css: { 'block': change_password.success_msg() != '' }"></div>
 
-		 				<div class="error-msg" data-bind="text: change_password.error_msg(), visible: change_password.error_msg() != ''"></div>
-
-		 				<input type="text" name="username" value="<?php echo o3_html($this->logged_user()->get('username')); ?>" style="display: none" />
+		 				<div class="error-msg" data-bind="text: change_password.error_msg(), css: { 'block': change_password.error_msg() != '' }"></div>
+		 					
+		 				<!--Fix autocomplete-->
+		 				<input type="password" value="" class="none" />
 
 		 				<span>Current password</span>
 		 				<div class="form-group" data-bind="css: { 'has-warning': change_password.fields.password.error() }">
-		 					<input class="form-control" value="" name="password" type="password" 
+		 					<input class="form-control" type="password" 
 		 						data-bind="value: change_password.fields.password.value,
-										   valueUpdate: 'keyup'" autocomplete="nope">
+										   valueUpdate: 'keyup'">
 
 							<div class="warning" data-bind="visible: change_password.fields.password.error()">Sorry, wrong password.</div>
 						</div>
@@ -56,9 +57,9 @@
 
 						<span>New password</span>
 		 				<div class="form-group" data-bind="css: { 'has-warning': change_password.fields.password_new.error() }">
-		 					<input class="form-control" value="" name="password_new" type="password" 
+		 					<input class="form-control" type="password" 
 		 						data-bind="value: change_password.fields.password_new.value,
-										   valueUpdate: 'keyup'" autocomplete="nope">
+										   valueUpdate: 'keyup'">
 						
 							<div class="warning" data-bind="visible: change_password.fields.password_new.error()">Please choose a new password.</div>
 						</div>
@@ -67,10 +68,10 @@
 
 						<div class="btns">
 							<a href="/account">Cancel</a> 
-							<button class="btn" type="submit">Set new password</button>
+							<button class="btn" data-bind="click: change_password.submit">Set new password</button>
 						</div>
 
-		 			</form>
+		 			</div>
 
 				</div>
 			</div>

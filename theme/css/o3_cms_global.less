@@ -66,6 +66,13 @@ html {
 
 .valign-top { vertical-align: top;  }
 
+/* DISPLAY */
+
+.block { display: block !important; }
+.inline-block { display: inline-block !important; }
+.inline { display: inline !important; }
+.none { display: none !important; }
+
 /* MAIN FRAME */
 
 #o3-cms-wrapper {
@@ -182,7 +189,8 @@ h6 {
 	transition: all .3s ease-in-out;
 }
 
-form {
+form,
+.form {
 
 	.form-group { 
 
@@ -209,6 +217,12 @@ form {
 					box-shadow: none;
 				 	outline: 0 none;
 		 		}
+			}
+		}
+
+		&.read-only {
+			.form-control {
+				background: #f0f0f0 !important;
 			}
 		}
 	}
@@ -274,6 +288,12 @@ form {
 				color: #ece6e3 !important;
 			}
 		}
+
+		&:-moz-read-only,
+		&:read-only {
+			background: #333 !important;
+		}
+
 	}
 
 	select.form-control {
@@ -318,6 +338,7 @@ form {
 	}
 
 	.success-msg {
+		display: none;
 		padding: 10px 20px;
 		background: #00bff3;
 		color: #fff;
@@ -325,6 +346,7 @@ form {
 	}
 	
 	.error-msg {
+		display: none;
 		padding: 10px 20px;
 		background: #c85305;
 		color: #fff;
