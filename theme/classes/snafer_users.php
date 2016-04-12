@@ -9,6 +9,9 @@ require_once(O3_CMS_DIR.'/classes/o3_cms_user.php');
 //Require country class
 require_once(O3_CMS_THEME_DIR.'/classes/snafer_country.php');
 
+//Require payments class
+require_once(O3_CMS_THEME_DIR.'/classes/snafer_payments.php');
+
 /**
  * Snafer Users class
  *

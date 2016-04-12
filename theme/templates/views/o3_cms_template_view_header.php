@@ -30,7 +30,7 @@
 
 										<ul>
 											<li>
-												<a href="/account"><span>Account</span></a>
+												<a href="<?php echo $this->o3_cms()->page_url( ACCOUNT_PAGE_ID ); ?>"><span>Account</span></a>
 											</li>
 											<li>
 												<a href="/index.php?snafer-sign-out" data-bind="click: logged_user.signout"><i class="fa fa-sign-out"></i> <span>Sign out</span></a>
@@ -44,7 +44,7 @@
 		  					</li>	
 
 		  					<li class="visible-xs-block">
-								<a href="/account" class="logged-user-item" data-bind="visible: logged_user.is_logged()"><span>Account</span></a>
+								<a href="<?php echo $this->o3_cms()->page_url( ACCOUNT_PAGE_ID ); ?>" class="logged-user-item" data-bind="visible: logged_user.is_logged()"><span>Account</span></a>
 							</li>
 							<li class="visible-xs-block">
 								<a href="/index.php?snafer-sign-out" class="logged-user-item" data-bind="click: logged_user.signout, visible: logged_user.is_logged()"><i class="fa fa-sign-out"></i> <span>Sign out</span></a>

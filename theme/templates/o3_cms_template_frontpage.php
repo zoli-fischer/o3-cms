@@ -22,7 +22,7 @@
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col-sm-12">
-				<section class="parallax top-container" data-mobile="false" data-url="/res/parallax1.jpg" data-speed="3">
+				<section class="top-container" style="background-image: url(/res/top-frontpage.jpg)">
 
 					<div class="container">
 		        		<div class="row">
@@ -145,7 +145,7 @@
 
 	</section>
 
-	<section id="premium"  class="hash-anchor" data-bind="visible: !logged_user.is_logged()">
+	<section id="premium"  class="hash-anchor">
 		<div class="container">
 			<div class="row">
 				
@@ -158,20 +158,24 @@
 				<div class="col-md-4 col-md-offset-2 col-sm-5 col-sm-offset-1">
 
 					<div class="plan-box wow flipInX" data-wow-duration="1s" data-wow-delay=".3s">
-						<p>Free</p>
-						<b>kr 0,00 <span>/month</span></b>
-						<small>&nbsp;</small>
+						<p>Free</p>						
+						<b><?php echo o3_html($this->country()->format_price(0)); ?><span>/month</span></b>
+						<small data-bind="visible: !logged_user.is_logged() || logged_user.allow_trial()">&nbsp;</small>
 						<hr />
 						<ul>
-							<li class="active"><i class="fa fa-check"></i> Shuffle play</li>
-							<li><i class="fa fa-check"></i> Ad free</li>
-							<li><i class="fa fa-check"></i> Unlimited skips</li>
-							<li><i class="fa fa-check"></i> Listen offline</li>
-							<li><i class="fa fa-check"></i> Play any track</li>
-							<li><i class="fa fa-check"></i> High quality audio</li>
+							<li class="active"><i class="fa fa-check"></i> Send up to 4GB per upload</li>
+							<li><i class="fa fa-check"></i> Transfer expire in 14 days</li>
+							<li><i class="fa fa-check"></i> Transfer history</li>
+							<li><br></li>
+							<li><br></li>
+							<li><br></li>
 						</ul>
 						<hr />
-						<a href="/#sign-in" onclick="show_sign_up_form()" class="btn active">Get free</a>
+						<a href="/#sign-in" onclick="show_sign_up_form(SNAFER_FREE)" class="btn active" data-bind="visible: !logged_user.is_logged()">Get Free</a>
+						
+						<!--<a href="<?php echo $this->o3_cms()->page_url( CANCEL_SUBSCRIPTION_PAGE_ID ); ?>" class="btn active" data-bind="visible: logged_user.is_logged() && logged_user.is_premium()">Get back to Free</a>-->
+
+						<span data-bind="visible: logged_user.is_logged() && !logged_user.is_premium()"><i class="fa fa-check"></i> You're currently Snafer Free</span>
 					</div>
 
 				</div>
@@ -182,23 +186,109 @@
 					
 					<div class="plan-box plan-box-premium wow flipInX" data-wow-duration="1s" data-wow-delay=".5s">
 						<p>Premium</p>
-						<b>kr 99,00 <span>/month</span></b>
-						<small>Start your 30 day free trial</small>
+						<b><?php echo o3_html($this->country()->monthly_price()); ?><span>/month</span></b>
+						<small data-bind="visible: !logged_user.is_logged() || logged_user.allow_trial()">Start your 30 day free trial</small>						
 						<hr />
 						<ul>
-							<li class="active"><i class="fa fa-check"></i> Shuffle play</li>
-							<li class="active"><i class="fa fa-check"></i> Ad free</li>
-							<li class="active"><i class="fa fa-check"></i> Unlimited skips</li>
-							<li class="active"><i class="fa fa-check"></i> Listen offline</li>
-							<li class="active"><i class="fa fa-check"></i> Play any track</li>
-							<li class="active"><i class="fa fa-check"></i> High quality audio</li>
+							<li class="active"><i class="fa fa-check"></i> Send up to 20GB per upload</li>
+							<li><i class="fa fa-check"></i> Transfer never expire</li>
+							<li><i class="fa fa-check"></i> Transfer history</li>
+							<li><i class="fa fa-check"></i> Ad free</li>
+							<li><i class="fa fa-check"></i> Secure transfer with password</li>
+							<li><i class="fa fa-check"></i> Customize transfer</li>
 						</ul>
 						<hr />
-						<a href="/#sign-in" onclick="show_sign_up_form()" class="btn btn-primary active">Get premium</a>
+						<a href="/#sign-in" onclick="show_sign_up_form(SNAFER_PREMIUM)" class="btn btn-primary active" data-bind="visible: !logged_user.is_logged()">Get Premium</a>
+						<a href="/#get-premium" class="btn btn-primary active" data-bind="visible: logged_user.is_logged() && !logged_user.is_premium()">Get  Premium</a>
+						<span data-bind="visible: logged_user.is_logged() && logged_user.is_premium()"><i class="fa fa-check"></i> You're currently Snafer Premium</span>
 					</div>	
 
 				</div>
 
+			</div>
+		</div>
+	</section>
+
+	<section id="get-premium" class="hash-anchor" data-bind="visible: logged_user.is_logged() && !logged_user.is_premium()">
+		<div class="container wow fadeIn" data-wow-duration="1s" data-wow-delay=".5s">
+			<div class="row">
+				<form id="get-premium-form" class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2" data-bind="submit: sign_in_up.go_premium_submit">
+
+					<h2>Go Premium</h2>	
+
+					<p>Premium - <?php echo o3_html($this->country()->monthly_price()); ?><small>/month</small></p>
+
+					<div class="clearfix clearfix-sm"></div>					
+
+					<div class="error-msg" data-bind="text: sign_in_up.go_premium_error_msg(), css: { block: sign_in_up.go_premium_error_msg() != '' }"></div>					
+
+					<h3 class="text-left">Billing information</h3>					
+
+					<div class="clearfix clearfix-sm"></div>
+					
+					<div class="form-group" data-bind="css: { 'has-warning': sign_in_up.go_premium_fields.bil_name.value.o3_showError() }">
+						<input class="form-control" placeholder="Name / Company" name="bil_name" type="text" value="<?php echo o3_html($this->logged_user()->get('bil_name')); ?>" 
+							data-bind="value: sign_in_up.go_premium_fields.bil_name.value,
+									   valueUpdate: 'keyup',
+									   o3_validate: sign_in_up.go_premium_fields.bil_name.value">
+						<div class="warning" data-bind="visible: sign_in_up.go_premium_fields.bil_name.value.o3_showError()">Please type in your name.</div>
+					</div>
+
+					<?php
+					if ( $this->country()->has_vat() ) {
+					?>
+					<div class="form-group">
+						<input class="form-control" placeholder="Vat nr." name="bil_vat" type="text" value="<?php echo o3_html($this->logged_user()->get('bil_vat')); ?>" 
+							data-bind="value: sign_in_up.go_premium_fields.bil_vat.value,
+									   valueUpdate: 'keyup',
+									   o3_validate: sign_in_up.go_premium_fields.bil_vat.value">						
+					</div>
+					<?php
+					}
+					?>
+
+					<div class="form-group">
+						<input class="form-control" placeholder="Country" type="text" readonly="readonly" value="<?php echo ucfirst(strtolower(o3_html($this->country()->get('name')))); ?>">						
+					</div>
+
+					<p class="text-left"><small>To changing your country go to <a href="<?php echo $this->o3_cms()->page_url( EDIT_PROFILE_PAGE_ID ); ?>">edit profile page</a>.</small></p>
+
+					<div class="clearfix-xs"></div>
+
+					<div class="form-group" data-bind="css: { 'has-warning': sign_in_up.go_premium_fields.bil_city.value.o3_showError() }">
+						<input class="form-control" placeholder="City" name="bil_city" type="text" value="<?php echo o3_html($this->logged_user()->get('bil_city')); ?>" 
+							data-bind="value: sign_in_up.go_premium_fields.bil_city.value,
+									   valueUpdate: 'keyup',
+									   o3_validate: sign_in_up.go_premium_fields.bil_city.value">
+						<div class="warning" data-bind="visible: sign_in_up.go_premium_fields.bil_city.value.o3_showError()">Please type in your city.</div>
+					</div>
+
+					<div class="form-group" data-bind="css: { 'has-warning': sign_in_up.go_premium_fields.bil_zip.value.o3_showError() }">
+						<input class="form-control" placeholder="Postal code" name="bil_zip" type="text" value="<?php echo o3_html($this->logged_user()->get('bil_zip')); ?>" 
+							data-bind="value: sign_in_up.go_premium_fields.bil_zip.value,
+									   valueUpdate: 'keyup',
+									   o3_validate: sign_in_up.go_premium_fields.bil_zip.value">
+						<div class="warning" data-bind="visible: sign_in_up.go_premium_fields.bil_zip.value.o3_showError()">Please type in your postal code.</div>
+					</div>
+
+					<div class="form-group" data-bind="css: { 'has-warning': sign_in_up.go_premium_fields.bil_address.value.o3_showError() }">
+						<input class="form-control" placeholder="Address" name="bil_address" type="text" value="<?php echo o3_html($this->logged_user()->get('bil_address')); ?>" 
+							data-bind="value: sign_in_up.go_premium_fields.bil_address.value,
+									   valueUpdate: 'keyup',
+									   o3_validate: sign_in_up.go_premium_fields.bil_address.value">
+						<div class="warning" data-bind="visible: sign_in_up.go_premium_fields.bil_address.value.o3_showError()">Please type in your address.</div>
+					</div>
+
+
+					<p><br></p>
+
+					<p class="text-left"><small>By clicking on Go Premium, you agree to <a href="<?php echo $this->o3_cms()->page_url( TERMS_PAGE_ID ); ?>" target="_blank">Snafer's terms & conditions and privacy policy</a></small></p>
+
+					<p><br></p>
+
+					<button type="submit" class="btn btn-primary">Go Premium</button>
+
+				</form>
 			</div>
 		</div>
 	</section>
@@ -211,7 +301,7 @@
 
 					<h2>Sign in</h2>
 
-					<div class="error-msg" data-bind="text: sign_in_up.sign_in_error_msg(), visible: sign_in_up.sign_in_error_msg() != ''"></div>
+					<div class="error-msg" data-bind="text: sign_in_up.sign_in_error_msg(), css: { block: sign_in_up.sign_in_error_msg() != '' }"></div>
 
 					<div class="form-group">
 						<input class="form-control" placeholder="Username" name="username" type="text">
@@ -251,7 +341,18 @@
 					
 					<h2>Sign up</h2>
 
-					<div class="error-msg" data-bind="text: sign_in_up.sign_up_error_msg(), visible: sign_in_up.sign_up_error_msg() != ''"></div>
+					<div class="error-msg" data-bind="text: sign_in_up.sign_up_error_msg(), css: { block: sign_in_up.sign_up_error_msg() != '' }"></div>
+
+					<div class="form-group">
+						<div class="float-left">
+							<a href="#" class="radio" data-bind="click: function(){ sign_in_up.sign_up_form_type(SNAFER_FREE) }, css: { 'active': sign_in_up.sign_up_form_type() != SNAFER_PREMIUM }"><span><i class="fa fa-circle"></i></span> Free - <?php echo o3_html($this->country()->format_price(0)); ?><small>/month</small></a>
+						</div>	
+						<div class="float-left radio-2nd">
+							<a href="#" class="radio" data-bind="click: function(){ sign_in_up.sign_up_form_type(SNAFER_PREMIUM) }, css: { 'active': sign_in_up.sign_up_form_type() == SNAFER_PREMIUM }"><span><i class="fa fa-circle"></i></span> Premium - <?php echo o3_html($this->country()->monthly_price()); ?><small>/month</small></a>
+						</div>
+
+						<div class="clearfix"></div>
+					</div>
 
 					<div class="form-group" data-bind="css: { 'has-warning': sign_in_up.sign_up_fields.username.value.o3_showError() }">
 						<input class="form-control" placeholder="Username" name="username" type="text" 
@@ -284,7 +385,7 @@
 
 					<p class="text-left">Date of birth:</p>
 					<div class="form-group form-group-date" data-bind="css: { 'has-warning': sign_in_up.sign_up_fields.bday_day.value.o3_showError() || sign_in_up.sign_up_fields.bday_month.value.o3_showError() || sign_in_up.sign_up_fields.bday_year.value.o3_showError() }">
-						<input class="form-control" placeholder="Day" name="bithdate_day" type="text"
+						<input class="form-control" placeholder="Day" name="bithdate_day" type="text" maxlength="2" 
 							data-bind="value: sign_in_up.sign_up_fields.bday_day.value,
 									   valueUpdate: 'keyup',
 									   o3_validate: sign_in_up.sign_up_fields.bday_day.value">
@@ -307,7 +408,7 @@
 							<option value="11">November</option>
 							<option value="12">December</option>
 						</select>
-						<input class="form-control" placeholder="Year" name="bithdate_year" type="text"
+						<input class="form-control" placeholder="Year" name="bithdate_year" type="text" maxlength="4"
 							data-bind="value: sign_in_up.sign_up_fields.bday_year.value,
 									   valueUpdate: 'keyup',
 									   o3_validate: sign_in_up.sign_up_fields.bday_year.value">
@@ -337,11 +438,68 @@
 						<div class="warning">Please indicate your gender.</div>
 					</div>
 
-					<div class="clearfix"></div>
+					<div class="clearfix clearfix-sm"></div>
+
+					<div data-bind="visible: sign_in_up.sign_up_form_type() == SNAFER_PREMIUM">
+						<h3 class="text-left">Billing information</h3>
+						
+
+						<div class="clearfix clearfix-sm"></div>
+						
+						<div class="form-group" data-bind="css: { 'has-warning': sign_in_up.sign_up_fields.bil_name.value.o3_showError() }">
+							<input class="form-control" placeholder="Name / Company" name="bil_name" type="text" 
+								data-bind="value: sign_in_up.sign_up_fields.bil_name.value,
+										   valueUpdate: 'keyup',
+										   o3_validate: sign_in_up.sign_up_fields.bil_name.value">
+							<div class="warning" data-bind="visible: sign_in_up.sign_up_fields.bil_name.value.o3_showError()">Please type in your name.</div>
+						</div>
+
+						<?php
+						if ( $this->country()->has_vat() ) {
+						?>
+						<div class="form-group">
+							<input class="form-control" placeholder="Vat nr." name="bil_vat" type="text" 
+								data-bind="value: sign_in_up.sign_up_fields.bil_vat.value,
+										   valueUpdate: 'keyup',
+										   o3_validate: sign_in_up.sign_up_fields.bil_vat.value">						
+						</div>
+						<?php
+						}
+						?>
+
+						<div class="form-group">
+							<input class="form-control" placeholder="Country" type="text" readonly="readonly" value="<?php echo ucfirst(strtolower(o3_html($this->country()->get('name')))); ?>">						
+						</div>
+
+						<div class="form-group" data-bind="css: { 'has-warning': sign_in_up.sign_up_fields.bil_city.value.o3_showError() }">
+							<input class="form-control" placeholder="City" name="bil_city" type="text" 
+								data-bind="value: sign_in_up.sign_up_fields.bil_city.value,
+										   valueUpdate: 'keyup',
+										   o3_validate: sign_in_up.sign_up_fields.bil_city.value">
+							<div class="warning" data-bind="visible: sign_in_up.sign_up_fields.bil_city.value.o3_showError()">Please type in your city.</div>
+						</div>
+
+						<div class="form-group" data-bind="css: { 'has-warning': sign_in_up.sign_up_fields.bil_zip.value.o3_showError() }">
+							<input class="form-control" placeholder="Postal code" name="bil_zip" type="text" 
+								data-bind="value: sign_in_up.sign_up_fields.bil_zip.value,
+										   valueUpdate: 'keyup',
+										   o3_validate: sign_in_up.sign_up_fields.bil_zip.value">
+							<div class="warning" data-bind="visible: sign_in_up.sign_up_fields.bil_zip.value.o3_showError()">Please type in your postal code.</div>
+						</div>
+
+						<div class="form-group" data-bind="css: { 'has-warning': sign_in_up.sign_up_fields.bil_address.value.o3_showError() }">
+							<input class="form-control" placeholder="Address" name="bil_address" type="text" 
+								data-bind="value: sign_in_up.sign_up_fields.bil_address.value,
+										   valueUpdate: 'keyup',
+										   o3_validate: sign_in_up.sign_up_fields.bil_address.value">
+							<div class="warning" data-bind="visible: sign_in_up.sign_up_fields.bil_address.value.o3_showError()">Please type in your address.</div>
+						</div>
+
+					</div>
 
 					<p><br></p>
 
-					<p class="text-left"><small>By clicking on Sign up, you agree to <a href="/terms-and-policies" target="_blank">Snafer's terms & conditions and privacy policy</a></small></p>
+					<p class="text-left"><small>By clicking on Sign up, you agree to <a href="<?php echo $this->o3_cms()->page_url( TERMS_PAGE_ID ); ?>" target="_blank">Snafer's terms & conditions and privacy policy</a></small></p>
 
 					<p><br></p>
 

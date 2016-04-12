@@ -134,8 +134,13 @@ class o3_mysqli extends mysqli {
 	public function select( $table_name, $conditions, $fields = '*', $limit = '', $orderby = '' ) {
 		
 		$conditions_list = array();
-		foreach ( $conditions as $key => $value )
-			$conditions_list[] = '`'.$this->escape_string( $key ).'` = "'.$this->escape_string( $value ).'"';		
+		foreach ( $conditions as $key => $value ) {
+			if ( $value === null ) {
+				$conditions_list[] = '`'.$this->escape_string( $key ).'` = NULL';
+			} else {
+				$conditions_list[] = '`'.$this->escape_string( $key ).'` = "'.$this->escape_string( $value ).'"';
+			}
+		}
 
 		$sql = "SELECT ".$this->escape_string($fields)." FROM ".$this->escape_string( $table_name )." ".
 			  ( count($conditions_list) > 0 ? " WHERE ".implode( ' AND ', $conditions_list ) : "" )." ".
@@ -180,7 +185,11 @@ class o3_mysqli extends mysqli {
 		$fields_list = array();
 		
 		foreach ( $values as $key => $value ) {
-			$values_list[] = '"'.$this->escape_string( $value ).'"';
+			if ( $value === null ) {
+				$values_list[] = 'NULL';
+			} else {
+				$values_list[] = '"'.$this->escape_string( $value ).'"';
+			}
 			$fields_list[] = '`'.$this->escape_string( $key ).'`';
 		}
 
@@ -213,14 +222,27 @@ class o3_mysqli extends mysqli {
 	public function update( $table_name, $values, $conditions ) {
 
 		$values_list = array();		
-		foreach ( $values as $key => $value )
-			$values_list[] = '`'.$this->escape_string( $key ).'` = "'.$this->escape_string( $value ).'"';					
+		foreach ( $values as $key => $value ) {
+			if ( $value === null ) {
+				$values_list[] = '`'.$this->escape_string( $key ).'` = NULL';					
+			} else {
+				$values_list[] = '`'.$this->escape_string( $key ).'` = "'.$this->escape_string( $value ).'"';					
+			}
+		}
 
 		$conditions_list = array();
-		foreach ( $conditions as $key => $value )
-			$conditions_list[] = '`'.$this->escape_string( $key ).'` = "'.$this->escape_string( $value ).'"';		
+		foreach ( $conditions as $key => $value ) {
+			if ( $value === null ) {
+				$conditions_list[] = '`'.$this->escape_string( $key ).'` = NULL';		
+			} else {
+				$conditions_list[] = '`'.$this->escape_string( $key ).'` = "'.$this->escape_string( $value ).'"';		
+			}
+		}
 
 		$sql = "UPDATE ".$this->escape_string( $table_name )." SET ".implode( ',', $values_list )." WHERE ".implode( ' AND ', $conditions_list )." ";
+
+		global $o3;
+		$o3->debug->_( $sql );
 		
 		return $this->query( $sql );
 
@@ -237,8 +259,13 @@ class o3_mysqli extends mysqli {
 	public function delete( $table_name, $conditions ) {
 
 		$conditions_list = array();
-		foreach ( $conditions as $key => $value )
-			$conditions_list[] = '`'.$this->escape_string( $key ).'` = "'.$this->escape_string( $value ).'"';		
+		foreach ( $conditions as $key => $value ) {
+			if ( $value === null ) {
+				$conditions_list[] = '`'.$this->escape_string( $key ).'` = NULL';
+			} else {	
+				$conditions_list[] = '`'.$this->escape_string( $key ).'` = "'.$this->escape_string( $value ).'"';		
+			}
+		}
 
 		$sql = "DELETE FROM ".$this->escape_string( $table_name )." WHERE ".implode( ' AND ', $conditions_list )." ";
 		return $this->query( $sql );

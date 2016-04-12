@@ -23,6 +23,9 @@ function snaferPageApp() {
 	//edit billing info form
 	self.edit_billing_information = typeof snaferEditBillingInfoApp == 'function' ? new snaferEditBillingInfoApp({ parent: self }) : null;
 
+	//cancel subsciption form
+	self.cancel_subsciption = typeof snaferCancelSubsciptionApp == 'function' ? new snaferCancelSubsciptionApp({ parent: self }) : null;
+
 	//utils
 
 	//ajax call

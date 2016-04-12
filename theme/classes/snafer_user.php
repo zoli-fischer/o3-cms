@@ -30,12 +30,17 @@ define('SNAFER_PREMIUM','premium');
 define('SNAFER_CARD','card');
 define('SNAFER_PAYPAL','paypal');
 
+//Subsciption length in days
+define('SNAFER_PERIOD_DAYS',30);
+
+//Subsciption length in seconds
+define('SNAFER_PERIOD_SECS',SNAFER_PERIOD_DAYS * 24 * 3600);
 
 class snafer_user extends o3_cms_object {
 
 	protected $country = false;
 
-	/*
+	/**
 	* Load user with id
 	* @param id User id to select
 	*/
@@ -69,12 +74,19 @@ class snafer_user extends o3_cms_object {
 			$conditions = $conditions === null ? array() : $conditions;
 			$conditions['id'] = $this->get('id');
 
-			return o3_with(new snafer_users())->update( $values, $conditions );
+			//update
+			if ( o3_with(new snafer_users())->update( $values, $conditions ) !== false ) {				
+
+				//reload user data
+				$this->reload();
+
+				return true;
+			}	
 		}
 		return false;
 	}
 
-	/*
+	/**
 	* Set user password
 	*
 	* @param string $password Not encrupted password
@@ -90,7 +102,7 @@ class snafer_user extends o3_cms_object {
 		return false;
 	}
 
-	/*
+	/**
 	* Log in user from session
 	*/
 	public function load_from_session() {
@@ -105,7 +117,7 @@ class snafer_user extends o3_cms_object {
 		return false;
 	}
 
-	/*
+	/**
 	* Check if user is logged
 	* @return boolean
 	*/
@@ -116,7 +128,7 @@ class snafer_user extends o3_cms_object {
 			   isset($_SESSION[SNAFER_SIGNED_USER_SESSION_INDEX_ID]) && $_SESSION[SNAFER_SIGNED_USER_SESSION_INDEX_ID] == $this->get('id');
 	}
 
-	/*
+	/**
 	* Log user in
 	*/
 	public function set_logged( $username, $password ) {
@@ -141,7 +153,7 @@ class snafer_user extends o3_cms_object {
 		return false;
 	}
 
-	/*
+	/**
 	* Log user out
 	*/
 	public function set_logged_out() {
@@ -152,7 +164,7 @@ class snafer_user extends o3_cms_object {
 		$_SESSION[SNAFER_SIGNED_USER_SESSION_INDEX_ID] = 0;
 	}
 
-	/*
+	/**
 	* Check if user logged and he/she is the sender
 	*/
 	public function validate_ajax( &$ajax_result ) {
@@ -177,60 +189,202 @@ class snafer_user extends o3_cms_object {
 		return false;		
 	}
 
-	/*
+	/**
 	* Get country object
 	*/
 	public function country() {
 		return $this->country;
 	}
 
-	/*
+	/**
 	* Format date by the users country
 	*/
 	public function format_date( $date ) {
 		return $this->country->format_date( $date );
 	}
 
-	/*
+	/**
 	* Format number by the users country
 	*/
 	public function format_number( $nubmer ) {
 		return $this->country->format_number( $nubmer );
 	}
 
-	/*
+	/**
 	* Display monthly price with currency and formated value
 	*/
 	public function monthly_price() {
 		return $this->country->monthly_price();
 	}
 
- 	/*
+ 	/**
  	* Check if user's subscription's type is premium
  	*/
  	public function is_premium() {
  		return $this->get('subsciption_type') === SNAFER_PREMIUM;
  	}
 
- 	/*
+ 	/**
  	* Check if user's subscription's is paid
  	*/
  	public function is_paid() {
- 		return $this->get('subscription_paid') > '0000-00-00';
+ 		return $this->get('subscription_paid') !== null && $this->get('subscription_paid') <= $this->country()->now();
  	}
 
- 	/*
+ 	/**
+ 	* Has payment
+ 	*/
+ 	public function has_payment() {
+		return $this->get('subscription_pay_type') == SNAFER_CARD || $this->get('subscription_pay_type') == SNAFER_PAYPAL;
+ 	}
+
+ 	/**
  	* Update payment
  	*/
  	public function update_payment( $type, $cardnumber ) {
  		//check valid type and update
- 		if ( $type == SNAFER_CARD || $type == SNAFER_PAYPAL )
- 			return $this->update( array( 'subscription_pay_type' => $type, 'subscription_pay_card' => substr( $cardnumber, 12, 4 ) ) );
+ 		if ( $type == SNAFER_CARD || $type == SNAFER_PAYPAL ) { 			
+ 			$update = array( 
+ 				'subscription_pay_type' => $type, 
+ 				'subscription_pay_card' => substr( $cardnumber, 12, 4 ) 
+ 			);
+ 			
+ 			return $this->update( $update );
+ 		}
 
  		return false;
  	}
 
+ 	/*
+ 	* Check if user allowed for trial
+ 	*/
+ 	public function allow_trial() {
+ 		return $this->get('subscription_trial') === null;
+ 	}
+
+ 	/*
+ 	* Set premium subscription
+ 	*/
+ 	public function set_premium_subscription() { 		
+ 		$now = $this->country->now();
+ 		$return = false;
+
+ 		if ( $this->allow_trial() ) {
+			
+			$values = array(
+					'subsciption_type' => SNAFER_PREMIUM,
+					'subsciption_start' => date('Y-m-d',$now),
+					'subsciption_end' => date('Y-m-d',$now + SNAFER_PERIOD_SECS),
+					'subscription_paid' => date('Y-m-d',$now),
+					'subscription_trial' => date('Y-m-d',$now)
+				);			
+			$return = $this->update( $values );
 	
+			//create payment
+			if ( $return )
+				$this->add_subscription_payment( true );
+
+		} else if ( $this->is_paid() ) {
+
+			$values = array(
+					'subsciption_type' => SNAFER_PREMIUM					
+				);			
+			$return = $this->update( $values );
+
+		} else {
+
+			$values = array(
+					'subsciption_type' => SNAFER_PREMIUM,
+					'subsciption_start' => date('Y-m-d',$now),
+					'subsciption_end' => date('Y-m-d',$now + SNAFER_PERIOD_SECS),
+					'subscription_paid' => $this->has_payment() ? date('Y-m-d',$now) : null
+				);			
+			$return = $this->update( $values );
+
+			//create payment
+			if ( $return )
+				$this->add_subscription_payment( true );
+
+		}
+		return $return;
+ 	} 
+ 	
+ 	/*
+ 	* Cancel subscription
+ 	*/ 
+ 	public function cancel_subscription() {
+ 		if ( !$this->is_premium() )
+ 			return true;
+
+ 		//update user
+ 		$update = array( 
+ 			'subsciption_type' => SNAFER_FREE/*, 
+ 			'subscription_paid' => null,
+ 			'subsciption_start' => null,
+ 			'subsciption_end' => null*/
+ 		); 			 			 		
+ 		$this->update( $update );
+
+ 		//check is still premium
+ 		return !$this->is_premium();
+ 	}
+
+ 	/**
+ 	* Add payment
+ 	*
+ 	* @param boolean $is_trial If the payment is for trial, than the value is 0
+ 	* @return boolean
+ 	*/
+ 	public function add_subscription_payment( $is_trial = false ) {
+ 		if ( $this->is() ) {
+ 			$has_vat = $this->country->has_vat();
+ 			
+ 			//home country always vat payment and if country has vat and no vat inserted than vat payment
+ 			$vat_percent = $has_vat && ( $this->country->get('country_code') == SNAFER_PAYMENT_HOME_COUNTRY || strlen(trim($this->get('bil_vat'))) == 0 ) ? SNAFER_PAYMENT_VAT_PERCENT : 0;
+ 		
+ 			$total_excl_vat = $is_trial ? 0 : snafer_payments::get_excl_vat_value( $this->country->get('monthly_price'), $vat_percent );;
+ 			$total_vat = $total_excl_vat * $vat_percent / 100;
+ 			$total_incl_vat = $total_excl_vat + $total_vat;
+
+	 		$values = array(
+	 				'user_id' => $this->get('id'),
+	 				'username' => $this->get('username'),
+	 				'email' => $this->get('email'),
+	 				'mobile' => $this->get('mobile'),
+	 				'country_id' => $this->country->get('id'),
+	 				'bil_name' => $this->get('bil_name'),
+	 				'bil_vat' => $this->get('bil_vat'),	 				
+	 				'bil_country' => $this->country->get('name'),
+	 				'bil_city' => $this->get('bil_city'),
+	 				'bil_zip' => $this->get('bil_zip'),
+	 				'bil_address' => $this->get('bil_address'),
+	 				'product' => "Snafer Premium monthly subscription from ".$this->format_date($this->get('subsciption_start'))." to ".$this->format_date($this->get('subsciption_end')),
+	 				'currency' => $this->country->get('currency'),
+	 				'show_vat' => $has_vat ? 1 : 0,
+	 				'vat_percent' => $vat_percent,
+	 				'total_excl_vat' => $total_excl_vat,
+	 				'total_vat' => $total_vat,
+	 				'total_incl_vat' => $total_incl_vat,
+	 				'subscription_pay_type' => $this->get('subscription_pay_type'),
+	 				'subscription_pay_card' => $this->get('subscription_pay_card')
+	 			);
+	 		return o3_with(new snafer_payments())->insert( $values );
+	 	}
+	 	return false;
+ 	}
+
+ 	/**
+ 	* Get user's payments
+ 	*/
+ 	public function get_payments() {
+ 		$payments = array();
+ 		if ( $this->is() ) {
+ 			$user_payments = o3_with(new snafer_payments())->select( 'id',  ' user_id = '.$this->get('id'), ' created DESC ' );
+ 			foreach ( $user_payments as $key => $value )
+ 				$payments[] = new snafer_payment( $value->id );
+		}
+		return $payments;
+ 	}
 
 
 }

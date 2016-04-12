@@ -6,6 +6,9 @@ require_once(O3_CMS_DIR.'/classes/o3_cms_page.php');
 //Require user class
 require_once(O3_CMS_DIR.'/classes/o3_cms_user.php');
 
+//require theme template controller class
+require_once(O3_CMS_DIR.'/classes/o3_cms_template_controller.php');
+
 /**
  * O3 CMS Main class
  *
@@ -57,9 +60,6 @@ class o3_cms {
 
 		} else {
 
-			//require theme template controller class
-			require_once(O3_CMS_DIR.'/classes/o3_cms_template_controller.php');			
-
 			//set template and flush template buffer
 			$o3->template->flush( $this->page->template()->name() );
 
@@ -84,15 +84,17 @@ class o3_cms {
 
 	/*
 	* Get page url
-	* If id is omitted than the frontpage url is returned.
+	* If id is omitted than the current page url is returned.
 	*
 	* @param int $id Page id
 	* @param int $param Parameters as array
 	* @param int $hash Hash tag
 	* @return mixed String if page found else false
 	*/
-	public function page_url( $id = 0, $params = array(), $hash = '' ) {
-		return O3_CMS_URL.'/';
+	public function page_url( $page_id = 0, $params = array(), $hash = '' ) {
+		//$url = O3_CMS_URL.'/';
+		$page_id = $page_id == 0 ? $this->page->get('id') : $page_id;
+		return o3_with($o3_cms_pages = new o3_cms_pages())->page_url( $page_id, $params, $hash );
 	}
 
 	/*

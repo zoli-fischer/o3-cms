@@ -41,11 +41,14 @@
 
 		 				<div class="error-msg" data-bind="text: edit_billing_information.error_msg(), css: { 'block': edit_billing_information.error_msg() != '' }"></div>
 		 				
+
 						<span>Name / Company</span>
-		 				<div class="form-group">
+		 				<div class="form-group" data-bind="css: { 'has-warning': edit_billing_information.fields.bil_name.value.o3_showError() }">
 		 					<input class="form-control" placeholder="" value="<?php echo o3_html($this->logged_user()->get('bil_name')); ?>" name="bil_name" type="text"
 		 					data-bind="value: edit_billing_information.fields.bil_name.value,
-									   valueUpdate: 'keyup'">
+									   valueUpdate: 'keyup',
+									   o3_validate: edit_billing_information.fields.bil_name.value">
+							<div class="warning" data-bind="visible: edit_billing_information.fields.bil_name.value.o3_showError()">Please type in your name.</div>
 						</div>
 
 						<div class="clearfix-sm"></div> 
@@ -67,42 +70,48 @@
 
 						<span>Country</span>
 		 				<div class="form-group read-only">
-		 					<input class="form-control" placeholder="" readonly="readonly" value="<?php echo ucfirst(strtolower(o3_html($this->logged_user()->country()->get('name')))); ?>" >
+		 					<input class="form-control" placeholder="" readonly="readonly" value="<?php echo ucfirst(strtolower(o3_html($this->logged_user()->country()->get('name')))); ?>" >							
 						</div>
 
-						<p><small>To changing your country go to <a href="/edit-profile">edit profile page</a>.</small></p>
+						<p><small>To changing your country go to <a href="<?php echo $this->o3_cms()->page_url( EDIT_PROFILE_PAGE_ID ); ?>">edit profile page</a>.</small></p>
 
 						<div class="clearfix-m"></div>
 
 						<span>City</span>
-		 				<div class="form-group">
+		 				<div class="form-group" data-bind="css: { 'has-warning': edit_billing_information.fields.bil_city.value.o3_showError() }">
 		 					<input class="form-control" placeholder="" value="<?php echo o3_html($this->logged_user()->get('bil_city')); ?>" name="bil_city" type="text"
 		 					data-bind="value: edit_billing_information.fields.bil_city.value,
-									   valueUpdate: 'keyup'">
+									   valueUpdate: 'keyup',
+									   o3_validate: edit_billing_information.fields.bil_city.value">
+							<div class="warning" data-bind="visible: edit_billing_information.fields.bil_city.value.o3_showError()">Please type in your name.</div>
 						</div>
 
 						<div class="clearfix-sm"></div>
 
 						<span>Postal code</span>
-		 				<div class="form-group">
+		 				<div class="form-group" data-bind="css: { 'has-warning': edit_billing_information.fields.bil_zip.value.o3_showError() }">
 		 					<input class="form-control" placeholder="" value="<?php echo o3_html($this->logged_user()->get('bil_zip')); ?>" name="bil_zip" type="text"
 		 					data-bind="value: edit_billing_information.fields.bil_zip.value,
-									   valueUpdate: 'keyup'">
+									   valueUpdate: 'keyup',
+									   o3_validate: edit_billing_information.fields.bil_zip.value">
+							<div class="warning" data-bind="visible: edit_billing_information.fields.bil_zip.value.o3_showError()">Please type in your name.</div>
 						</div>
 
 						<div class="clearfix-sm"></div>
 
 						<span>Address</span>
-		 				<div class="form-group">
+		 				<div class="form-group" data-bind="css: { 'has-warning': edit_billing_information.fields.bil_address.value.o3_showError() }">
 		 					<input class="form-control" placeholder="" value="<?php echo o3_html($this->logged_user()->get('bil_address')); ?>" name="bil_address" type="text"
 		 					data-bind="value: edit_billing_information.fields.bil_address.value,
-									   valueUpdate: 'keyup'">
+									   valueUpdate: 'keyup',
+									   o3_validate: edit_billing_information.fields.bil_address.value">
+							<div class="warning" data-bind="visible: edit_billing_information.fields.bil_address.value.o3_showError()">Please type in your name.</div>
 						</div>
 
 						<div class="clearfix-lg"></div>
 
 						<div class="btns">
-							<a href="/account">Cancel</a> 
+							<a href="<?php echo $this->o3_cms()->page_url( ACCOUNT_PAGE_ID ); ?>">Cancel</a> 
 							<button class="btn" data-bind="click: edit_billing_information.submit">Save billing information</button>
 						</div>
 

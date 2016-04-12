@@ -55,7 +55,7 @@ class snafer_country extends o3_cms_object {
 	*/
 	public function format_date( $date ) {
 		$date = explode( '-', $date );
-		return date( $this->is() ? $this->get('date_format') : 'j/n/Y', mktime( 0, 0, 0, $date[1], $date[2], $date[0]) );
+		return date( $this->is() ? $this->get('date_format') : 'j/n/Y', mktime( 0, 0, 0, intval($date[1]), intval($date[2]), intval($date[0]) ) );
 	}
 
 	/*
@@ -97,6 +97,14 @@ class snafer_country extends o3_cms_object {
 	*/
 	public function monthly_price() {
 		return $this->is() ? $this->format_price( $this->get('monthly_price') ) : false;
+	}
+
+	/*
+	* Get current timestamp in current country
+	*/
+	public function now() {
+		$timestamp = time();
+		return $timestamp;
 	}
 
 }

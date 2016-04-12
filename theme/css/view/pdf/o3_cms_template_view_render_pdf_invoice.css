@@ -1,0 +1,30 @@
+body, html {
+	font-family: Helvetica, sans-serif;
+	color: #000;
+	font-size: 16px; 
+	background: #ff0000 !important;
+}
+
+.pdf-content {
+	width: 635px;
+	padding: 0px;
+	margin: 60px auto 30px auto;  
+	position: relative;
+}
+
+h1 {
+	color: #000;
+	font-size: 35px;
+}
+
+.left {
+	text-align: left;
+}
+
+.right {
+	text-align: right;
+}
+
+table {
+	width: 100%;
+}

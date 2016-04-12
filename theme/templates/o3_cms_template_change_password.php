@@ -67,7 +67,7 @@
 						<div class="clearfix-lg"></div>
 
 						<div class="btns">
-							<a href="/account">Cancel</a> 
+							<a href="<?php echo $this->o3_cms()->page_url( ACCOUNT_PAGE_ID ); ?>">Cancel</a> 
 							<button class="btn" data-bind="click: change_password.submit">Set new password</button>
 						</div>
 

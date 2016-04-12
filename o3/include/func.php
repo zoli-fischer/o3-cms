@@ -331,6 +331,51 @@ function o3_current_url() {
 	return o3_get_host().$_SERVER['REQUEST_URI'];
 }
 
+/**
+ * Check if url is absolute or relative
+ */
+function o3_is_absolute_url( $url ) {
+	$uri_parts = parse_url($url);
+	return isset($uri_parts['host']);
+}
+
+/**
+ * Add parameters to url
+ *
+ * @param string $url
+ * @param params $array
+ * @return string url with parameters
+ */
+function o3_add_params_url( $url, $params ) {
+	if ( is_array($params) && count($params) > 0 ) {
+		$p = array(); 
+		foreach ( $params as $key => $value )
+			$p[] = $key.'='.$value;		
+		return $url.( strpos( $url, '?' ) === false ? '?' : '&' ).implode( '&', $p );
+	}	
+	return $url;
+}
+
+/**
+ * Add hash to url
+ *
+ * @param string $url
+ * @param hash $string
+ * @param boolean $replace Replace hash if url has one
+ *
+ * @return string url with hash
+ */
+function o3_add_hash_url( $url, $hash, $replace = true ) {
+	if ( strlen($hash) > 0 ) {
+		$uri_parts = parse_url($url);
+		if ( isset($uri_parts['fragment']) && $replace ) {
+			return str_replace( '#'.$uri_parts['fragment'], '#'.$hash, $url );
+		} else {
+			return $url.'#'.$hash;
+		}
+	}	
+	return $url;
+}
 
 //ARRAY
 

@@ -32,7 +32,7 @@ class snafer_template_controller extends o3_cms_template_controller {
 				$this->country = new snafer_country( $_SESSION['snafer_country_id'] );	
 			} else {
 				$this->country = new snafer_country( 0 );
-				$this->country->load_by_ip( $_SERVER['REMOTE_ADDR'].'1' );
+				$this->country->load_by_ip( $_SERVER['REMOTE_ADDR'] );
 			}
 
 			//if country not found load default country
@@ -51,7 +51,7 @@ class snafer_template_controller extends o3_cms_template_controller {
 	*/
 	public function country() {
 		return $this->country === false ? $this->logged_user->country() : $this->country;
-	}
+	}	
 
 	/*
 	* Return logged_user 

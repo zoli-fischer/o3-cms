@@ -1,3 +1,4 @@
 /config.php
 ftpsync.settings
 /cache/*
+*.sql

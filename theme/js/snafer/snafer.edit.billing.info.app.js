@@ -32,27 +32,32 @@ function snaferEditBillingInfoApp( opts ) {
 		bil_name: {
 			value: ko.observable(''),
 			$: null,
-			error: ko.observable( false )
+			error: ko.observable( false ),
+			validate: function(str){ return str != '' }
 		},
 		bil_vat: {
 			value: ko.observable(''),
 			$: null,
-			error: ko.observable( false )
+			error: ko.observable( false ),
+			validate: false
 		},
 		bil_city: {
 			value: ko.observable(''),
 			$: null,
-			error: ko.observable( false )
+			error: ko.observable( false ),
+			validate: function(str){ return str != '' }
 		},
 		bil_zip: {
 			value: ko.observable(''),
 			$: null,
-			error: ko.observable( false )
+			error: ko.observable( false ),
+			validate: function(str){ return str != '' }
 		},
 		bil_address: {
 			value: ko.observable(''),
 			$: null,
-			error: ko.observable( false )
+			error: ko.observable( false ),
+			validate: function(str){ return str != '' }
 		}
 	};
 
@@ -159,6 +164,10 @@ function snaferEditBillingInfoApp( opts ) {
 			if ( typeof fields[prop].$.val() != 'undefined' ) {
 				fields[prop].value(fields[prop].$.val());
 			};
+
+			//set validation
+			if ( fields[prop].validate !== false )
+				o3_isValid( fields[prop].value, fields[prop].validate );
 		};	
 	}(); 
 

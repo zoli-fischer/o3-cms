@@ -59,21 +59,70 @@
 						
 						<div class="clearfix-m"></div>
 
-						<a href="/edit-profile" class="btn"><i class="fa fa-pencil"></i> Edit profile</a>
+						<a href="<?php echo $this->o3_cms()->page_url( EDIT_PROFILE_PAGE_ID ); ?>" class="btn"><i class="fa fa-pencil"></i> Edit profile</a>
 
 						<div class="clearfix-sm"></div>
 
-						<a href="/change-password" class="btn"><i class="fa fa-lock"></i> Change password</a>
+						<a href="<?php echo $this->o3_cms()->page_url( CHANGE_PASSWORD_PAGE_ID ); ?>" class="btn"><i class="fa fa-lock"></i> Change password</a>
 
 					</div>
 
-					<div class="hidden-sm">	
-						<h3>Bills</h3>
+					<div class="hidden-xs payment-history">	
+						<h3>Payment history</h3>
 
 						<div class="clearfix-sm"></div>
 
-						<p>There is no bills to show.</p>
-
+						<?php
+						$payments = $this->logged_user()->get_payments();
+						if ( count($payments) > 0 ) {
+						?>	
+							<ul>
+								<li>
+									<span class="text-center">ID</span>
+									<span>Date</span>
+									<span>Amount</span>
+									<span>Payment method</span>
+									<span class="text-center">Invoice</span>
+								</li>
+								<?php
+								foreach ( $payments as $key => $value ) {
+									if ( $value->get('total_incl_vat') > 0 ) {
+									?>
+									<li>
+										<span class="text-center"><?php echo o3_html( $value->get('id') ); ?></span>
+										<span><?php echo o3_html( $this->logged_user()->format_date( $value->get('created') ) ); ?></span>
+										<span><?php echo o3_html( $value->display_price( $value->get('total_incl_vat') ) ); ?></span>
+										<span>
+											<?php 
+												switch ($value->get('subscription_pay_type')) {
+												 	case SNAFER_PAYPAL:
+												 		?>
+												 		<i class="fa fa-cc-paypal"></i> Paypal
+												 		<?php
+												 		break;											 	
+												 	case SNAFER_CARD:
+												 		?>
+												 		<i class="fa fa-credit-card"></i> Visa (<?php echo o3_html($value->get('subscription_pay_card')); ?>)
+												 		<?php
+												 		break;
+												 } 
+											?>
+										</span>
+										<span class="text-center"><a href="<?php echo $value->download_url(1); ?>" title="Download invoice"><i class="fa fa-cloud-download"></i></a></span>
+									</li>
+									<?php	
+									}
+								}
+								?>
+							</ul>
+						<?php
+						} else {
+						?>	
+							<p>There is no payments to show.</p>
+						<?php
+						}
+						?>
+						
 					</div>
 
 				</div> 
@@ -89,13 +138,29 @@
 						//check for subscripbtion type
 						if ( $this->logged_user()->is_premium() ) {
 
-							//check if subscripbtion is paid
-							if ( !$this->logged_user()->is_paid() ) {
+							
+							//check if subscribtion has payment
+							if ( !$this->logged_user()->has_payment() ) {
+							?>
+								
+								<div class="pay-error-box">
+									<p><b>Your subscription payment failed.</b></p>
+									<p>You will lose your subscription after the trial period ends if we don't have a working payment method for your account, so please <a href="<?php echo $this->o3_cms()->page_url( UPDATE_PAYMENT_METHOD_PAGE_ID ); ?>">add your payment method</a>.</p>									
+								</div>
+
+								<hr>
+
+								<div class="clearfix-sm"></div>
+
+								<a href="<?php echo $this->o3_cms()->page_url( SUBSCRIPTION_PAGE_ID ); ?>" class="btn">Add payment method</a>
+
+							<?php
+							} else if ( !$this->logged_user()->is_paid() ) { //check if subscripbtion is not paid
 							?>
 
 								<div class="pay-error-box">
 									<p><b>Your subscription payment failed.</b></p>
-									<p>You will lose your subscription if we don't have a working payment method for your account, so please <a href="/update-payment-method">update your payment method</a>.</p>
+									<p>You will lose your subscription if we don't have a working payment method for your account, so please <a href="<?php echo $this->o3_cms()->page_url( UPDATE_PAYMENT_METHOD_PAGE_ID ); ?>">update your payment method</a>.</p>
 									<p>We will retry your payment in a few days.</p>
 								</div>
 
@@ -103,7 +168,7 @@
 
 								<div class="clearfix-sm"></div>
 
-								<a href="/subscription" class="btn">View details</a>
+								<a href="<?php echo $this->o3_cms()->page_url( SUBSCRIPTION_PAGE_ID ); ?>" class="btn">View details</a>
 
 							<?php
 							} else {
@@ -115,7 +180,7 @@
 
 								<div class="clearfix-sm"></div>
 
-								<a href="/subscription" class="btn">View details</a>
+								<a href="<?php echo $this->o3_cms()->page_url( SUBSCRIPTION_PAGE_ID ); ?>" class="btn">View details</a>
 
 							<?php
 							}
@@ -124,7 +189,7 @@
 						?>
 						
 
-							<p>TODO: no premium message</p>
+							<p>You're currently Snafer Free. With Free, your transfers'll have ads, and you won't be able to upload up to 20GB, or customize your transfers. Upgrade to Premium anytime you like. </p>
 						
 							<hr>
 
@@ -139,6 +204,9 @@
 						
 							
 					</div>
+
+					<!-- Mobile payment history -->
+					<div class="visible-xs-block payment-history"></div>
 
 					<div>	
 						<h3>Billing information</h3>
@@ -182,7 +250,7 @@
 
 						<div class="clearfix-m"></div>
 
-						<a href="/edit-billing-information" class="btn"><i class="fa fa-pencil"></i> Edit billing information</a>
+						<a href="<?php echo $this->o3_cms()->page_url( EDIT_BILLING_INFO_PAGE_ID ); ?>" class="btn"><i class="fa fa-pencil"></i> Edit billing information</a>
 
 					</div>
 

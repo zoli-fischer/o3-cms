@@ -29,7 +29,7 @@
 
 				<div class="col-md-12">
 				
-					<h2>Update paymenth method</h2>
+					<h2><?php echo !$this->logged_user()->has_payment() ? 'Add payment method' : 'Update payment method'; ?></h2>
 				</div>
 				
 				<div class="clearfix-m"></div>
@@ -44,7 +44,7 @@
  		
 	 			<form id="update-payment-form" class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2" data-bind="submit: update_payment.submit">	 			
 
-	 				<div class="error-msg" data-bind="text: update_payment.error_msg(), visible: update_payment.error_msg() != ''"></div>
+	 				<div class="error-msg" data-bind="text: update_payment.error_msg(), css: { block: update_payment.error_msg() != '' }"></div>
 
 	 				<div data-bind="visible: update_payment.type() == 'card'">
 
@@ -159,7 +159,7 @@
 
 	 				<div class="clearfix-m"></div>
 
-	 				<button type="submit" class="btn btn-primary">Update payment method</button>
+	 				<button type="submit" class="btn btn-primary"><?php echo !$this->logged_user()->has_payment() ? 'Add payment method' : 'Update payment method'; ?></button>
 
 
 	 				<div class="clearfix-lg"></div>
@@ -196,7 +196,7 @@
 
 					<div class="clearfix-m"></div>
 
-					<p>Would you like to <a href="#">cancel your subscription?</a></p>
+					<p>Would you like to <a href="<?php echo $this->o3_cms()->page_url( CANCEL_SUBSCRIPTION_PAGE_ID ); ?>">cancel your subscription?</a></p>
 
 				</div>
 

@@ -21,20 +21,33 @@ function snaferLoggedUserApp( opts ) {
 	//user name
 	self.username = ko.observable( '' );
 
+	//subsciption type
+	self.subsciption_type = ko.observable('free');
+
+	//allow trial to user
+	self.allow_trial = ko.observable( true );
+
 	//check if user is logged
 	self.is_logged = ko.pureComputed(function() {
 		return self.id() > 0;
 	});
 
+	//check if user is premium
+	self.is_premium = ko.pureComputed(function() {
+		return self.subsciption_type() == 'premium';
+	});
+
 	//set user data
-	self.set = function( id, username ) {
+	self.set = function( id, username, subsciption_type, allow_trial ) {
 		self.id(id);
 		self.username(username);
+		self.subsciption_type(subsciption_type);
+		self.allow_trial(allow_trial);
 	};
 
 	//unset user data
 	self.unset = function() {
-		self.set( 0, '' );
+		self.set( 0, '', '', false );
 	};
 
 	//sign out user
@@ -65,12 +78,11 @@ function snaferLoggedUserApp( opts ) {
 
 	//constructor
 	+function constructor(){
-		var $obj = $('script[ref=logged_user]'),
-			id = $obj.data('user-id'),
-			username = $obj.data('user-name'); 
-		
+		var $obj = $('script[ref=logged_user]');
+
 		//set user
-		self.set( id, username );
+		if ( $obj.length > 0 )
+			self.set( $obj.data('user-id'), $obj.data('user-name'), $obj.data('subsciption-type'), $obj.data('allow-trial') );
 
 	}();
 		

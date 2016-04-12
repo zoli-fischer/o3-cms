@@ -30,9 +30,9 @@ function show_sign_in_form() {
 };
 
 //show sign up form
-function show_sign_up_form() {
+function show_sign_up_form( type ) {
 	if ( typeof window.snafer != 'undefined' )
-		window.snafer.sign_in_up.show_sign_up_form();
+		window.snafer.sign_in_up.show_sign_up_form( type );
 };
 
 //scroll to top

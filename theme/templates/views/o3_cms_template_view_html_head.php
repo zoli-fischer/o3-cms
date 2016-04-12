@@ -31,7 +31,17 @@
 <script 
 	ref="logged_user" 
 	data-user-id="<?php echo o3_html($this->parent->logged_user()->get('id')); ?>"
-	data-user-name="<?php echo o3_html($this->parent->logged_user()->get('username')); ?>"></script>
+	data-user-name="<?php echo o3_html($this->parent->logged_user()->get('username')); ?>"
+	data-subsciption-type="<?php echo o3_html($this->parent->logged_user()->get('subsciption_type')); ?>"
+	data-allow-trial="<?php echo o3_html($this->parent->logged_user()->allow_trial()); ?>"></script>
+
+<!--DEFINES-->
+<script>
+	var SNAFER_FREE = '<?php echo SNAFER_FREE; ?>',
+		SNAFER_PREMIUM = '<?php echo SNAFER_PREMIUM; ?>',
+		SNAFER_CARD = '<?php echo SNAFER_CARD; ?>',
+		SNAFER_PAYPAL = '<?php echo SNAFER_PAYPAL; ?>';
+</script>
 
 <?php
 	

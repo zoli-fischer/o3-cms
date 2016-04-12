@@ -22,7 +22,7 @@
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col-sm-12">
-				<section class="parallax top-container" data-mobile="false" data-url="/res/parallax5.jpg" data-speed="3">
+				<section class="top-container" style="background-image: url(/res/top-legal.jpg)">
 
 					<div class="container">
 		        		<div class="row">

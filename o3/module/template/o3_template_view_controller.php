@@ -18,13 +18,13 @@ class o3_template_view_controller {
 	public $views = array();
 
 	/** mixed View filepath */
-	private $view_file = ''; 
+	protected $view_file = ''; 
 
 	/** Content of the view */
-	public $content = null;
+	protected $content = null;
 
 	/** Title of the view */
-	public $title = null;
+	protected $title = null;
 
 	/**
 	 * Constructor of view

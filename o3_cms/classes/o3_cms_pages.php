@@ -55,7 +55,7 @@ class o3_cms_pages extends o3_cms_objects {
 				FROM 
 					".$this->o3->mysqli->tablename("pages_url")." AS t1
 				RIGHT JOIN
-					".$this->o3->mysqli->tablename("pages")." AS t2
+					".$this->o3->mysqli->tablename($this->tablename_index())." AS t2
 				ON
 					t1.page_id = t2.id
 				WHERE
@@ -78,6 +78,42 @@ class o3_cms_pages extends o3_cms_objects {
 
 		//return page id
 		return $row->id;
+	}
+
+	/**
+	* Get page URL from database
+	* 	
+	* @return string URL
+	*/
+	public function get_url_by_id( $page_id ) {
+		if ( $page_id > 0 ) {
+			$sql = "SELECT t1.url FROM ".$this->o3->mysqli->tablename("pages_url")." AS t1 RIGHT JOIN ".$this->o3->mysqli->tablename($this->tablename_index())." AS t2 ON t1.page_id = t2.id WHERE t1.page_id = ".$this->o3->mysqli->escape_string($page_id)." ORDER BY t1.timestamp DESC LIMIT 1";
+			$result = $this->o3->mysqli->query($sql);
+			if ( $result->num_rows === 1 ) {
+				$row = $result->fetch_object();
+				return $row->url;
+			}
+		}
+		return false;
+	}
+
+	/**
+	* Get page full formated URL
+	* 	
+	* @return string URL
+	*/
+	public function page_url( $page_id = 0, $params = array(), $hash = '' ) {
+		$page_url = $this->get_url_by_id( $page_id );
+		if ( $page_url !== false ) {
+			//add parameters
+			$page_url = o3_add_params_url( $page_url, $params );
+
+			//add hash
+			$page_url = o3_add_hash_url( $page_url, $hash );
+
+			return $page_url;
+		}
+		return false;
 	}
 
 }

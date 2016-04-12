@@ -101,7 +101,7 @@
 
 						<span>Date of birth:</span>
 						<div class="form-group form-group-date">
-							<select class="form-control form-control-selected" name="bday_day"
+							<select class="form-control form-control-selected" name="bday_day" maxlength="2"
 								data-bind="value: edit_profile.fields.bday_day.value,
 									   	   valueUpdate: 'keyup'">
 								<?php
@@ -125,7 +125,7 @@
 								<option value="11" <?php echo $this->bday_month == 11 ? 'selected' : ''; ?>>November</option>
 								<option value="12" <?php echo $this->bday_month == 12 ? 'selected' : ''; ?>>December</option>
 							</select>
-							<select class="form-control form-control-selected" name="bday_year"
+							<select class="form-control form-control-selected" name="bday_year" maxlength="4"
 								data-bind="value: edit_profile.fields.bday_year.value,
 									   	   valueUpdate: 'keyup'">
 								<?php
@@ -138,7 +138,7 @@
 						<div class="clearfix-lg"></div>
 
 						<div class="btns">
-							<a href="/account">Cancel</a> 
+							<a href="<?php echo $this->o3_cms()->page_url( ACCOUNT_PAGE_ID ); ?>">Cancel</a> 
 							<button class="btn" data-bind="click: edit_profile.submit">Save profile</button>
 						</div>
 

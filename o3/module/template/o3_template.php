@@ -208,6 +208,7 @@ class o3_template {
 			//Create controller
 			$controller = null;
 			if ( $is_controller_file ) {
+
 				if ( !include_once($controller_file) ) {											
 					trigger_error( 'View controller error! Unable to load "'. o3_html($controller_file).'".', E_USER_WARNING );
 				} else {

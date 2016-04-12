@@ -189,6 +189,14 @@ h6 {
 	transition: all .3s ease-in-out;
 }
 
+.error-msg {
+	display: none;
+	padding: 10px 20px;
+	background: #c85305;
+	color: #fff;
+	margin-bottom: 15px;
+}
+
 form,
 .form {
 
@@ -346,11 +354,7 @@ form,
 	}
 	
 	.error-msg {
-		display: none;
-		padding: 10px 20px;
-		background: #c85305;
-		color: #fff;
-		margin-bottom: 15px;
+		.error-msg;
 	}
 }
 
@@ -729,6 +733,15 @@ footer {
 	padding-bottom: 120px;
 	margin-left: -15px; 
 	margin-right: -15px; 
+
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: cover;
+	background-color: #51545a;
+
+	h1 {
+		text-shadow: 1px 1px 3px rgba(0,0,0,0.9);
+	}
 
 	@media (max-width:767px) {
 		padding-top: 120px;

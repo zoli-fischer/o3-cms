@@ -19,9 +19,9 @@ class o3_cms_template_view_controller extends o3_template_view_controller {
 
 	/**
 	 * Constructor of template
-	 * @param string $template_file File path to template
 	 */
 	public function __construct() {
+		global $o3, $o3_cms;	
 
 		//o3 ref
 		$this->o3 = &$o3;
@@ -30,6 +30,85 @@ class o3_cms_template_view_controller extends o3_template_view_controller {
 		$this->o3_cms = &$o3_cms;
 		
 	}
+	
+	/*
+	* On template initializations
+	*/
+	public function init() {}
+
+	/*
+	* Return o3 object
+	*/
+	public function o3() { 	return $this->o3; }
+
+	/*
+	* Return o3 cms object
+	*/
+	public function o3_cms() { 	return $this->o3_cms; }
+	
+	/*
+	* Get template name
+	*/
+	public function name() {
+		return ltrim( preg_replace('/\\.[^.\\s]{3,4}$/', '', str_replace( realpath($this->view_dir), '', realpath($this->view_file) ) ), '/');
+	}
+
+	/**
+	* Require css/less and js.
+	*
+	* @return void
+	*/
+	public function require_js_css() {
+		$this->require_js();
+		$this->require_css();
+	}
+
+	/**
+	* Require css/less.
+	*
+	* @return void
+	*/
+	public function require_css() {
+		$name = $this->name();
+ 
+		//add o3 cms css
+		if ( file_exists(O3_CMS_DIR.'/css/o3_cms.less') )
+			$this->parent->head_less( O3_CMS_DIR.'/css/o3_cms.less' );
+
+		//add global css
+		if ( file_exists(O3_CMS_THEME_DIR.'/css/o3_cms_global.less') )
+			$this->parent->head_less( O3_CMS_THEME_DIR.'/css/o3_cms_global.less' );
+		
+		//add less
+		if ( file_exists(O3_CMS_THEME_DIR.'/css/view/'.$name.'.less') )
+			$this->parent->head_less( O3_CMS_THEME_DIR.'/css/view/'.$name.'.less' );
+
+		//add css
+		if ( file_exists(O3_CMS_THEME_DIR.'/css/view/'.$name.'.css') )
+			$this->parent->head_css( O3_CMS_THEME_DIR.'/css/view/'.$name.'.css' ); 
+	}
+
+	/**
+	* Require js.
+	*
+	* @return void
+	*/
+	public function require_js() {
+		$name = $this->name();
+ 
+		//add o3 cms js
+		if ( file_exists(O3_CMS_DIR.'/js/o3_cms.js') )
+			$this->parent->body_js( O3_CMS_DIR.'/js/o3_cms.js' );
+		
+		//add global js
+		if ( file_exists(O3_CMS_THEME_DIR.'/js/o3_cms_global.js') )
+			$this->parent->body_js( O3_CMS_THEME_DIR.'/js/o3_cms_global.js' );
+ 
+		//add js
+		if ( file_exists(O3_CMS_THEME_DIR.'/js/view/'.$name.'.js') )
+			$this->parent->body_js( O3_CMS_THEME_DIR.'/js/view/'.$name.'.js' );
+	}
+
 
 }
 

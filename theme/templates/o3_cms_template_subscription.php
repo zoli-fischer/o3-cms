@@ -42,13 +42,21 @@
 						//check for subscripbtion type
 						if ( $this->logged_user()->is_premium() ) {
 
-							//check if subscripbtion is paid
-							if ( !$this->logged_user()->is_paid() ) {
+							
+							if ( !$this->logged_user()->has_payment() ) {
+							?>
+
+								<div class="pay-error-box">
+									<p>You will lose your subscription after the trial period ends if we don't have a working payment method for your account, so please <a href="<?php echo $this->o3_cms()->page_url( UPDATE_PAYMENT_METHOD_PAGE_ID ); ?>">add your payment method</a>.</p>
+								</div>
+
+							<?php
+							} else if ( !$this->logged_user()->is_paid() ) { //check if subscripbtion is paid
 							?>
 
 								<div class="pay-error-box">
 									<p><b>Your subscription payment failed.</b></p>
-									<p>You will lose your subscription if we don't have a working payment method for your account, so please <a href="/update-payment-method">update your payment method</a>.</p>
+									<p>You will lose your subscription if we don't have a working payment method for your account, so please <a href="<?php echo $this->o3_cms()->page_url( UPDATE_PAYMENT_METHOD_PAGE_ID ); ?>">update your payment method</a>.</p>
 									<p>We will retry your payment in a few days.</p>
 								</div>
 
@@ -81,17 +89,23 @@
 									<p>Your account at PayPal is used for payment.</p>
 									<?php		
 									break;
+								default:
+									?>
+									<p>No payment method attached to your account.</p>
+									<?php		
+									break;
+									break;
 							}
 
 							?>							
 
 							<hr> 
 
-							<a href="/update-payment-method" class="btn"><i class="fa fa-credit-card-alt"></i> Update payment method</a>
+							<a href="<?php echo $this->o3_cms()->page_url( UPDATE_PAYMENT_METHOD_PAGE_ID ); ?>" class="btn"><i class="fa fa-credit-card-alt"></i> <?php echo !$this->logged_user()->has_payment() ? 'Add payment method' : 'Update payment method'; ?></a>
 
 							<div class="clearfix-m"></div>
 
-							<p>Would you like to <a href="#">cancel your subscription?</a></p>
+							<p>Would you like to <a href="<?php echo $this->o3_cms()->page_url( CANCEL_SUBSCRIPTION_PAGE_ID ); ?>">cancel your subscription?</a></p>
 
 							<?php							
 

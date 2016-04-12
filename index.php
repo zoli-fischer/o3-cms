@@ -3,6 +3,9 @@
 //start session
 session_start();
 
+//load THEME config
+require_once( str_replace(DIRECTORY_SEPARATOR, '/', realpath(dirname(__FILE__) )).'/theme/config.php');
+
 //load O3 CMS config
 require_once( str_replace(DIRECTORY_SEPARATOR, '/', realpath(dirname(__FILE__) )).'/o3_cms/config.php');
 
