@@ -326,7 +326,7 @@
 
 					<p><br><br></p>
 
-					<p><a href="#">Forgot your username or password?</a></p>
+					<p><a href="<?php echo $this->o3_cms()->page_url(RESET_PASSWORD_PAGE_ID); ?>">Forgot your username or password?</a></p>
 					
 					<p><br></p>
 

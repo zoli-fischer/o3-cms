@@ -1,5 +1,4 @@
 <?php
-
 /**
  * O3 Engine main config file
  *
@@ -43,8 +42,9 @@ if( !isset($_SERVER['DOCUMENT_ROOT']) ) {
   $_SERVER['DOCUMENT_ROOT'] = str_replace( '\\', '/', substr($path, 0, 0-strlen($_SERVER['PHP_SELF'])));
 }
 
-/** The root of your O3 installation */
-def("O3_DIR", str_replace(DIRECTORY_SEPARATOR, '/', realpath(dirname(__FILE__))));
+if ( !defined('O3_DIR') )
+	/** The root of your O3 installation */
+	define("O3_DIR", str_replace(DIRECTORY_SEPARATOR, '/', realpath(dirname(__FILE__))));
 
 //load O3 custom config
 def("O3_CUSTOM_CONFIG", O3_DIR.'/config.custom.php');
@@ -98,7 +98,7 @@ def("O3_HOST_PORT", isset($_SERVER['SERVER_PORT']) ? $_SERVER['SERVER_PORT'] : '
 def("O3_URL", O3_HOST_PROTOCOL.'://'.O3_HOST.( O3_HOST_PORT != 80 && O3_HOST_PORT != 443 && O3_HOST_PORT != '' ? ':'.O3_HOST_PORT : '' ) );
 
 /** URL to cache forlder for your O3 installation */
-def("O3_CACHE_URL", O3_URL.'/cache');
+def("O3_CACHE_URL",O3_URL.'/cache');
 
 /** O3 Admin utility */
 

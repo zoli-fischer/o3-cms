@@ -44,65 +44,155 @@ function get_collections( $languages ) {
 
 $collection = o3_request('collection','general');
 $collection = $collection == '' ? 'general' : $collection;
-$cmd = o3_post('cmd','');
-if ( $cmd == 'udt' ) {
-	
-	$languages = get_languages();
-	$collections = get_collections( $languages );
-	
-	$error = array();
-	$files = array();
-	
-	$o3_lang = new o3_lang();
-	$o3_lang->set_dir( O3_LANG_DIR );
-	foreach ( $languages as $key => $value ) {
-		$o3_lang->current( $value );
-		$o3_lang->load( $collection == 'general' ? '' : $collection );
-	}
-	
-	$max_plural_form = 1;
-	foreach ( $o3_lang->list as $key => $value ) {
-		foreach ( $value as $key_ => $value_ ) {										
-			
-			//check language prular form 
-			$max_plural_form = max( $max_plural_form, isset($value_['o3_lang_plural_rule_id']) && isset($o3->lang->plural_rules[$value_['o3_lang_plural_rule_id'][0]]) ? $o3->lang->plural_rules[$value_['o3_lang_plural_rule_id'][0]]['form'] : 0 );			
-		}
-	}									 			
-						
-	$indexes = o3_post('index');					
-	$plurals = o3_post('plural');
- 
-	foreach ( $languages as $key => $value ) {		
-		$LANG = array();
-		
-		for ( $i = 0; $i < $max_plural_form; $i++ ) {
-			$values = o3_post('value_'.$value.'_'.$i);				
-			foreach ( $indexes as $key_ => $value_ ) {
-				if ( strlen(trim($value_)) > 0 ) 
-					$LANG[trim($value_)][$i] = $values[$key_];
-			}			
-		} 
-		
-		foreach ( $indexes as $key_ => $value_ ) {
-			if ( strlen(trim($value_)) > 0 && is_array($plurals) ) { 
-				$LANG[trim($value_)]['plural'] = in_array( $key_, $plurals ) ? 1 : 0;
-			}
-		}
-		
-		$file = O3_LANG_DIR.'/'.$value.( $collection == '' || $collection == 'general' ? '' : '-'.$collection ).'.json';
-		$exists = file_exists($file);
-		$content = $exists ? file_get_contents($file) : '';
-		$files[] = array( 'file' => $file, 'data' => $LANG, 'exists' => $exists, 'content' => $content );
-	}  
-	if ( count($files) > 0 ) {
-		foreach ( $files as $key => $value ) { 
-			o3_write_file( $value['file'], json_encode($value['data']), 'w' );
-		}
-	} 
+$cmd = o3_request('cmd','');
+switch ( $cmd ) {
+	case 'exp':
 
-	o3\admin\functions\add_notification_msg('Changes are saved');
-	
-	
+
+		$lines = array();
+		$linenr = 0;
+		$lines[$linenr] = array( 'index' );
+
+		$languages = get_languages();
+		$collections = get_collections( $languages );
+		
+		$o3_lang = new o3_lang();
+		$o3_lang->set_dir( O3_LANG_DIR );
+		foreach ( $languages as $key => $value ) {
+			$o3_lang->current( $value );
+			$o3_lang->load( $collection == 'general' ? '' : $collection );
+			
+			$lines[$linenr][] = $value;			
+		}
+		$linenr++;
+
+		$indexes = array();								
+		$max_plural_form = 1;								
+		foreach ( $o3_lang->list as $key => $value ) {
+			foreach ( $value as $key_ => $value_ ) {										
+				
+				//check language prular form 
+				$max_plural_form = max( $max_plural_form, isset($value_['o3_lang_plural_rule_id']) && isset($o3->lang->plural_rules[$value_['o3_lang_plural_rule_id'][0]]) ? $o3->lang->plural_rules[$value_['o3_lang_plural_rule_id'][0]]['form'] : 0 );			
+											
+				if ( $collection == $key_ || ( $collection == 'general' && $key == $key_ ) ) {
+					foreach ( $value_ as $key__ => $value__ ) {								
+						if ( !isset( $indexes[$key__] ) )
+							$indexes[$key__] = array( 'index' => $key__, 'plural' => ( isset($value__['plural']) ? $value__['plural'] : '' ) );
+					}
+				}
+			}
+		} 
+
+		foreach ( $indexes as $key => $value ) { 
+			$lines[$linenr] = array( $value['index'] );
+			
+
+			foreach ( $languages as $key_ => $value_ ) {  									
+				
+				$lines[$linenr][] = $o3_lang->list[$value_][$collection=='general'?$value_:$collection][$key][0];
+
+				/*
+				?>
+				<td class="lang_col_<?php echo $value_; ?>">
+					<textarea name="value_<?php echo $value_?>_0[]"><?php echo o3_html($o3_lang->list[$value_][$collection=='general'?$value_:$collection][$key][0]); ?></textarea> 					
+					<?php
+					if ( $max_plural_form > 1 ) {
+						for ( $i = 1; $i < $max_plural_form; $i++ ) {
+					?>						
+						<textarea class="plural_<?php echo $j?>_data <?php echo $value['plural']?'':'nodisp'?>" name="value_<?php echo $value_?>_<?php echo $i?>[]"><?php echo o3_html($o3_lang->list[$value_][$collection=='general'?$value_:$collection][$key][$i]); ?></textarea> 						
+					<?php
+						}
+					}
+					?>
+				</td>							
+				<?php
+				*/
+			}
+			$linenr++;
+
+			if ( $max_plural_form > 1 && $value['plural'] == 1 ) {
+				for ( $i = 1; $i < $max_plural_form; $i++ ) {
+					$lines[$linenr] = array( '' );
+					foreach ( $languages as $key_ => $value_ ) {
+						$lines[$linenr][] = $o3_lang->list[$value_][$collection=='general'?$value_:$collection][$key][$i];
+					}
+					$linenr++;
+				}
+			}
+
+		}
+
+		$buffer = array();
+		foreach ( $lines as $values ) {
+			$line = array();
+			foreach ( $values as $value ) {
+				$line[] = '"'.$value.'"';
+			}
+			$buffer[] = implode(',', $line);
+		};
+
+		o3_output_buffer( implode("\r\n", $buffer), $_SERVER['HTTP_HOST'].'-'.$collection.'.csv', 'application/csv', 'attachment' );
+
+		die();
+		break;
+	case 'udt':
+		
+		$languages = get_languages();
+		$collections = get_collections( $languages );
+		
+		$error = array();
+		$files = array();
+		
+		$o3_lang = new o3_lang();
+		$o3_lang->set_dir( O3_LANG_DIR );
+		foreach ( $languages as $key => $value ) {
+			$o3_lang->current( $value );
+			$o3_lang->load( $collection == 'general' ? '' : $collection );
+		}
+		
+		$max_plural_form = 1;
+		foreach ( $o3_lang->list as $key => $value ) {
+			foreach ( $value as $key_ => $value_ ) {										
+				
+				//check language prular form 
+				$max_plural_form = max( $max_plural_form, isset($value_['o3_lang_plural_rule_id']) && isset($o3->lang->plural_rules[$value_['o3_lang_plural_rule_id'][0]]) ? $o3->lang->plural_rules[$value_['o3_lang_plural_rule_id'][0]]['form'] : 0 );			
+			}
+		}									 			
+							
+		$indexes = o3_post('index');					
+		$plurals = o3_post('plural');
+	 
+		foreach ( $languages as $key => $value ) {		
+			$LANG = array();
+			
+			for ( $i = 0; $i < $max_plural_form; $i++ ) {
+				$values = o3_post('value_'.$value.'_'.$i);				
+				foreach ( $indexes as $key_ => $value_ ) {
+					if ( strlen(trim($value_)) > 0 ) 
+						$LANG[trim($value_)][$i] = $values[$key_];
+				}			
+			} 
+			
+			foreach ( $indexes as $key_ => $value_ ) {
+				if ( strlen(trim($value_)) > 0 && is_array($plurals) ) { 
+					$LANG[trim($value_)]['plural'] = in_array( $key_, $plurals ) ? 1 : 0;
+				}
+			}
+			
+			$file = O3_LANG_DIR.'/'.$value.( $collection == '' || $collection == 'general' ? '' : '-'.$collection ).'.json';
+			$exists = file_exists($file);
+			$content = $exists ? file_get_contents($file) : '';
+			$files[] = array( 'file' => $file, 'data' => $LANG, 'exists' => $exists, 'content' => $content );
+		}  
+		if ( count($files) > 0 ) {
+			foreach ( $files as $key => $value ) { 
+				o3_write_file( $value['file'], json_encode($value['data']), 'w' );
+			}
+		} 
+
+		o3\admin\functions\add_notification_msg('Changes are saved');
+		
+		break;	
 }
  
 ?>
@@ -166,6 +256,12 @@ if ( $cmd == 'udt' ) {
 			$('.plural_'+index+'_data').addClass('nodisp');
 		}
 	}
+
+	function exportCSV() {
+		var collection = jQuery('#collection').val();
+		if ( collection != '' && collection != '+' )
+			window.open( window.location+'&cmd=exp&collection='+collection );
+	}
 								
 </script>
 <?php	
@@ -210,6 +306,7 @@ $configData[] = array( 'name' => 'O3_LANG_DISPLAY_NAME_INDEX',
 
 			<input type="button" onclick="newLanguage()" value="+ New language">
 
+			<input type="button" onclick="exportCSV()" value="+ Export CSV">
 		</div>
 
 		<table class="main_table">

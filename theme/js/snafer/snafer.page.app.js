@@ -26,6 +26,9 @@ function snaferPageApp() {
 	//cancel subsciption form
 	self.cancel_subsciption = typeof snaferCancelSubsciptionApp == 'function' ? new snaferCancelSubsciptionApp({ parent: self }) : null;
 
+	//reset password form
+	self.reset_password = typeof snaferResetPasswordApp == 'function' ? new snaferResetPasswordApp({ parent: self }) : null;
+
 	//utils
 
 	//ajax call

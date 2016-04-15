@@ -119,7 +119,33 @@ function o3_extension( $path ) {
 }
 
 /**
-* Get the extension of a file.
+* Output buffer to download or inline
+*
+* @param string $buffer Buffer
+* @param string $filename Output file name
+* @param string $mime Output conten type
+* @param string $disposition inline or attachment Defaut: inline
+*
+* @return boolean
+*/	
+function o3_output_buffer( $buffer, $filename, $mime = 'application/octet-stream', $disposition = 'inline' ) { 
+	
+	header("Content-Type: ".$mime);	
+	header('Content-Disposition: '.$disposition.'; filename="'.$filename.'"');
+	header('Cache-Control: public, must-revalidate, max-age=0, post-check=0, pre-check=0');
+	header('Pragma: no-cache');  
+	header('Content-Length: '.strlen($buffer));
+	header("Last-Modified: ".date( 'r', filemtime($path) ));
+
+	ob_clean();
+
+	echo $buffer;
+
+	return true;
+}
+
+/**
+* Output file to download or inline
 *
 * @param string $path Path to the file
 * @param string $filename Output file name
@@ -380,7 +406,7 @@ function o3_upload_max_size() {
 *
 * @return string/boolean Content of URL or false if URL not found
 */
-function o3_url_get_contents( $url, $timeout = 5 ) {	
+function o3_url_get_contents( $url, $timeout = 5, &$header = null ) {	
 	$result = false;
 
 	//check if curl_init available
@@ -391,9 +417,15 @@ function o3_url_get_contents( $url, $timeout = 5 ) {
 			curl_setopt($ch, CURLOPT_URL, $url);
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 			curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
-			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);                    
+			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+			curl_setopt($ch, CURLOPT_HEADER, true);
+			
                
-            $result = @curl_exec($ch);
+            $response = @curl_exec($ch);
+
+            $header_size = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
+            $header = preg_split('/\r\n|\r|\n/', trim(substr($response, 0, $header_size)));
+            $result = substr($response, $header_size);
                
             curl_close($ch);
         } catch (Exception $e) {
