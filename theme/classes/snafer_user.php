@@ -29,6 +29,7 @@ snafer_helper::define('SNAFER_SIGNED_USER_SESSION_INDEX_PASSWORD','snafer_signed
 snafer_helper::define('SNAFER_SIGNED_USER_SESSION_INDEX_ID','snafer_signed_user_id');
 
 //Subsciption types
+snafer_helper::define('SNAFER_NONE','',true);
 snafer_helper::define('SNAFER_FREE','free',true);
 snafer_helper::define('SNAFER_PREMIUM','premium',true);
 
@@ -37,7 +38,7 @@ snafer_helper::define('SNAFER_CARD','card',true);
 snafer_helper::define('SNAFER_PAYPAL','paypal',true);
 
 //Subsciption length in days
-snafer_helper::define('SNAFER_PERIOD_DAYS',30);
+snafer_helper::def('SNAFER_PERIOD_DAYS',30);
 
 //Subsciption length in seconds
 snafer_helper::define('SNAFER_PERIOD_SECS',SNAFER_PERIOD_DAYS * 24 * 3600);

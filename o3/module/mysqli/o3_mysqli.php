@@ -324,7 +324,6 @@ class o3_mysqli extends mysqli {
 
 		if ( $return === false )
 			trigger_error( 'Mysqli query error ('. mysqli_connect_errno(). ') '.mysqli_connect_error(), E_USER_WARNING );
-		
 
 		$this->queries_exec_time += $time;
 		$this->queries_count++; 

@@ -24,9 +24,20 @@ snafer_helper::define('SNAFER_TRANSFER_EMAIL','email',true);
 snafer_helper::define('SNAFER_TRANSFER_DOWNLOAD','download',true);
 snafer_helper::define('SNAFER_TRANSFER_SOCIAL','social',true);
 
-class snafer_transfer extends o3_cms_object {
+//Transfer month length in days
+snafer_helper::def('SNAFER_MONTH_LENGTH',30);
 
-	protected $country = false;
+//Transfer expires days
+snafer_helper::def('SNAFER_TRANSFER_LIFETIME_DAYS', 7, true);
+snafer_helper::def('SNAFER_TRANSFER_LIFETIME_FREE_DAYS', 14, true);
+snafer_helper::def('SNAFER_TRANSFER_LIFETIME_PREMIUM_DAYS', SNAFER_MONTH_LENGTH * 6, true);
+
+//Transfer expires sec
+snafer_helper::define('SNAFER_TRANSFER_LIFETIME_SECS', SNAFER_TRANSFER_LIFETIME_DAYS * 3600 * 24, true);
+snafer_helper::define('SNAFER_TRANSFER_LIFETIME_FREE_SECS', SNAFER_TRANSFER_LIFETIME_FREE_DAYS * 3600 * 24, true);
+snafer_helper::define('SNAFER_TRANSFER_LIFETIME_PREMIUM_SECS', SNAFER_TRANSFER_LIFETIME_PREMIUM_DAYS * 3600 * 24, true);
+
+class snafer_transfer extends o3_cms_object {
 
 	/**
 	* Load transfer with id
@@ -34,18 +45,17 @@ class snafer_transfer extends o3_cms_object {
 	*/
 	public function load( $id ) {				
 		if ( $id != '' ) {
-			$this->data = o3_with(new snafer_transfers())->get_by_id( $id );			
+			$this->data = o3_with(new snafer_transfers())->get_by_id( $id );
+		}
+	}
 
-			//load country
-			if ( $this->is() ) {
-				$this->country = new snafer_country( $this->get('country_id') );
-
-				//if country not found load default country
-				if ( !$this->country->is() )
-					$this->country = new snafer_country( DEFAULT_COUNTRY );
-
-			}
-
+	/**
+	* Load transfer with canonical id
+	* @param id Transfer canonical id to select
+	*/
+	public function load_canonical( $canonical_id ) {				
+		if ( $id != '' ) {
+			$this->data = o3_with(new snafer_transfers())->get_by_canonical_id( $canonical_id );
 		}
 	}
 	
