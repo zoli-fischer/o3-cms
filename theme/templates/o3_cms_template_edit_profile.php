@@ -43,7 +43,7 @@
 		 				
 		 				<span>Email</span>
 		 				<div class="form-group" data-bind="css: { 'has-warning': edit_profile.fields.email.error() }">
-		 					<input class="form-control" placeholder="Please enter your email" value="<?php echo o3_html($this->logged_user()->get('email')); ?>" name="email" type="email"data-bind="value: edit_profile.fields.email.value,
+		 					<input class="form-control" placeholder="Please enter your email" value="<?php echo o3_html($this->logged_user()->get('email')); ?>" name="email" type="email" data-bind="value: edit_profile.fields.email.value,
 										   	  valueUpdate: 'keyup'">
 
 							<div class="warning" data-bind="visible: edit_profile.fields.email.error()">The email address you supplied is invalid.</div>

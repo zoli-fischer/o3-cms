@@ -109,9 +109,13 @@ jQuery(document).ready(function(){
 		
 		currHash = offsetArray[nearIndex].hashVal;
 		currHash = currHash == '' ? '#' : currHash; 
-	
+		
 		$('.anchors, .rd-mobilemenu_ul, .rd-mobilepanel_title').find('.active').removeClass('active');
-		$('.anchors, .rd-mobilemenu_ul, .rd-mobilepanel_title').find('a[href="' + currHash + '"], a[href="/' + currHash + '"]').addClass('active');
+
+		var $link = $('.anchors, .rd-mobilemenu_ul, .rd-mobilepanel_title').find('a[href="' + currHash + '"], a[href="/' + currHash + '"]'),
+			link = o3_url_info( $link.attr('href') );
+		if ( window.location.pathname == link.path )
+			$link.addClass('active');
 
 	});
 	$(window).on('resize', function(){
@@ -119,8 +123,11 @@ jQuery(document).ready(function(){
 	});	
 	$(window).on('hashchange', function() {
 		var target = window.location.hash ? window.location.hash : offsetArray[0].hashVal;
-			$('.anchors, .rd-mobilemenu_ul, .rd-mobilepanel_title').find('.active').removeClass('active');
-			$('.anchors, .rd-mobilemenu_ul, .rd-mobilepanel_title').find('a[href="' + target + '"], a[href="/' + target + '"]').addClass('active');
+		$('.anchors, .rd-mobilemenu_ul, .rd-mobilepanel_title').find('.active').removeClass('active');
+		var $link = $('.anchors, .rd-mobilemenu_ul, .rd-mobilepanel_title').find('a[href="' + target + '"], a[href="/' + target + '"]'),
+			link = o3_url_info( $link.attr('href') );
+		if ( window.location.pathname == link.path )
+			$link.addClass('active');
 	}).trigger('hashchange');
 
 	//add clicks

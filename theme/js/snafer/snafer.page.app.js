@@ -28,6 +28,9 @@ function snaferPageApp() {
 
 	//reset password form
 	self.reset_password = typeof snaferResetPasswordApp == 'function' ? new snaferResetPasswordApp({ parent: self }) : null;
+	
+	//upload file
+	self.upload = typeof snaferUploadApp == 'function' ? new snaferUploadApp({ parent: self }) : null;
 
 	//utils
 

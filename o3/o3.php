@@ -530,7 +530,7 @@ class o3 {
 			foreach ($this->head_inlines as $value) {
 				switch ($value['type']) {
 					case 'javascript':
-						$inline_js .= '<script type="text/javascript">'.$value['content'].'</script>';
+						$inline_js .= '<script>'.$value['content'].'</script>';
 						break;
 					case 'stylesheet/less':
 						$inline_css .= '<style type="stylesheet/less">'.$value['content'].'</style>';
@@ -550,7 +550,7 @@ class o3 {
 							if ( count($js) > 0 )
 								$code_js .= $this->mini->js_script( $js );
 							$js = array();	
-							$code_js .= '<script type="text/javascript" src="'.$value['url'].'"></script>';
+							$code_js .= '<script src="'.$value['url'].'"></script>';
 							break;
 						case 'stylesheet/less':
 							if ( count($css) > 0 )
@@ -603,14 +603,14 @@ class o3 {
 			if ( $is_mini_js ) {
 				if ( count($js) > 0 ) {
 					$url = $this->mini->js_cache_url( $js );
-					$code_js .= '<script type="text/javascript" src="'.$url.'"></script>';
+					$code_js .= '<script src="'.$url.'"></script>';
 					isset($this->manifest) ? $this->manifest->cache($url) : ''; //add url to cache manifest
 				}
 			} else {
 				if ( count($js) > 0 )
 					foreach ($js as $value) {
 						isset($this->manifest) ? $this->manifest->cache($value) : false; //add url to cache manifest
-						$code_js .= '<script type="text/javascript" src="'.$value.'"></script>';
+						$code_js .= '<script src="'.$value.'"></script>';
 					}
 			}
 
@@ -658,7 +658,7 @@ class o3 {
 							if ( count($js) > 0 )
 								$code_js .= $this->mini->js_script( $js );
 							$js = array();	
-							$code_js .= '<script type="text/javascript" src="'.$value['url'].'"></script>';
+							$code_js .= '<script src="'.$value['url'].'"></script>';
 							break;
 						case 'stylesheet':
 							if ( count($css) > 0 )
@@ -691,7 +691,7 @@ class o3 {
 				}
 				if ( count($js) > 0 ) {
 					$url = $this->mini->js_cache_url( $js );
-					$code_js .= '<script type="text/javascript" src="'.$url.'"></script>';
+					$code_js .= '<script src="'.$url.'"></script>';
 					isset($this->manifest) ? $this->manifest->cache($url) : ''; //add url to cache manifest
 				}
 			} else {
@@ -703,7 +703,7 @@ class o3 {
 				if ( count($js) > 0 )
 					foreach ($js as $value) {
 						isset($this->manifest) ? $this->manifest->cache($value) : false; //add url to cache manifest
-						$code_js .= '<script type="text/javascript" src="'.$value.'"></script>';
+						$code_js .= '<script src="'.$value.'"></script>';
 					}
 			}
 

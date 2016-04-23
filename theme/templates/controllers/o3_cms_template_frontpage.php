@@ -3,6 +3,9 @@
 //Require theme controller class
 require_once(O3_CMS_THEME_DIR.'/classes/snafer_template_controller.php');
 
+//Require transfers class
+require_once(O3_CMS_THEME_DIR.'/classes/snafer_transfers.php');
+
 class o3_cms_template_frontpage extends snafer_template_controller {
 
 	public function init() {
@@ -71,9 +74,12 @@ class o3_cms_template_frontpage extends snafer_template_controller {
 			//set user logged
 			$this->logged_user()->set_logged( $this->ajax_result->value('username'), $this->ajax_result->value('password') );			
 
-			//if premium sign up, set premium/trial period
-			if ( $this->ajax_result->value('sign_up_type') == SNAFER_PREMIUM )
+			//if premium sign up, set premium/trial period, else send welcome free
+			if ( $this->ajax_result->value('sign_up_type') == SNAFER_PREMIUM ) {
 				$this->logged_user()->set_premium_subscription();
+			} else {
+				$this->logged_user()->send_free_subscription_notification();
+			}
 
 			//send user data
 			$this->ajax_result->data('id',$this->logged_user->get('id'));

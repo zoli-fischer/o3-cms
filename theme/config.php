@@ -2,6 +2,7 @@
 
 /*SYSTEM PAGE IDS*/
 define( 'HOME_PAGE_ID', 1 );
+define( 'CONTACT_PAGE_ID', 2 );
 define( 'TERMS_PAGE_ID', 5 );
 define( 'ACCOUNT_PAGE_ID', 6 );
 define( 'EDIT_PROFILE_PAGE_ID', 7 );
@@ -11,5 +12,6 @@ define( 'UPDATE_PAYMENT_METHOD_PAGE_ID', 10 );
 define( 'EDIT_BILLING_INFO_PAGE_ID', 11 );
 define( 'CANCEL_SUBSCRIPTION_PAGE_ID', 12 );
 define( 'RESET_PASSWORD_PAGE_ID', 13 );
+define( 'RESET_USER_PASSWORD_PAGE_ID', 14 );
 
 ?>

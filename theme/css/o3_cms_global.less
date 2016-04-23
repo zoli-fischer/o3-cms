@@ -41,12 +41,12 @@ html {
 
 /* CLEAR FIX */
 
-.clearfix { clear: both; overflow: hidden; }
-.clearfix-xs { clear: both; overflow: hidden; height: 10px; }
-.clearfix-sm { clear: both; overflow: hidden; height: 15px; }
-.clearfix-m { clear: both; overflow: hidden; height: 30px; }
-.clearfix-lg { clear: both; overflow: hidden; height: 50px; }
-.clearfix-xl { clear: both; overflow: hidden; height: 80px; }
+.clearfix { clear: both; overflow: hidden; display: block; }
+.clearfix-xs { clear: both; overflow: hidden; height: 10px; display: block; }
+.clearfix-sm { clear: both; overflow: hidden; height: 15px; display: block; }
+.clearfix-m { clear: both; overflow: hidden; height: 30px; display: block; }
+.clearfix-lg { clear: both; overflow: hidden; height: 50px; display: block; }
+.clearfix-xl { clear: both; overflow: hidden; height: 80px; display: block; }
 
 /* ALIGNMENT*/
 
@@ -173,6 +173,62 @@ h6 {
 	&.active {
 		color: #a9cf54;
 		background: #51545a;
+	}
+}
+
+.btn-facebook {
+	.btn-primary;
+
+	background: #3B5998;
+	border: 1px solid #3B5998;
+
+	&:hover,
+	&:focus,
+	&.active {
+		color: #3B5998;
+		background: #ffffff;
+	}
+}
+
+.btn-google {
+	.btn-primary;
+
+	background: #dd4b39;
+	border: 1px solid #dd4b39;
+
+	&:hover,
+	&:focus,
+	&.active {
+		color: #dd4b39;
+		background: #ffffff;
+	}
+}
+
+.btn-twitter {
+	.btn-primary;
+
+	background: #4099ff;
+	border: 1px solid #4099ff;
+
+	&:hover,
+	&:focus,
+	&.active {
+		color: #4099ff;
+		background: #ffffff;
+	}
+}
+
+.btn-linkedin {
+	.btn-primary;
+
+	background: #0075B5;
+	border: 1px solid #0075B5;
+
+	&:hover,
+	&:focus,
+	&.active {
+		color: #0075B5;
+		background: #ffffff;
 	}
 }
 
@@ -741,6 +797,11 @@ footer {
 
 	h1 {
 		text-shadow: 1px 1px 3px rgba(0,0,0,0.9);
+	}
+
+	&.small {
+		padding-top: 40px;
+		padding-bottom: 40px;
 	}
 
 	@media (max-width:767px) {

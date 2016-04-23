@@ -6,6 +6,9 @@ require_once(O3_CMS_DIR.'/classes/o3_cms_object.php');
 //Require countries class
 require_once(O3_CMS_THEME_DIR.'/classes/snafer_countries.php');
 
+//Require define class
+require_once(O3_CMS_THEME_DIR.'/classes/snafer_helper.php');
+
 /**
  * O3 Snafer Country class
  *
@@ -16,7 +19,7 @@ require_once(O3_CMS_THEME_DIR.'/classes/snafer_countries.php');
  */
 
 //Default country id
-define('DEFAULT_COUNTRY',46);
+snafer_helper::def('DEFAULT_COUNTRY',46);
 
 class snafer_country extends o3_cms_object {
 

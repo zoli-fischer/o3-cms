@@ -7,6 +7,9 @@
 		//load html head
 		$this->view( 'o3_cms_template_view_html_head' );
 
+		//load file upload app
+		$this->parent->body_js(O3_CMS_THEME_DIR.'/js/snafer/snafer.upload.app.js');
+
 	?>
 
 </head>
@@ -22,12 +25,176 @@
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col-sm-12">
-				<section class="top-container" style="background-image: url(/res/top-frontpage.jpg)">
+				<section class="top-container small" style="background-image: url(/res/top-frontpage.jpg)">
 
 					<div class="container">
 		        		<div class="row">
-		            		<div class="col-md-10 col-md-offset-1">
-		            			<h1>Great service and expertise<br>in everything we do</h1>
+		            		<div class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2" id="upload">
+		            			
+		            			<div id="upload-form" class="form wow fadeIn" data-wow-duration="0.4s" data-wow-delay=".5s">
+		            				
+		            				<div data-bind="o3_slideVisible: upload.uploading()">
+		            					<h2>Transfering</h2>
+		            					<span class="clearfix-sm"></span>
+
+		            					<div>
+
+		            						<div class="uploader">
+		            							
+		            							<span data-bind="html: o3_number_format( upload.uploading_percent(), 0, '.' )+'<small>%</small>'"></span>
+		            							<div>
+		            								<div data-bind="style: { width: ( 100 - upload.uploading_percent() )+'%' }"></div>
+		            							</div>
+
+		            						</div>
+
+		            						<span class="clearfix-sm"></span>
+
+		            					</div>
+		            					<div class="align-center">
+		            						<button class="btn" data-bind="click: upload.cancel">Cancel</button>
+		            					</div>
+		            				</div>
+
+		            				<div data-bind="o3_slideVisible: upload.transfered() ">
+		            					<h2>Transfer completed</h2>
+		            					<span class="clearfix-sm"></span>
+
+		            					<div>	
+
+											<div class="align-center">
+		            							<big><i class="fa fa-check-circle"></i> Success!</big>
+		            						</div>
+
+		            						<div class="align-center" data-bind="o3_slideVisible: upload.is_type( SNAFER_TRANSFER_EMAIL )">		            						
+		            							The download link was sent to the recepients.<br>
+		            							<small><i class="fa fa-info-circle"></i> A confirmation email is sent to you.</small>
+		            						</div>
+
+		            						<div class="from" data-bind="o3_slideVisible: upload.is_type( SNAFER_TRANSFER_DOWNLOAD )">
+				            					<span>Copy your download link:</span>
+								 				<div class="form-group">
+								 					<input class="form-control" type="input" readonly="readonly" />
+												</div>
+												<span class="clearfix-sm"></span>
+												<div class="align-center">
+					            					<button class="btn">Copy link</button>
+					            				</div>
+				            				</div>
+
+				            				<div class="align-center" data-bind="o3_slideVisible: upload.is_type( SNAFER_TRANSFER_SOCIAL )">
+				            					<button class="btn btn-facebook" data-bind="click: function(){ upload.share('facebook') }"><i class="fa fa-facebook"></i> Share on Facebook</button>
+												<div class="clearfix-sm"></div>
+
+												<button class="btn btn-google" data-bind="click: function(){ upload.share('google') }"><i class="fa fa-google-plus"></i> Share on Google +</button>										
+												<div class="clearfix-sm"></div>
+
+												<button class="btn btn-twitter" data-bind="click: function(){ upload.share('twitter') }"><i class="fa fa-twitter"></i> Share on Twitter</button>
+												<div class="clearfix-sm"></div>
+
+												<button class="btn btn-linkedin" data-bind="click: function(){ upload.share('linkedin') }"><i class="fa fa-linkedin"></i> Share on LinkedIn</button>
+				            				</div>
+
+
+		            					</div>
+		            					<div class="align-center">
+		            						<button class="btn btn-primary" data-bind="click: upload.reset">Okay</button>
+		            					</div>
+		            				</div>
+
+			            			<div data-bind="o3_slideVisible: !upload.uploading() && !upload.transfered()">
+			            				<h2>Send up to 2GB</h2>
+			            				<small class="anchors">
+			            					<br>
+			            					<a href="/#premium">Register free</a> if you want to upload up to 4GB.<br>
+			            					<a href="/#premium">Go Premium</a> if you want to upload up to 20GB.
+			            				</small>
+
+			            				<span class="clearfix-sm"></span>
+
+			            				<div class="send-type"> 
+
+			            					<div class="form-group">
+												<div class="radio-1st">
+													<a href="#" class="radio" data-bind="click: function(){ upload.type(SNAFER_TRANSFER_EMAIL); }, css: { 'active': upload.is_type( SNAFER_TRANSFER_EMAIL ) }"><span><i class="fa fa-circle"></i></span> Send by email</a>
+												</div>	
+												<div class="radio-2nd">
+													<a href="#" class="radio" data-bind="click: function(){ upload.type(SNAFER_TRANSFER_DOWNLOAD); }, css: { 'active': upload.is_type( SNAFER_TRANSFER_DOWNLOAD ) }"><span><i class="fa fa-circle"></i></span> Grab a download link</a>
+												</div>
+												<div class="radio-3rd">
+													<a href="#" class="radio" data-bind="click: function(){ upload.type(SNAFER_TRANSFER_SOCIAL); }, css: { 'active': upload.is_type( SNAFER_TRANSFER_SOCIAL ) }"><span><i class="fa fa-circle"></i></span> Share on social media</a>
+												</div>
+
+												<div class="clearfix"></div>
+											</div>
+
+											<small><i class="fa fa-info-circle"></i> Select the way you want to send your files.</small>
+
+			            				</div>
+
+			            				<div class="files">
+			            					
+			            					<a href="#" class="btn"><i class="fa fa-plus-square"></i> Add files</a>
+			            				</div>
+
+			            				<div class="receivers" data-bind="o3_slideVisible: upload.is_type( SNAFER_TRANSFER_EMAIL )">
+			            					<!--<span>Recipients</span>-->
+							 				<div class="form-group">
+							 					<textarea class="form-control" placeholder="Recipient(s)"
+							 						data-bind="value: upload.recipients"></textarea>				
+							 					<small><i class="fa fa-info-circle"></i> Type in 1 or more email separated with comma.</small>
+											</div>     					
+			            				</div>
+
+			            				<div class="from" data-bind="o3_slideVisible: upload.is_type( SNAFER_TRANSFER_EMAIL )">
+			            					<!--<span>Your email</span>-->
+							 				<div class="form-group">
+							 					<input class="form-control" placeholder="Your email" value="" name="email" type="email" 
+							 						data-bind="value: upload.email" />
+							 					<small><i class="fa fa-info-circle"></i> You receive an email when the files have been downloaded.</small>
+											</div>
+			            				</div>
+
+			            				<div class="message" data-bind="o3_slideVisible: upload.is_type( SNAFER_TRANSFER_EMAIL )">
+			            					<!--<span>Message</span>-->
+							 				<div class="form-group">
+							 					<textarea class="form-control" placeholder="Message"></textarea>				
+							 					<small><i class="fa fa-info-circle"></i> Optional. Send a message along with the files.</small>
+											</div>
+			            				</div>
+
+			            				<div class="align-center">
+		
+											<div data-bind="o3_slideVisible: upload.is_type( SNAFER_TRANSFER_EMAIL )">		            					
+			            						<button class="btn btn-primary" data-bind="click: upload.submit"><i class="fa fa-paper-plane"></i> Send files</button>
+			            					</div>
+
+			            					<div data-bind="o3_slideVisible: upload.is_type( SNAFER_TRANSFER_DOWNLOAD )">
+												<button class="btn btn-primary" data-bind="click: upload.submit"><i class="fa fa-link"></i> Get download link</button>
+											</div>
+
+											<div data-bind="o3_slideVisible: upload.is_type( SNAFER_TRANSFER_SOCIAL )">
+												<button class="btn btn-facebook" data-bind="click: function(){ upload.share('facebook') }"><i class="fa fa-facebook"></i> Share on Facebook</button>
+												<div class="clearfix-sm"></div>
+
+												<button class="btn btn-google" data-bind="click: function(){ upload.share('google') }"><i class="fa fa-google-plus"></i> Share on Google +</button>										
+												<div class="clearfix-sm"></div>
+
+												<button class="btn btn-twitter" data-bind="click: function(){ upload.share('twitter') }"><i class="fa fa-twitter"></i> Share on Twitter</button>
+												<div class="clearfix-sm"></div>
+
+												<button class="btn btn-linkedin" data-bind="click: function(){ upload.share('linkedin') }"><i class="fa fa-linkedin"></i> Share on LinkedIn</button>
+											</div>
+
+			            					<div class="clearfix-sm"></div>
+			            					<small class="anchors"><i class="fa fa-info-circle"></i> The file(s) will be kept for 7 days. <br>
+			            					<a href="/#premium">Register free</a> if you want to keep files up to 14 days.<br>
+			            					<a href="/#premium">Go Premium</a> if you want to keep files up to 6 months.</small>
+			            				</div>
+
+			            			</div>
+			            		</div>
+
 		            		</div>
 		            	</div>
 		            </div>
@@ -155,7 +322,7 @@
 			
 			</div>
 			<div class="row anchors">
-				<div class="col-md-4 col-md-offset-2 col-sm-5 col-sm-offset-1">
+				<div class="col-md-5 col-md-offset-1 col-lg-4 col-lg-offset-2">
 
 					<div class="plan-box wow flipInX" data-wow-duration="1s" data-wow-delay=".3s">
 						<p>Free</p>						
@@ -165,10 +332,10 @@
 						<ul>
 							<li class="active"><i class="fa fa-check"></i> Send up to 4GB per upload</li>
 							<li><i class="fa fa-check"></i> Transfer expire in 14 days</li>
-							<li><i class="fa fa-check"></i> Transfer history</li>
-							<li><br></li>
-							<li><br></li>
-							<li><br></li>
+							<li><i class="fa fa-check"></i> Transfer history up to 2 months</li>
+							<li class="hidden-sm"><br></li>
+							<li class="hidden-sm"><br></li>
+							<li class="hidden-sm"><br></li>
 						</ul>
 						<hr />
 						<a href="/#sign-in" onclick="show_sign_up_form(SNAFER_FREE)" class="btn active" data-bind="visible: !logged_user.is_logged()">Get Free</a>
@@ -182,7 +349,7 @@
 
 				<div class="clearfix-lg visible-xs"></div>
 
-				<div class="col-md-4 col-sm-5">
+				<div class="col-md-5 col-lg-4">
 					
 					<div class="plan-box plan-box-premium wow flipInX" data-wow-duration="1s" data-wow-delay=".5s">
 						<p>Premium</p>
@@ -191,8 +358,8 @@
 						<hr />
 						<ul>
 							<li class="active"><i class="fa fa-check"></i> Send up to 20GB per upload</li>
-							<li><i class="fa fa-check"></i> Transfer never expire</li>
-							<li><i class="fa fa-check"></i> Transfer history</li>
+							<li><i class="fa fa-check"></i> Transfer expire in 6 months</li>
+							<li><i class="fa fa-check"></i> Transfer history up to 6 months</li>
 							<li><i class="fa fa-check"></i> Ad free</li>
 							<li><i class="fa fa-check"></i> Secure transfer with password</li>
 							<li><i class="fa fa-check"></i> Customize transfer</li>
@@ -344,7 +511,7 @@
 					<div class="error-msg" data-bind="text: sign_in_up.sign_up_error_msg(), css: { block: sign_in_up.sign_up_error_msg() != '' }"></div>
 
 					<div class="form-group">
-						<div class="float-left">
+						<div class="float-left radio-1st">
 							<a href="#" class="radio" data-bind="click: function(){ sign_in_up.sign_up_form_type(SNAFER_FREE) }, css: { 'active': sign_in_up.sign_up_form_type() != SNAFER_PREMIUM }"><span><i class="fa fa-circle"></i></span> Free - <?php echo o3_html($this->country()->format_price(0)); ?><small>/month</small></a>
 						</div>	
 						<div class="float-left radio-2nd">
@@ -426,7 +593,7 @@
 							   data-bind="value: sign_in_up.sign_up_fields.gender.value,
 									   valueUpdate: 'keyup',
 									   o3_validate: sign_in_up.sign_up_fields.gender.value">
-						<div class="float-left">
+						<div class="float-left radio-1st">
 							<a href="#" class="radio" data-bind="click: function(){ sign_in_up.sign_up_fields.gender.value('male') }, css: { 'active': sign_in_up.sign_up_fields.gender.value() == 'male' }"><span><i class="fa fa-circle"></i></span> Male</a>
 						</div>	
 						<div class="float-left radio-2nd">

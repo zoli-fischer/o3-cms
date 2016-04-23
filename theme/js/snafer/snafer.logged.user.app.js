@@ -78,7 +78,7 @@ function snaferLoggedUserApp( opts ) {
 
 	//constructor
 	+function constructor(){
-		var $obj = $('script[ref=logged_user]');
+		var $obj = $('script[data-ref=logged_user]');
 
 		//set user
 		if ( $obj.length > 0 )

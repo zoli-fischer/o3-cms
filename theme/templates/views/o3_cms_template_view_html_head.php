@@ -29,19 +29,11 @@
 <link href='https://fonts.googleapis.com/css?family=Slabo+13px%7CMontserrat:400,700' rel='stylesheet' type='text/css'>
 
 <script 
-	ref="logged_user" 
+	data-ref="logged_user" 
 	data-user-id="<?php echo o3_html($this->parent->logged_user()->get('id')); ?>"
 	data-user-name="<?php echo o3_html($this->parent->logged_user()->get('username')); ?>"
 	data-subsciption-type="<?php echo o3_html($this->parent->logged_user()->get('subsciption_type')); ?>"
 	data-allow-trial="<?php echo o3_html($this->parent->logged_user()->allow_trial()); ?>"></script>
-
-<!--DEFINES-->
-<script>
-	var SNAFER_FREE = '<?php echo SNAFER_FREE; ?>',
-		SNAFER_PREMIUM = '<?php echo SNAFER_PREMIUM; ?>',
-		SNAFER_CARD = '<?php echo SNAFER_CARD; ?>',
-		SNAFER_PAYPAL = '<?php echo SNAFER_PAYPAL; ?>';
-</script>
 
 <?php
 	
@@ -49,7 +41,7 @@
 	$this->parent->parent->inlince_css( false );
 
 	//require js
-	$this->parent->parent->body_res('jquery2,o3_bootstrap,o3,o3_device,o3_valid,awesome,knockout');
+	$this->parent->parent->body_res('jquery2,o3_bootstrap,o3,o3_device,o3_valid,o3_string,awesome,knockout');
 
 	//parallax
 	$this->parent->parent->head_css(O3_CMS_THEME_DIR.'/lib/parallax/jquery.rd-parallax.css');

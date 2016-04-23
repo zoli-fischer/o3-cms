@@ -9,6 +9,9 @@ require_once(O3_CMS_THEME_DIR.'/classes/snafer_payments.php');
 //Require country class
 require_once(O3_CMS_THEME_DIR.'/classes/snafer_country.php');
 
+//Require define class
+require_once(O3_CMS_THEME_DIR.'/classes/snafer_helper.php');
+
 /**
  * O3 Snafer Payment class
  *
@@ -19,10 +22,10 @@ require_once(O3_CMS_THEME_DIR.'/classes/snafer_country.php');
  */
 
 //VAT percent
-define('SNAFER_PAYMENT_VAT_PERCENT',25);
+snafer_helper::def('SNAFER_PAYMENT_VAT_PERCENT',25);
 
 //Invoicing country 
-define('SNAFER_PAYMENT_HOME_COUNTRY','DK');
+snafer_helper::def('SNAFER_PAYMENT_HOME_COUNTRY','DK');
 
 class snafer_payment extends o3_cms_object {
 

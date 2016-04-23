@@ -33,12 +33,26 @@ abstract class o3_cms_object implements o3_cms_object_interface {
 
 	/** array | boolean Data of the object. Null if no object data. */	
 	protected $data = null;
+
+	//global o3
+	protected $o3 = null;
+
+	//global o3 cms
+	protected $o3_cms = null;
 	
 	/*
 	* Constructor
 	* @param id object id to select
 	*/
 	public function __construct( $id = null ) {
+		global $o3, $o3_cms;
+
+		//o3 ref
+		$this->o3 = &$o3;
+
+		//o3 cms ref
+		$this->o3_cms = &$o3_cms;	
+
 		if ( $id !== null )
 			$this->load( $id );
 	}

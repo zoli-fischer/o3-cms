@@ -38,15 +38,21 @@ abstract class o3_cms_objects implements o3_cms_objects_interface {
 
 	//global o3
 	protected $o3 = null;
+
+	//global o3 cms
+	protected $o3_cms = null;
 		
 	/*
 	* Constructor
 	*/
 	function __construct() {
-		global $o3;
+		global $o3, $o3_cms;
 
 		//o3 ref
 		$this->o3 = &$o3;
+		
+		//o3 cms ref
+		$this->o3_cms = &$o3_cms;	
 
 		//call on init
 		if ( method_exists( $this, 'init' ) )

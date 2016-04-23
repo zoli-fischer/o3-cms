@@ -1,0 +1,59 @@
+body, html {
+	font-size: 16px;
+	font-family: sans-serif;	
+	background-color: #ffffff;
+	padding-top: 10px;
+	padding-bottom: 20px;
+}
+
+h1, h2, h3, h4, h5, h6, p {
+	padding: 0px;
+	margin: 0px;
+	padding-bottom: 15px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	text-align: center;
+	padding-bottom: 25px;
+}
+
+p {
+	padding-bottom: 15px;
+}
+
+a {
+	color: #a9cf54;
+}
+
+.wrapper {
+	max-width: 560px;
+}
+
+footer {
+	padding: 20px;
+	color: #666666;
+	background-color: #eeeeee;
+	font-size: 13px;
+}
+
+footer hr {
+	height: 1px;
+	overflow: hidden;
+	color: #666666;
+	background-color: #666666;
+	border: 0px;
+}
+
+footer a {
+	color: #666666;
+	font-weight: bold;
+}
+
+/* CLEAR FIX */
+
+.clearfix { clear: both; overflow: hidden; }
+.clearfix-xs { clear: both; overflow: hidden; height: 10px; }
+.clearfix-sm { clear: both; overflow: hidden; height: 15px; }
+.clearfix-m { clear: both; overflow: hidden; height: 30px; }
+.clearfix-lg { clear: both; overflow: hidden; height: 50px; }
+.clearfix-xl { clear: both; overflow: hidden; height: 80px; }

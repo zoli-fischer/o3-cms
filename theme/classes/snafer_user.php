@@ -9,6 +9,12 @@ require_once(O3_CMS_THEME_DIR.'/classes/snafer_users.php');
 //Require country class
 require_once(O3_CMS_THEME_DIR.'/classes/snafer_country.php');
 
+//Require email sending class
+require_once(O3_CMS_THEME_DIR.'/classes/snafer_emails.php');
+
+//Require define class
+require_once(O3_CMS_THEME_DIR.'/classes/snafer_helper.php');
+
 /**
  * O3 Snafer User class
  *
@@ -18,23 +24,23 @@ require_once(O3_CMS_THEME_DIR.'/classes/snafer_country.php');
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
-define('SNAFER_SIGNED_USER_SESSION_INDEX_NAME','snafer_signed_user_name');
-define('SNAFER_SIGNED_USER_SESSION_INDEX_PASSWORD','snafer_signed_user_password');
-define('SNAFER_SIGNED_USER_SESSION_INDEX_ID','snafer_signed_user_id');
+snafer_helper::define('SNAFER_SIGNED_USER_SESSION_INDEX_NAME','snafer_signed_user_name');
+snafer_helper::define('SNAFER_SIGNED_USER_SESSION_INDEX_PASSWORD','snafer_signed_user_password');
+snafer_helper::define('SNAFER_SIGNED_USER_SESSION_INDEX_ID','snafer_signed_user_id');
 
 //Subsciption types
-define('SNAFER_FREE','free');
-define('SNAFER_PREMIUM','premium');
+snafer_helper::define('SNAFER_FREE','free',true);
+snafer_helper::define('SNAFER_PREMIUM','premium',true);
 
 //Subsciption pay types
-define('SNAFER_CARD','card');
-define('SNAFER_PAYPAL','paypal');
+snafer_helper::define('SNAFER_CARD','card',true);
+snafer_helper::define('SNAFER_PAYPAL','paypal',true);
 
 //Subsciption length in days
-define('SNAFER_PERIOD_DAYS',30);
+snafer_helper::define('SNAFER_PERIOD_DAYS',30);
 
 //Subsciption length in seconds
-define('SNAFER_PERIOD_SECS',SNAFER_PERIOD_DAYS * 24 * 3600);
+snafer_helper::define('SNAFER_PERIOD_SECS',SNAFER_PERIOD_DAYS * 24 * 3600);
 
 class snafer_user extends o3_cms_object {
 
@@ -93,10 +99,11 @@ class snafer_user extends o3_cms_object {
 	*
 	* @return boolean
 	*/
-	public function set_password( $password ) {
+	public function set_password( $password, $update_session = true ) {
 		$password = o3_sha3($password);
 		if ( $this->update( array( 'password' => $password ) ) ) {
-			$_SESSION[SNAFER_SIGNED_USER_SESSION_INDEX_PASSWORD] = $password;
+			if ( $update_session )
+				$_SESSION[SNAFER_SIGNED_USER_SESSION_INDEX_PASSWORD] = $password;
 			return true;
 		}
 		return false;
@@ -262,6 +269,57 @@ class snafer_user extends o3_cms_object {
  		return $this->get('subscription_trial') === null;
  	}
 
+ 	/**
+ 	* Send subscription set to premium trial notification
+ 	* @return Boolean If true the email was sent
+ 	*/ 
+ 	public function send_premium_trial_subscription_notification() {
+	 	if ( $this->is() ) {			
+			return o3_with(new snafer_emails())->send( $this->get('email'), 'Welcome to Premium! Enjoy your '.SNAFER_PERIOD_DAYS.' '.( SNAFER_PERIOD_DAYS == 1 ? 'day' : 'days' ).' for free', '<h1>Hello.</h1> <h2>Welcome to Snafer Premium</h2><p>Thanks for taking our '.SNAFER_PERIOD_DAYS.' '.( SNAFER_PERIOD_DAYS == 1 ? 'day' : 'days' ).' free trial!</p><p><b>What is Snafer Premium?</b><ul>
+<li>Send up to 20GB per upload</li>
+<li>Transfer never expire</li>
+<li>Transfer history</li>
+<li>Ad free</li>
+<li>Secure transfer with password</li>
+<li>Customize transfer</li></ul></p><p><br></p>' );
+		}
+		return false;
+	}
+
+	/**
+ 	* Send subscription set to premium notification
+ 	* @return Boolean If true the email was sent
+ 	*/ 
+ 	public function send_premium_subscription_notification() {
+	 	if ( $this->is() ) {			
+			return o3_with(new snafer_emails())->send( $this->get('email'), 'Welcome to Premium!', '<h1>Hello.</h1> <h2>Welcome to Snafer Premium</h2><p>Thanks for taking our great service!</p><p><b>What is Snafer Premium?</b><ul>
+<li>Send up to 20GB per upload</li>
+<li>Transfer never expire</li>
+<li>Transfer history</li>
+<li>Ad free</li>
+<li>Secure transfer with password</li>
+<li>Customize transfer</li></ul></p><p><br></p>' );
+		}
+		return false;
+	}
+
+	/**
+ 	* Send subscription set to free notification
+ 	* @return Boolean If true the email was sent
+ 	*/ 
+ 	public function send_free_subscription_notification() {
+	 	if ( $this->is() ) {			
+			return o3_with(new snafer_emails())->send( $this->get('email'), 'Welcome to Snafer!', '<h1>Hello.</h1> <h2>Welcome to Snafer Free</h2><p>Thanks for taking our great service!</p><p>You can try Snafer Premium for '.SNAFER_PERIOD_DAYS.' '.( SNAFER_PERIOD_DAYS == 1 ? 'day' : 'days' ).' for free. Just click <a href="'.o3_get_host().$this->o3_cms->page_url( HOME_PAGE_ID, '', 'premium' ).'" target="_blank">here</a>.</p><p><b>What is Snafer Premium?</b><ul>
+<li>Send up to 20GB per upload</li>
+<li>Transfer never expire</li>
+<li>Transfer history</li>
+<li>Ad free</li>
+<li>Secure transfer with password</li>
+<li>Customize transfer</li></ul></p><p><br></p>' );
+		}
+		return false;
+	}
+
  	/*
  	* Set premium subscription
  	*/
@@ -281,8 +339,13 @@ class snafer_user extends o3_cms_object {
 			$return = $this->update( $values );
 	
 			//create payment
-			if ( $return )
+			if ( $return ) {
+				//send notification email
+				$this->send_premium_trial_subscription_notification();
+
+				//create invoice
 				$this->add_subscription_payment( true );
+			}
 
 		} else if ( $this->is_paid() ) {
 
@@ -302,17 +365,36 @@ class snafer_user extends o3_cms_object {
 			$return = $this->update( $values );
 
 			//create payment
-			if ( $return )
+			if ( $return ) {
+				
+				//send notification email
+				$this->send_premium_subscription_notification();
+
+				//create invoice
 				$this->add_subscription_payment( true );
+			}
 
 		}
 		return $return;
  	} 
- 	
- 	/*
- 	* Cancel subscription
+
+ 	/**
+ 	* Send cancel subscription notification
+ 	* @return Boolean  If true the email was sent
  	*/ 
- 	public function cancel_subscription() {
+ 	public function send_subscription_canceled_notification() {
+	 	if ( $this->is() ) {			
+			return o3_with(new snafer_emails())->send( $this->get('email'), 'You have cancelled your Snafer subscription', '<h1>Hello.</h1> <p>We thought you\'d like to know that you have successfully cancelled your Snafer subscription.</p><p>We\'re sorry to lose you as a subscriber, but you can come back any time just go to your account and re-subscribe.</p>' );
+		}
+		return false;
+	}
+ 	
+ 	/**
+ 	* Cancel subscription
+ 	* @param $send_notification Boolean If true email with cancel subscription notification will be sent to user
+ 	* @return Boolean  If true the subscription was cancelled
+ 	*/ 
+ 	public function cancel_subscription( $send_notification = true ) {
  		if ( !$this->is_premium() )
  			return true;
 
@@ -324,6 +406,10 @@ class snafer_user extends o3_cms_object {
  			'subsciption_end' => null*/
  		); 			 			 		
  		$this->update( $update );
+
+		//send email notification
+ 		if ( $send_notification && !$this->is_premium() )
+ 			$this->send_subscription_canceled_notification();
 
  		//check is still premium
  		return !$this->is_premium();

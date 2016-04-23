@@ -85,8 +85,7 @@
 									<span class="text-center">Invoice</span>
 								</li>
 								<?php
-								foreach ( $payments as $key => $value ) {
-									if ( $value->get('total_incl_vat') > 0 ) {
+								foreach ( $payments as $key => $value ) {								
 									?>
 									<li>
 										<span class="text-center"><?php echo o3_html( $value->get('id') ); ?></span>
@@ -105,13 +104,17 @@
 												 		<i class="fa fa-credit-card"></i> Visa (<?php echo o3_html($value->get('subscription_pay_card')); ?>)
 												 		<?php
 												 		break;
+												 	default:
+												 		?>
+												 		Free trial
+												 		<?php
+												 		break;
 												 } 
 											?>
 										</span>
 										<span class="text-center"><a href="<?php echo $value->download_url(1); ?>" title="Download invoice"><i class="fa fa-cloud-download"></i></a></span>
 									</li>
-									<?php	
-									}
+									<?php
 								}
 								?>
 							</ul>
@@ -195,7 +198,7 @@
 
 							<div class="clearfix-sm"></div>
 
-							<a href="/#premium" class="btn">Upgrade</a>
+							<a href="<?php echo $this->o3_cms()->page_url( HOME_PAGE_ID, '', 'premium' ); ?>" class="btn">Upgrade</a>
 
 						<?php
 						}

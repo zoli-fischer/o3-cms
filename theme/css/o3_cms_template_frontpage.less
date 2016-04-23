@@ -248,7 +248,94 @@
 #sign-up-form {
 	text-align: center;
 
-	.radio-2nd {
-		margin-left: 30px;
+	.radio-1st {
+		padding-right: 30px;
 	}
+}
+
+
+#upload-form {
+	visibility: hidden;
+	background: #fff;
+	border: 3px solid #333;
+	border-radius: 15px;
+	padding: 30px 0 10px 0;
+	-webkit-box-shadow: 3px 3px 5px rgba(0,0,0,0.5);
+	-moz-box-shadow: 3px 3px 5px rgba(0,0,0,0.5);
+	box-shadow: 3px 3px 5px rgba(0,0,0,0.5);
+
+	h2 {
+		font-size: 22px;
+		color: #333;
+	}
+
+	input {
+		border: 1px solid #333;
+		padding: 0 7px;
+		height: 36px;
+		line-height: 36px;
+	}
+
+	textarea {
+		border: 1px solid #333;
+		padding: 7px;
+	}
+
+	.form-group {
+		margin: 0px;
+	}
+	
+	> small {
+		padding-left: 20px;
+		padding-right: 20px;		
+	}
+	
+	> div > div {
+		text-align: left;
+		padding: 20px;
+		border-top: 1px dashed #333;
+	}
+
+	.align-center {
+		text-align: center;
+	}	
+
+	big {
+		font-size: 56px;
+		font-family: 'Slabo 13px',sans-serif;
+		color: #aad051;
+	}
+
+	.uploader {
+		text-align: center;
+		font-size: 56px;
+		font-family: 'Slabo 13px',sans-serif;
+		color: #aad051;
+
+		small {
+			font-size: 36px;
+		}
+
+		> div {
+			width: 212px;
+			height: 13px;
+			background: url(/res/uploader.png);
+			margin: 0 auto;
+
+			> div {
+				float: right;
+				width: 0%;
+				min-width: 1px;
+				height: 100%;
+				background: #fff;
+				opacity: 0.8;
+				border-left: 1px solid #a9cf54;
+			}
+		}
+	}
+
+	.files {
+		
+	}
+
 }
