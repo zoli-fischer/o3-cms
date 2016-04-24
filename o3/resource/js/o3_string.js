@@ -210,10 +210,11 @@ function o3_number_format(number, decimals, dec_point, thousands_sep) {
 *
 * @return string
 */
-function o3_bytes_display( size ) {
+function o3_bytes_display( size, decimals, dec_point, thousands_sep ) {
   var unit_u = [ 'B', 'KB', 'MB', 'GB', 'TB', 'PB' ],
       i = Math.floor( Math.log( size ) / Math.log( 1024 ) ),
       v = size / Math.pow( 1024, i ),
       u_u = unit_u[i];
-  return v+u_u;
+
+  return ( typeof decimals != 'undefined' ? o3_number_format(v, decimals, dec_point, thousands_sep) : v )+u_u;
 };

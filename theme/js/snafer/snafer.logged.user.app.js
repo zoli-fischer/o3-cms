@@ -22,7 +22,7 @@ function snaferLoggedUserApp( opts ) {
 	self.username = ko.observable( '' );
 
 	//subsciption type
-	self.subsciption_type = ko.observable('free');
+	self.subsciption_type = ko.observable( SNAFER_NONE );
 
 	//allow trial to user
 	self.allow_trial = ko.observable( true );
@@ -34,7 +34,17 @@ function snaferLoggedUserApp( opts ) {
 
 	//check if user is premium
 	self.is_premium = ko.pureComputed(function() {
-		return self.subsciption_type() == 'premium';
+		return self.subsciption_type() == SNAFER_PREMIUM;
+	});
+
+	//check if user is registered but not premium
+	self.is_free = ko.pureComputed(function() {
+		return self.subsciption_type() == SNAFER_FREE;
+	});
+
+	//check if user is not registered
+	self.is_none = ko.pureComputed(function() {
+		return self.subsciption_type() == SNAFER_NONE;
 	});
 
 	//set user data

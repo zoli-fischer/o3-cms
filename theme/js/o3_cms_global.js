@@ -12,7 +12,7 @@ jQuery(document).ready(function(){
 	*/
 
 	//animate on scroll
-	if ((navigator.userAgent.toLowerCase().indexOf('msie') == -1 ) || (isIE() && isIE() > 9)) {
+	if ( navigator.userAgent.toLowerCase().indexOf('msie') == -1 ) {
         if (!jQuery('body').hasClass('mobile')) {
 			new WOW().init();            
         };

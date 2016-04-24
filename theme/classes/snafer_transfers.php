@@ -33,17 +33,17 @@ class snafer_transfers extends o3_cms_objects {
 	}
 
 	/**
-	* Table name where are the recepients
+	* Table name where are the recipients
 	*/
-	public function tablename_index_recepients() {
-		return 'snafer_transfer_recepients';
+	public function tablename_index_recipients() {
+		return 'snafer_transfer_recipients';
 	}
 
 	/*
-	* Get recepients table name
+	* Get recipients table name
 	*/
-	public function tablename_recepients() {
-		return $this->o3->mysqli->tablename($this->tablename_index_recepients());
+	public function tablename_recipients() {
+		return $this->o3->mysqli->tablename($this->tablename_index_recipients());
 	}
 
 	/**
@@ -54,7 +54,7 @@ class snafer_transfers extends o3_cms_objects {
 	}
 
 	/*
-	* Get recepients table name
+	* Get recipients table name
 	*/
 	public function tablename_canonical_ids() {
 		return $this->o3->mysqli->tablename($this->tablename_index_canonical_ids());
@@ -92,14 +92,14 @@ class snafer_transfers extends o3_cms_objects {
 	* Generate canonical id
 	*/
 	public static function canonical_id( $user_id, $created, $expire, $type, $way, $email ) {
-		return preg_replace( "/[ :-]+/i", "", base64_encode($type.$way.$email).strrev($expire).strrev($created.$user_id) );
+		return preg_replace( "/[ :=-]+/i", "", base64_encode($type.$way.$email).strrev($expire).strrev($created.$user_id) );
 	}
 
 	/**
 	* Insert temporary transfer into database 
 	* @example o3_with(new snafer_transfers())->create( null, 'free', 'email', '$email', '$message', array( 'mail1@test.dk', 'mail2@test.dk' ) );
 	*/
-	public function create( $user_id, $type, $way, $email, $message, $recepients = array() ) {
+	public function create( $user_id, $type, $way, $email, $message, $recipients = array(), $files = array() ) {
 		//error flag
 		$mysql_error = false;
 
@@ -129,20 +129,19 @@ class snafer_transfers extends o3_cms_objects {
 		) ) ) === false )
 			$mysql_error = true;
 
-		//insert recepients
-		if ( count($recepients) > 1 ) {
-			foreach ($recepients as $recepient_email )
-				if ( $this->o3->mysqli->insert( $this->tablename_recepients(), array(
+		//insert recipients
+		if ( count($recipients) == 1 ) {
+			foreach ($recipients as $recepient_email )
+				if ( $this->o3->mysqli->insert( $this->tablename_recipients(), array(
 					'transfer_id' => $transfer_id,
 					'email' => $recepient_email
 				) ) === false )
 					$mysql_error = true;
-		} else {
-			if ( $prepare = $mysqli->prepare("INSERT INTO ".$this->tablename_recepients()." ( transfer_id, email ) VALUES ( ?, ? )") ) {
-				$prepare->bind_param("s", $transfer_id);
-				$prepare->bind_param("s", $recepient_email);
-				foreach ($recepients as $recepient_email )
-					$prepare->execute();				
+		} elseif ( count($recipients) > 1 ) {
+			if ( $prepare = $this->o3->mysqli->prepare("INSERT INTO ".$this->tablename_recipients()." ( transfer_id, email ) VALUES ( ?, ? )") ) {
+				$prepare->bind_param("ss", $transfer_id, $recepient_email);
+				foreach ($recipients as $recepient_email )
+					$prepare->execute();
 			}
 		}
 
@@ -166,8 +165,33 @@ class snafer_transfers extends o3_cms_objects {
 		
 		return false;
 	}
-}
 
-o3_with(new snafer_transfers())->create( null, 'free', 'email', '$email', '$message', array( 'mail1@test.dk', 'mail2@test.dk' ) );
+	/**
+	* Display day/month period
+	* @param integer $days
+	* @return string
+	*/
+	public static function display_period( $days ) {
+		if ( $days == 1 ) {
+			return "1 day";
+		} else if ( $days >= SNAFER_YEAR_LENGTH ) {
+			$years = $days / SNAFER_YEAR_LENGTH;
+			if ( $years == 1 ) {
+				return "1 year";
+			} else {
+				return $years." years";
+			}
+		} else if ( $days >= SNAFER_MONTH_LENGTH ) {
+			$months = $days / SNAFER_MONTH_LENGTH;
+			if ( $months == 1 ) {
+				return "1 month";
+			} else {
+				return $months." months";
+			}
+		} 
+		return $days.' days';
+	}
+
+}
 
 ?>

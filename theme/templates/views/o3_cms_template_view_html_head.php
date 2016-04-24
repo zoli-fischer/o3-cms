@@ -41,7 +41,7 @@
 	$this->parent->parent->inlince_css( false );
 
 	//require js
-	$this->parent->parent->body_res('jquery2,o3_bootstrap,o3,o3_device,o3_valid,o3_string,awesome,knockout');
+	$this->parent->parent->body_res('jquery2,o3_bootstrap,o3,o3_device,o3_upclick,o3_valid,o3_string,awesome,knockout');
 
 	//parallax
 	$this->parent->parent->head_css(O3_CMS_THEME_DIR.'/lib/parallax/jquery.rd-parallax.css');

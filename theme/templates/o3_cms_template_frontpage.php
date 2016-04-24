@@ -7,8 +7,11 @@
 		//load html head
 		$this->view( 'o3_cms_template_view_html_head' );
 
-		//load file upload app
+		//load create transfer app
 		$this->parent->body_js(O3_CMS_THEME_DIR.'/js/snafer/snafer.upload.app.js');
+
+		//load transfer file app
+		$this->parent->body_js(O3_CMS_THEME_DIR.'/js/snafer/snafer.upload.file.app.js');
 
 	?>
 
@@ -34,7 +37,7 @@
 		            			<div id="upload-form" class="form wow fadeIn" data-wow-duration="0.4s" data-wow-delay=".5s">
 		            				
 		            				<div data-bind="o3_slideVisible: upload.uploading()">
-		            					<h2>Transfering</h2>
+		            					<h2>Transfering...</h2>
 		            					<span class="clearfix-sm"></span>
 
 		            					<div>
@@ -46,13 +49,16 @@
 		            								<div data-bind="style: { width: ( 100 - upload.uploading_percent() )+'%' }"></div>
 		            							</div>
 
+		            							<p data-bind="o3_fadeVisible: upload.uploading_percent() > 0"><span data-bind="text: o3_bytes_display( upload.uploading_percent() * upload.files_size() / 100, 0 )"></span> of <span data-bind="text: o3_bytes_display( upload.files_size(), 0 )"></span> completed</p>
+												<p data-bind="text: upload.estimated_display(), o3_fadeVisible: upload.estimated_seconds() > 0"></p>
+
 		            						</div>
 
 		            						<span class="clearfix-sm"></span>
 
 		            					</div>
 		            					<div class="align-center">
-		            						<button class="btn" data-bind="click: upload.cancel">Cancel</button>
+		            						<button class="btn" data-bind="click: function() { if ( confirm('Are you sure you want to cancel?') ) upload.cancel(); }">Cancel</button>
 		            					</div>
 		            				</div>
 
@@ -74,11 +80,11 @@
 		            						<div class="from" data-bind="o3_slideVisible: upload.is_type( SNAFER_TRANSFER_DOWNLOAD )">
 				            					<span>Copy your download link:</span>
 								 				<div class="form-group">
-								 					<input class="form-control" type="input" readonly="readonly" />
+								 					<input class="form-control download-link" type="input" readonly="readonly" data-bind="value: upload.transfer_url" onclick="jQuery(this).focus(), jQuery(this).select()" />
 												</div>
 												<span class="clearfix-sm"></span>
 												<div class="align-center">
-					            					<button class="btn">Copy link</button>
+					            					<button class="btn" data-bind="click: upload.copy">Copy link</button>
 					            				</div>
 				            				</div>
 
@@ -103,11 +109,11 @@
 		            				</div>
 
 			            			<div data-bind="o3_slideVisible: !upload.uploading() && !upload.transfered()">
-			            				<h2>Send up to 2GB</h2>
-			            				<small class="anchors">
+			            				<h2>Send up to <span data-bind="text: upload.max_upload_size_display()"></span></h2>
+			            				<small class="anchors" data-bind="visible: !logged_user.is_premium()">
 			            					<br>
-			            					<a href="/#premium">Register free</a> if you want to upload up to 4GB.<br>
-			            					<a href="/#premium">Go Premium</a> if you want to upload up to 20GB.
+			            					<a href="/#premium" data-bind="visible: !logged_user.is_free()">Register free</a> if you want to upload up to <?php echo o3_html(SNAFER_TRANSFER_FREE_MAXSIZE_GB); ?>.<br>
+			            					<a href="/#premium">Go Premium</a> if you want to upload up to <?php echo o3_html(SNAFER_TRANSFER_PREMIUM_MAXSIZE_GB); ?>.
 			            				</small>
 
 			            				<span class="clearfix-sm"></span>
@@ -134,7 +140,17 @@
 
 			            				<div class="files">
 			            					
-			            					<a href="#" class="btn"><i class="fa fa-plus-square"></i> Add files</a>
+			            					<ul data-bind="template: { 
+			            										foreach: upload.files,
+									                       		beforeRemove: upload.hideElement,
+									                      		afterAdd: upload.showElement 
+									                      	}">
+			            						<li><span data-bind="text: name()"></span> <a href="#" data-bind="click: $root.upload.remove_file"><i class="fa fa-minus-circle"></i></a></li>
+			            					</ul>
+
+			            					<a href="#" class="btn" data-bind="click: upload.select_file"><i class="fa fa-plus-square"></i> <span data-bind="text: upload.files().length > 0 ? 'Add more' : 'Add files'"></span><small data-bind="text: ' ('+o3_bytes_display(upload.remianing_size(),2)+' left)', visible: upload.files_size() > 0"></small></a>
+			            					<input multiple="multiple" type="file" />
+
 			            				</div>
 
 			            				<div class="receivers" data-bind="o3_slideVisible: upload.is_type( SNAFER_TRANSFER_EMAIL )">
@@ -158,7 +174,7 @@
 			            				<div class="message" data-bind="o3_slideVisible: upload.is_type( SNAFER_TRANSFER_EMAIL )">
 			            					<!--<span>Message</span>-->
 							 				<div class="form-group">
-							 					<textarea class="form-control" placeholder="Message"></textarea>				
+							 					<textarea class="form-control" placeholder="Message" data-bind="value: upload.message"></textarea>				
 							 					<small><i class="fa fa-info-circle"></i> Optional. Send a message along with the files.</small>
 											</div>
 			            				</div>
@@ -187,9 +203,18 @@
 											</div>
 
 			            					<div class="clearfix-sm"></div>
-			            					<small class="anchors"><i class="fa fa-info-circle"></i> The file(s) will be kept for 7 days. <br>
-			            					<a href="/#premium">Register free</a> if you want to keep files up to 14 days.<br>
-			            					<a href="/#premium">Go Premium</a> if you want to keep files up to 6 months.</small>
+			            					
+			            					<small class="anchors"><i class="fa fa-info-circle"></i> The file(s) will be kept for 
+			            						<span data-bind="visible: logged_user.is_none()"><?php echo snafer_transfers::display_period( SNAFER_TRANSFER_LIFETIME_DAYS ); ?></span>
+			            						<span data-bind="visible: logged_user.is_free()"><?php echo snafer_transfers::display_period( SNAFER_TRANSFER_LIFETIME_FREE_DAYS ); ?></span>
+			            						<span data-bind="visible: logged_user.is_premium()"><?php echo snafer_transfers::display_period( SNAFER_TRANSFER_LIFETIME_PREMIUM_DAYS ); ?></span>
+			            					.<br>
+
+
+			            					<span data-bind="visible: !logged_user.is_premium()">
+				            					<span data-bind="visible: !logged_user.is_free()"><a href="/#premium">Register free</a> if you want to keep files up to <?php echo snafer_transfers::display_period( SNAFER_TRANSFER_LIFETIME_FREE_DAYS ); ?>.<br></span>
+				            					<a href="/#premium">Go Premium</a> if you want to keep files up to <?php echo snafer_transfers::display_period( SNAFER_TRANSFER_LIFETIME_PREMIUM_DAYS ); ?>.</small>
+				            				</span>
 			            				</div>
 
 			            			</div>
@@ -330,9 +355,9 @@
 						<small data-bind="visible: !logged_user.is_logged() || logged_user.allow_trial()">&nbsp;</small>
 						<hr />
 						<ul>
-							<li class="active"><i class="fa fa-check"></i> Send up to 4GB per upload</li>
-							<li><i class="fa fa-check"></i> Transfer expire in 14 days</li>
-							<li><i class="fa fa-check"></i> Transfer history up to 2 months</li>
+							<li class="active"><i class="fa fa-check"></i> Send up to <?php echo o3_html(SNAFER_TRANSFER_FREE_MAXSIZE_GB); ?> per upload</li>
+							<li><i class="fa fa-check"></i> Transfer expire in <?php echo snafer_transfers::display_period( SNAFER_TRANSFER_LIFETIME_FREE_DAYS ); ?></li>
+							<li><i class="fa fa-check"></i> Transfer history up to <?php echo snafer_transfers::display_period( SNAFER_TRANSFER_KEEP_FREE_DAYS ); ?></li>
 							<li class="hidden-sm"><br></li>
 							<li class="hidden-sm"><br></li>
 							<li class="hidden-sm"><br></li>
@@ -357,9 +382,9 @@
 						<small data-bind="visible: !logged_user.is_logged() || logged_user.allow_trial()">Start your 30 day free trial</small>						
 						<hr />
 						<ul>
-							<li class="active"><i class="fa fa-check"></i> Send up to 20GB per upload</li>
-							<li><i class="fa fa-check"></i> Transfer expire in 6 months</li>
-							<li><i class="fa fa-check"></i> Transfer history up to 6 months</li>
+							<li class="active"><i class="fa fa-check"></i> Send up to <?php echo o3_html(SNAFER_TRANSFER_PREMIUM_MAXSIZE_GB); ?> per upload</li>
+							<li><i class="fa fa-check"></i> Transfer expire in <?php echo snafer_transfers::display_period( SNAFER_TRANSFER_LIFETIME_PREMIUM_DAYS ); ?></li>
+							<li><i class="fa fa-check"></i> Transfer history up to <?php echo snafer_transfers::display_period( SNAFER_TRANSFER_KEEP_PREMIUM_DAYS ); ?></li>
 							<li><i class="fa fa-check"></i> Ad free</li>
 							<li><i class="fa fa-check"></i> Secure transfer with password</li>
 							<li><i class="fa fa-check"></i> Customize transfer</li>

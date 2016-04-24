@@ -179,6 +179,38 @@ class o3_cms_template_frontpage extends snafer_template_controller {
 
 	}	
 
+	/*
+	* Ajax call handler for create transfer
+	*/
+	public function ajax_create_transfer() {
+		$user_id = null;
+		$type = SNAFER_NONE;
+		$way = $this->ajax_result->value('way');
+		$email = $this->ajax_result->value('email');
+		$message = $this->ajax_result->value('message');
+		$recipients = $this->ajax_result->value('recipients');
+		$files = array();
+		
+		if ( $this->logged_user()->is() ) {
+			$user_id = $this->logged_user()->get('id');
+			$type = $this->logged_user()->get('subsciption_type');
+		}
+
+		//create transfer
+		$transfer = o3_with(new snafer_transfers())->create( $user_id, $type, $way, $email, $message, $recipients, $files );
+		if ( $transfer->is() ) {
+			//return url
+			$this->ajax_result->data('url', $transfer->url() );
+
+			//return caninical id
+			$this->ajax_result->data('id', $transfer->get('canonical_id') );
+
+			//return success
+			$this->ajax_result->success();
+		}
+		
+	}
+
 }
 
 ?>

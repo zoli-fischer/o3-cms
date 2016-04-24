@@ -473,6 +473,8 @@ class snafer_user extends o3_cms_object {
 		return $payments;
  	}
 
+ 	
+
 
 }
 
