@@ -1,4 +1,4 @@
-# o3-cms
+# snapfer
 
 Theme structure
 css
