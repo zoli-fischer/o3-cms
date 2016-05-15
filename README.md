@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 > **This project is in beta version**
 
 # Snapfer - Bachelor Project
