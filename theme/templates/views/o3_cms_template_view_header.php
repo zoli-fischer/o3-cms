@@ -6,7 +6,7 @@
 	  		<div class="row">
 	  			<div class="col-sm-3 logo-holder anchors">
 
-	  				<a href="/#"><img src="/res/header-logo.png" alt="snafer" /></a>
+	  				<a href="/#"><img src="/res/header-logo.png" alt="snapfer" /></a>
 
 	  			</div>	
 	  			<div class="col-sm-9 header-menu">
@@ -29,11 +29,17 @@
 										<p>Logged in as <span data-bind="text: logged_user.username()"></span></p>
 
 										<ul>
+											<li data-bind="visible: logged_user.is_premium()">
+												<a href="<?php echo $this->o3_cms()->page_url( TRANSFERS_HISTORY_PAGE_ID ); ?>"><span>Storage</span> <small>( <span data-bind="text: o3_bytes_display(logged_user.storage_free(),2)"></span> free )</small></a>
+											</li>
+											<li data-bind="visible: logged_user.is_free()">
+												<a href="<?php echo $this->o3_cms()->page_url( TRANSFERS_HISTORY_PAGE_ID ); ?>"><span>History</span></a>
+											</li>
 											<li>
 												<a href="<?php echo $this->o3_cms()->page_url( ACCOUNT_PAGE_ID ); ?>"><span>Account</span></a>
 											</li>
 											<li>
-												<a href="/index.php?snafer-sign-out" data-bind="click: logged_user.signout"><i class="fa fa-sign-out"></i> <span>Sign out</span></a>
+												<a href="/index.php?snapfer-sign-out" data-bind="click: logged_user.signout"><i class="fa fa-sign-out"></i> <span>Sign out</span></a>
 											</li>						
 										</ul>
 
@@ -44,10 +50,16 @@
 		  					</li>	
 
 		  					<li class="visible-xs-block">
+								<a href="<?php echo $this->o3_cms()->page_url( TRANSFERS_HISTORY_PAGE_ID ); ?>" class="logged-user-item" data-bind="visible: logged_user.is_premium()"><span>Storage</span> <small>( <span data-bind="text: o3_bytes_display(logged_user.storage_free(),2)"></span> free )</small></a>
+							</li>
+							<li class="visible-xs-block">
+								<a href="<?php echo $this->o3_cms()->page_url( TRANSFERS_HISTORY_PAGE_ID ); ?>" class="logged-user-item" data-bind="visible: logged_user.is_free()"><span>History</span></a>
+							</li>
+		  					<li class="visible-xs-block">
 								<a href="<?php echo $this->o3_cms()->page_url( ACCOUNT_PAGE_ID ); ?>" class="logged-user-item" data-bind="visible: logged_user.is_logged()"><span>Account</span></a>
 							</li>
 							<li class="visible-xs-block">
-								<a href="/index.php?snafer-sign-out" class="logged-user-item" data-bind="click: logged_user.signout, visible: logged_user.is_logged()"><i class="fa fa-sign-out"></i> <span>Sign out</span></a>
+								<a href="/index.php?snapfer-sign-out" class="logged-user-item" data-bind="click: logged_user.signout, visible: logged_user.is_logged()"><i class="fa fa-sign-out"></i> <span>Sign out</span></a>
 							</li>
 		  				</ul>
 		  			</nav>

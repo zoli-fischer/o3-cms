@@ -9,7 +9,7 @@
 
 
 		//load cancel subscription app
-		$this->parent->body_js(O3_CMS_THEME_DIR.'/js/snafer/snafer.cancel.subscription.app.js');		
+		$this->parent->body_js(O3_CMS_THEME_DIR.'/js/snapfer/snapfer.cancel.subscription.app.js');		
 
 	?>
 
@@ -100,7 +100,7 @@
 
 					<div class="clearfix-xl"></div>
 
-					<h3>Your Snafer Premium subscription was cancelled.</h3>	
+					<h3>Your Snapfer Premium subscription was cancelled.</h3>	
 
 					<div class="clearfix-m"></div>
 

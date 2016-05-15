@@ -69,7 +69,7 @@ abstract class o3_cms_object implements o3_cms_object_interface {
 	 * @return boolean
 	*/
 	public function is() {		
-		return $this->data !== null;
+		return $this->data !== null && $this->data !== false;
 	}
 
 	/**

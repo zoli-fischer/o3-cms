@@ -4,15 +4,20 @@
 if ( isset($_REQUEST['render-pdf']))
 	require_once('render-pdf.php');
 
-/*
-//add defines for javascript
-$o3->head_inline("
-	var SNAFER_TRANSFER_EMAIL = '".o3_html(SNAFER_TRANSFER_EMAIL)."',
-		SNAFER_TRANSFER_DOWNLOAD = '".o3_html(SNAFER_TRANSFER_DOWNLOAD)."',
-		SNAFER_TRANSFER_SOCIAL = '".o3_html(SNAFER_TRANSFER_SOCIAL)."';
-");
+//handle cronjob-hourly cronjob
+if ( isset($_REQUEST['cronjob-hourly']))
+	require_once('cronjob-hourly.php');
 
-snafer_define::
-*/
+//handle file download request
+if ( isset($_GET['dl']) ) {
+
+	//Require transfers class
+	require_once(O3_CMS_THEME_DIR.'/classes/snapfer_transfers.php');
+	
+	//load transfer and start download
+	$transfer = new snapfer_transfer();
+	$transfer->load_canonical( o3_get('dl') );
+	$transfer->download( intval(o3_get('fl')), intval(o3_get('r')) );
+}
 
 ?>

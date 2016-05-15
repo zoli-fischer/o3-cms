@@ -8,7 +8,7 @@
 		$this->view( 'o3_cms_template_view_html_head' );
 
 		//load change password app
-		$this->parent->body_js(O3_CMS_THEME_DIR.'/js/snafer/snafer.edit.profile.app.js');
+		$this->parent->body_js(O3_CMS_THEME_DIR.'/js/snapfer/snapfer.edit.profile.app.js');
 
 	?>
 
@@ -78,7 +78,7 @@
 		 						data-bind="value: edit_profile.fields.country_id.value,
 									   	   valueUpdate: 'keyup'">
 		 						<?php		 						
-		 							foreach ( o3_with(new snafer_countries)->select() as $key => $value ) {
+		 							foreach ( o3_with(new snapfer_countries)->select() as $key => $value ) {
 		 								echo '<option value="'.$value->id.'" '.( $value->id == $this->logged_user()->country()->get('id') ? 'selected' : '' ).'>'.ucfirst(strtolower(o3_html($value->name))).'</option>';
 		 							}
 		 						?>
@@ -101,7 +101,7 @@
 
 						<span>Date of birth:</span>
 						<div class="form-group form-group-date">
-							<select class="form-control form-control-selected" name="bday_day" maxlength="2"
+							<select class="form-control form-control-selected" name="bday_day"
 								data-bind="value: edit_profile.fields.bday_day.value,
 									   	   valueUpdate: 'keyup'">
 								<?php
@@ -125,7 +125,7 @@
 								<option value="11" <?php echo $this->bday_month == 11 ? 'selected' : ''; ?>>November</option>
 								<option value="12" <?php echo $this->bday_month == 12 ? 'selected' : ''; ?>>December</option>
 							</select>
-							<select class="form-control form-control-selected" name="bday_year" maxlength="4"
+							<select class="form-control form-control-selected" name="bday_year"
 								data-bind="value: edit_profile.fields.bday_year.value,
 									   	   valueUpdate: 'keyup'">
 								<?php

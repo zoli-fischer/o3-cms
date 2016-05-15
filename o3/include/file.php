@@ -106,6 +106,30 @@ function o3_path_size( $path ) {
 	return $size;
 }
 
+
+
+/**
+* Get the dir of a file.
+*
+* @param string $path Path to the file
+*
+* @return string
+*/	
+function o3_dirname( $path ) {
+	return pathinfo($path, PATHINFO_DIRNAME);
+}
+
+/**
+* Get the filename of a file without extension.
+*
+* @param string $path Path to the file
+*
+* @return string
+*/	
+function o3_filename( $path ) {
+	return pathinfo($path, PATHINFO_FILENAME);
+}
+
 /**
 * Get the extension of a file.
 *
@@ -145,6 +169,124 @@ function o3_output_buffer( $buffer, $filename, $mime = 'application/octet-stream
 }
 
 /**
+* Get mime type by extension
+*/
+function o3_ext2mime( $ext ){
+    $types['swf'] = 'application/x-shockwave-flash';
+    $types['pdf'] = 'application/pdf';
+    $types['exe'] = 'application/octet-stream';
+    $types['zip'] = 'application/zip';
+    $types['doc'] = 'application/msword';
+    $types['xls'] = 'application/vnd.ms-excel';
+    $types['ppt'] = 'application/vnd.ms-powerpoint';
+    $types['gif'] = 'image/gif';
+    $types['png'] = 'image/png';
+    $types['jpeg'] = 'image/jpg';
+    $types['jpg'] = 'image/jpg';
+    $types['rar'] = 'application/rar';
+
+    $types['ra'] = 'audio/x-pn-realaudio';
+    $types['ram'] = 'audio/x-pn-realaudio';
+    $types['ogg'] = 'audio/x-pn-realaudio';
+
+    $types['wav'] = 'video/x-msvideo';
+    $types['wmv'] = 'video/x-msvideo';
+    $types['avi'] = 'video/x-msvideo';
+    $types['asf'] = 'video/x-msvideo';
+    $types['divx'] = 'video/x-msvideo';
+
+    $types['mp3'] = 'audio/mpeg';
+    $types['mp4'] = 'video/mp4';
+    $types['mpeg'] = 'video/mp4';
+    $types['mpg'] = 'video/mp4';
+    $types['mpe'] = 'video/mp4';
+    $types['mov'] = 'video/quicktime';
+    $types['swf'] = 'video/quicktime';
+    $types['3gp'] = 'video/quicktime';
+    $types['m4a'] = 'video/quicktime';
+    $types['aac'] = 'video/quicktime';
+    $types['m3u'] = 'video/quicktime';
+    return isset($types[$ext]) ? $types[$ext] : 'application/octet-stream';
+};
+
+/**
+* Output file to download or inline
+*
+* @param string $path Path to the file
+* @param string $filename Output file name
+* @param string $mime Output conten type
+* @param string $disposition inline or attachment Defaut: inline
+*
+* @return boolean
+*/	
+function o3_output_file_stream( $path, $filename = null, $mime = null, $disposition = 'attachment', $maxspeed = 100, $stream = false ) {
+	if ( connection_status() != 0 )
+		return false;
+	
+	$filename = $filename == null ? basename($path) : $filename;
+	$ext = o3_extension($filename);
+	$mime = $mime === null ? $mime : o3_ext2mime($extension);
+    header("Cache-Control: public");
+    header("Content-Transfer-Encoding: binary\n");
+    header('Content-Type: $mime');
+
+        
+    if ( $stream == true ) {
+        /* extensions to stream */
+        $array_listen = array('mp3', 'm3u', 'm4a', 'mid', 'ogg', 'ra', 'ram', 'wm', 'wav', 'wma', 'aac', '3gp', 'avi', 'mov', 'mp4', 'mpeg', 'mpg', 'swf', 'wmv', 'divx', 'asf');
+        if ( in_array($extension, $array_listen) ) {
+            $disposition = 'inline';
+        }
+    }
+
+    if ( strstr($_SERVER['HTTP_USER_AGENT'], "MSIE" ) ) {
+        $filename = preg_replace('/\./', '%2e', $filename, substr_count($filename, '.') - 1);
+        header("Content-Disposition: $disposition;
+            filename=\"$filename\"");
+    } else {
+        header("Content-Disposition: $disposition;
+            filename=\"$filename\"");
+    }
+
+    header("Accept-Ranges: bytes");
+    $range = 0;
+    $size = filesize($path);
+
+    if (isset($_SERVER['HTTP_RANGE'])) {
+        list($a, $range) = explode("=", $_SERVER['HTTP_RANGE']);
+        str_replace($range, "-", $range);
+        $size2 = $size - 1;
+        $new_length = $size - $range;
+        header("HTTP/1.1 206 Partial Content");
+        header("Content-Length: $new_length");
+        header("Content-Range: bytes $range$size2/$size");
+    } else {
+        $size2 = $size - 1;
+        header("Content-Range: bytes 0-$size2/$size");
+        header("Content-Length: " . $size);
+    }
+
+    if ($size == 0) {
+        die('Zero byte file! Aborting download');
+    }
+    set_magic_quotes_runtime(0);
+    $fp = fopen("$path", "rb");
+
+    fseek($fp, $range);
+
+    while (!feof($fp) and ( connection_status() == 0)) {
+        set_time_limit(0);
+        print(fread($fp, 1024 * $maxspeed));
+        flush();
+        ob_flush();
+        sleep(1);
+    }
+    fclose($fp);
+
+    return((connection_status() == 0) and ! connection_aborted());
+}
+
+/**
 * Output file to download or inline
 *
 * @param string $path Path to the file
@@ -166,7 +308,7 @@ function o3_output_file( $path, $filename, $mime = 'application/octet-stream', $
 	header("Content-Type: ".$mime);	
 	header('Content-Disposition: '.$disposition.'; filename="'.$filename.'"');
 	header('Cache-Control: public, must-revalidate, max-age=0, post-check=0, pre-check=0');
-	header('Pragma: no-cache');  
+	header('Pragma: no-cache');
 	header('Content-Length: '.filesize($path));
 	header("Last-Modified: ".date( 'r', filemtime($path) ));
 	
@@ -177,52 +319,6 @@ function o3_output_file( $path, $filename, $mime = 'application/octet-stream', $
 	}
 
 	return true;
-
-	/*
-	if ( !file_exists($path) )
-		return false;
-	$filesize = filesize($path);		
-	$time = date( 'r', filemtime($path) );
-
-	$fh = @fopen( $path, 'rb' );	
-	if( !$fh )
-		return false;
-
-	$begin = 0;
-	$end = $size;
-
-	if(isset($_SERVER['HTTP_RANGE'])) { 
-		if(preg_match('/bytes=\h*(\d+)-(\d*)[\D.*]?/i', $_SERVER['HTTP_RANGE'], $matches)) { 
-			$begin = intval($matches[0]);
-			if( !empty($matches[1]) )
-				$end = intval($matches[1]);
-		}
-	}
-
-	if ( $begin > 0 || $end < $size )
-		header('HTTP/1.0 206 Partial Content');
-	else
-		header('HTTP/1.0 200 OK');
- 
-	header("Content-Type: ".$mime);
-	header('Cache-Control: public, must-revalidate, max-age=0');
-	header('Pragma: no-cache');  
-	header('Accept-Ranges: bytes');
-	header('Content-Length: '.( $end - $begin ));
-	header("Content-Range: bytes $begin - $end / $size");
-	header('Content-Disposition: inline; filename="'.$filename.'"');
-	header("Content-Transfer-Encoding: binary\n");
-	header("Last-Modified: ".$time);
-	header('Connection: close');  
-	 
-	$cur=$begin;
-	fseek( $fm, $begin, 0 );
-
-	while ( !feof($fm) && $cur < $end && ( connection_status() == 0 ) ) {
-		print fread( $fm, min( 1024 * 16, $end - $cur ) );
-		$cur += 1024 * 16;
-	}
-	*/
 }
 
 /*append & create*/
@@ -272,6 +368,21 @@ function o3_write2top_file( $file, $buffer = "" ) {
 	}
 	trigger_error( 'Can\'t read content of '.o3_html($file).'.' );	
 	return false;
+}
+
+/**
+* Delete a folder
+*/	
+function o3_unlink_dir( $dir ) {
+	$files = array_diff( scandir($dir), array('.','..') );
+    foreach ( $files as $file ) {
+    	if ( is_dir($dir."/".$file) ) {
+    		o3_unlink_dir($dir."/".$file);
+    	} else {
+    		o3_unlink($dir."/".$file);
+    	}
+    }
+    return rmdir($dir);
 }
 
 

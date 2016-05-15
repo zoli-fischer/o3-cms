@@ -214,7 +214,7 @@ function o3_bytes_display( size, decimals, dec_point, thousands_sep ) {
   var unit_u = [ 'B', 'KB', 'MB', 'GB', 'TB', 'PB' ],
       i = Math.floor( Math.log( size ) / Math.log( 1024 ) ),
       v = size / Math.pow( 1024, i ),
-      u_u = unit_u[i];
+      u_u = unit_u[i > 0 ? i : 0];
 
   return ( typeof decimals != 'undefined' ? o3_number_format(v, decimals, dec_point, thousands_sep) : v )+u_u;
 };

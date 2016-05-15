@@ -1,7 +1,7 @@
 <?php
 
 //Require payment class
-require_once(O3_CMS_THEME_DIR.'/classes/snafer_payment.php');
+require_once(O3_CMS_THEME_DIR.'/classes/snapfer_payment.php');
 
 class o3_cms_template_view_render_pdf_invoice extends o3_cms_template_view_controller {
 
@@ -10,13 +10,16 @@ class o3_cms_template_view_render_pdf_invoice extends o3_cms_template_view_contr
 	public function init() {
 		$args = func_get_args();
 
+		//disable html minify
+		$this->o3->mini->allow_mini_html_output( false );
+
 		//parent init
 		parent::init( func_get_args() );
 
 		$md5 = substr( $args[0], 0, 32 );
 		$id = substr( $args[0], 32, 10 );
 
-		$this->payment = new snafer_payment( $id );
+		$this->payment = new snapfer_payment( $id );
 		
 	}
 

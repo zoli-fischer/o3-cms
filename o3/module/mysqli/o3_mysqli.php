@@ -241,11 +241,7 @@ class o3_mysqli extends mysqli {
 
 		$sql = "UPDATE ".$this->escape_string( $table_name )." SET ".implode( ',', $values_list )." WHERE ".implode( ' AND ', $conditions_list )." ";
 
-		global $o3;
-		$o3->debug->_( $sql );
-		
 		return $this->query( $sql );
-
 	}
   
   	/**
@@ -280,7 +276,7 @@ class o3_mysqli extends mysqli {
 	 *
 	 * @return integer
 	 */	
-	public function date2time( $date ) {		
+	public static function date2time( $date ) {		
 		$a_ = explode( ' ', $date );
 		$time = 0;
 		if ( count($a_) == 1 ) {

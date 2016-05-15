@@ -76,7 +76,7 @@
 						$payments = $this->logged_user()->get_payments();
 						if ( count($payments) > 0 ) {
 						?>	
-							<ul>
+							<ul class="data-table">
 								<li>
 									<span class="text-center">ID</span>
 									<span>Date</span>
@@ -94,12 +94,12 @@
 										<span>
 											<?php 
 												switch ($value->get('subscription_pay_type')) {
-												 	case SNAFER_PAYPAL:
+												 	case SNAPFER_PAYPAL:
 												 		?>
 												 		<i class="fa fa-cc-paypal"></i> Paypal
 												 		<?php
 												 		break;											 	
-												 	case SNAFER_CARD:
+												 	case SNAPFER_CARD:
 												 		?>
 												 		<i class="fa fa-credit-card"></i> Visa (<?php echo o3_html($value->get('subscription_pay_card')); ?>)
 												 		<?php
@@ -133,7 +133,7 @@
 				<div class="col-md-6 white-box">
 					
 					<div>	
-						<h3>Snafer <?php echo ucfirst($this->logged_user()->get('subsciption_type')); ?></h3>
+						<h3>Snapfer <?php echo ucfirst($this->logged_user()->get('subsciption_type')); ?></h3>
 						
 						<hr>
 						
@@ -192,7 +192,7 @@
 						?>
 						
 
-							<p>You're currently Snafer Free. With Free, your transfers'll have ads, and you won't be able to upload up to 20GB, or customize your transfers. Upgrade to Premium anytime you like. </p>
+							<p>You're currently Snapfer Free. With Free, your transfers'll have ads, and you won't be able to upload up to 20GB, or customize your transfers. Upgrade to Premium anytime you like. </p>
 						
 							<hr>
 

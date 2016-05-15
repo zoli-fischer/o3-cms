@@ -83,7 +83,7 @@ function o3_image_resize( $source, $destination = '', $width = 1024, $height = 7
 				if ( $flags & O3_IMAGE_CROP_CENTER )
 					$size_flag = '^';
 
-				$command = "\"".O3_IMAGE_MAGIC."\" \"".$source."\" -profile \"USWebCoatedSWOP.icc\" ".( $flags & O3_IMAGE_FLATTEN ? '-flatten' : '' )." ".( $flags & O3_IMAGE_CLIP ? '-clip' : '')." ".( $background !== '' ? '-background '.$background : '')." -quality ".intval( ( $flags & O3_IMAGE_OPTIMIZE ) ? 100 : $quality )."% -density ".$dpi." ".( $width > 0 && $height > 0 ? " -resize \"".$width."x".$height.$size_flag."\"" : "" )." ".( ( $flags & O3_IMAGE_CROP_CENTER ) && $width > 0 && $height > 0 ?  " -gravity center -crop \"".$width."x".$height."+0+0\" " : "" )." -profile \"sRGB.icc\" \"".$destination."\"";								
+				$command = "\"".O3_IMAGE_MAGIC."\" \"".addslashes($source)."\" -profile \"USWebCoatedSWOP.icc\" ".( $background !== '' ? '-background "'.$background.'"' : '')." ".( $flags & O3_IMAGE_FLATTEN ? '-flatten' : '' )." ".( $flags & O3_IMAGE_CLIP ? '-clip' : '')." -quality ".intval( ( $flags & O3_IMAGE_OPTIMIZE ) ? 100 : $quality )."% -density ".$dpi." ".( $width > 0 && $height > 0 ? " -resize \"".$width."x".$height.$size_flag."\"" : "" )." ".( ( $flags & O3_IMAGE_CROP_CENTER ) && $width > 0 && $height > 0 ?  " -gravity center -crop \"".$width."x".$height."+0+0\" " : "" )." -profile \"sRGB.icc\" \"".addslashes($destination)."\"";								
 				exec( $command, $out, $rcode );
 				if ( file_exists($destination) ) {
 

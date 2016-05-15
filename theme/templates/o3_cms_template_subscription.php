@@ -34,7 +34,7 @@
 	 		
 		 			<div class="col-md-8 col-md-offset-2 col-sm-8 col-sm-offset-2 white-box">
 
-		 				<h3>Snafer <?php echo ucfirst($this->logged_user()->get('subsciption_type')); ?></h3>
+		 				<h3>Snapfer <?php echo ucfirst($this->logged_user()->get('subsciption_type')); ?></h3>
 						
 						<hr>
 						
@@ -79,12 +79,12 @@
 							<?php 
 							
 							switch ($this->logged_user()->get('subscription_pay_type')) {
-								case SNAFER_CARD:
+								case SNAPFER_CARD:
 									?>
 									<p>Your Visa(************<?php echo o3_html($this->logged_user()->get('subscription_pay_card')); ?>) debit/credit card is used for payment.</p>
 									<?php		
 									break;
-								case SNAFER_PAYPAL:
+								case SNAPFER_PAYPAL:
 									?>
 									<p>Your account at PayPal is used for payment.</p>
 									<?php		

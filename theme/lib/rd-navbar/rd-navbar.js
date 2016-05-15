@@ -50,7 +50,7 @@
                 }).append($('<span/>')))
                 .append($('<h2/>', {
                     'class': settings.titleClass,
-                    'html': '<a href="/#"><img src="/res/header-logo-small.png" alt="" /></a>'
+                    'html': '<a href="/#"><img src="/res/header-logo.png" alt="" /></a>'
                 })));
 
             $('.rd-mobilemenu_ul a').click(function(e){

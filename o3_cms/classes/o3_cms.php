@@ -60,8 +60,15 @@ class o3_cms {
 
 		} else {
 
-			//set template and flush template buffer
-			$o3->template->flush( $this->page->template()->name() );
+			if ( $this->page->is() ) {
+				//set template and flush template buffer
+				$o3->template->flush( $this->page->template()->name() );
+			} else {
+
+				o3_header_code(404);
+				echo '<h1>Error</h1><p>404 - File not found</p>';
+
+			}
 
 		}
 

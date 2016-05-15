@@ -27,7 +27,7 @@
 				</div>
 			</div>
 			<div class="o3-cms-row">
-				<div class="o3-cms-cell o3-cms-valign-top o3-cms-bg-light-white o3-cms-show-left-menu" id="o3-cms-content">
+				<div class="o3-cms-cell o3-cms-valign-top o3-cms-bg-light-white !o3-cms-show-left-menu" id="o3-cms-content">
 					<div>
 					
 						<div id="o3-cms-frame">

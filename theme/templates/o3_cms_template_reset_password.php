@@ -8,7 +8,7 @@
 		$this->view( 'o3_cms_template_view_html_head' );
 
 		//load change password app
-		$this->parent->body_js(O3_CMS_THEME_DIR.'/js/snafer/snafer.reset.password.app.js');
+		$this->parent->body_js(O3_CMS_THEME_DIR.'/js/snapfer/snapfer.reset.password.app.js');
 
 	?>
 
@@ -51,7 +51,7 @@
 							<p class="text-center" data-bind="text: reset_password.success_msg(), visible: reset_password.success_msg() != ''"></p>
 
 							<div data-bind="visible: reset_password.success_msg() == ''">
-								<p class="text-center">Enter your Snafer username, or the email address that you used to register. We'll send you an email with a link to reset your password.</p>
+								<p class="text-center">Enter your Snapfer username, or the email address that you used to register. We'll send you an email with a link to reset your password.</p>
 
 								<div class="clearfix clearfix-m"></div>
 
@@ -62,7 +62,7 @@
 										data-bind="value: reset_password.request_fields.username.value,
 												   valueUpdate: 'keyup'">
 
-									<div class="warning" data-bind="visible: reset_password.request_fields.username.error()">Please enter your Snafer username.</div>
+									<div class="warning" data-bind="visible: reset_password.request_fields.username.error()">Please enter your Snapfer username.</div>
 								</div>
 
 								<div class="clearfix clearfix-sm"></div>

@@ -115,10 +115,11 @@ abstract class o3_cms_objects implements o3_cms_objects_interface {
 	 * Insert row
 	 *	 
 	 * @param mixed $values Value to set
+	 * @param array $update_values List of values to update on duplicated
 	 * @return mixed False on error, insert id on success
 	 */
-  	public function insert( $values ) {
-		if ( $result = $this->o3->mysqli->insert( $this->o3->mysqli->escape_string($this->tablename()), $values ) )		 
+  	public function insert( $values, $update_values = array() ) {
+		if ( $result = $this->o3->mysqli->insert( $this->o3->mysqli->escape_string($this->tablename()), $values, $update_values ) )		 
 			$row_id = $this->o3->mysqli->insert_id;
 
 		return isset($row_id) && $row_id > 0 ? $row_id : false;		
@@ -134,6 +135,17 @@ abstract class o3_cms_objects implements o3_cms_objects_interface {
 	 */
   	public function update( $values, $conditions ) {
 		return $this->o3->mysqli->update( $this->o3->mysqli->escape_string($this->tablename()), $values, $conditions );
+	}
+
+	/**
+	 * Delete row
+	 *
+	 * @param array $condition List of conditions
+	 *
+	 * @return boolean
+	 */
+  	public function delete( $conditions ) {
+		return $this->o3->mysqli->delete( $this->o3->mysqli->escape_string($this->tablename()), $conditions );
 	}
 
 }

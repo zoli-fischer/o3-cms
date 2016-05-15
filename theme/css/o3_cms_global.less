@@ -38,6 +38,7 @@ html {
     height: 100%;
 }
 
+.nobr	{ white-space:nowrap; }
 
 /* CLEAR FIX */
 
@@ -79,7 +80,7 @@ html {
 	width: 100%;
 	height: 100%;
 	/*overflow: hidden;*/
-	padding-top: 80px;
+	padding-top: 56px;
 
 	@media (max-width:767px) {
 		padding-top: 56px;
@@ -158,9 +159,22 @@ h6 {
 	}
 }
 
+.btn-danger {
+	background: #990000;
+	border: 1px solid #990000 !important;
+
+	&:hover,
+	&:focus,
+	&.active {
+		color: #990000;
+		background: #ffffff;
+	}
+
+}
+
 .btn-primary {
 	background: #a9cf54;
-	border: 1px solid #a9cf54;
+	border: 1px solid #a9cf54 !important;
 
 	-webkit-transition: all .3s ease-in-out;
 	-moz-transition: all .3s ease-in-out;
@@ -172,7 +186,7 @@ h6 {
 	&:focus,
 	&.active {
 		color: #a9cf54;
-		background: #51545a;
+		background: #ffffff;
 	}
 }
 
@@ -180,7 +194,7 @@ h6 {
 	.btn-primary;
 
 	background: #3B5998;
-	border: 1px solid #3B5998;
+	border: 1px solid #3B5998 !important;
 
 	&:hover,
 	&:focus,
@@ -194,7 +208,7 @@ h6 {
 	.btn-primary;
 
 	background: #dd4b39;
-	border: 1px solid #dd4b39;
+	border: 1px solid #dd4b39 !important;
 
 	&:hover,
 	&:focus,
@@ -208,7 +222,7 @@ h6 {
 	.btn-primary;
 
 	background: #4099ff;
-	border: 1px solid #4099ff;
+	border: 1px solid #4099ff !important;
 
 	&:hover,
 	&:focus,
@@ -222,7 +236,7 @@ h6 {
 	.btn-primary;
 
 	background: #0075B5;
-	border: 1px solid #0075B5;
+	border: 1px solid #0075B5 !important;
 
 	&:hover,
 	&:focus,
@@ -230,6 +244,10 @@ h6 {
 		color: #0075B5;
 		background: #ffffff;
 	}
+}
+
+.btn-small {
+	font-size: 12px !important;
 }
 
 .text-primary {
@@ -468,12 +486,26 @@ form,
 	font-weight: normal;
 }
 
+.circle-small {
+	display: inline-block;
+	color: #ffffff;
+	width: 60px;
+	height: 60px;
+	line-height: 60px;
+	text-align: center;
+	border-radius: 30px;
+	background: #a9cf54;
+	font-size: 30px;
+	font-weight: normal;
+}
+
+
 /* HEADER */
 
 
 header {
 	width: 100%;
-	height: 80px;	
+	height: 56px;	
 	background: #fff; 
 	position: fixed;
 	top: 0px;
@@ -483,19 +515,11 @@ header {
 	-moz-box-shadow: 0 3px 3px 0 rgba(0, 0, 0, 0.1);
 	box-shadow: 0 3px 3px 0 rgba(0, 0, 0, 0.1);
 
-	.logo-holder {
-		/*
-		display: block;
-		margin-top: 15px;
-		*/
-		line-height: 80px;
+	.logo-holder {		
+		line-height: 56px;
 
 		img {
-			height: 50px;
-
-			@media (max-width:992px) {
-				height: 40px;
-			}
+			height: 35px;
 		}
 	}
 
@@ -508,7 +532,7 @@ header {
 				> li {
 					display: inline-block;
 					margin-left: 40px;
-					line-height: 80px;
+					line-height: 56px;
 
 					> a {
 						display: block;						
@@ -561,7 +585,7 @@ header {
 					> div {
 						position: absolute; 
 						right: -15px;
-						min-width: 160px;
+						min-width: 225px;
 						background: #45474d;
 						margin-top: 15px;
 						padding: 20px 20px 10px 20px;
@@ -681,13 +705,16 @@ header {
 
 footer {
 	padding-top: 120px;
-	padding-bottom: 120px;
+	padding-bottom: 190px;
 	background: #51545a;
-	color: #ffffff;
+	color: #ffffff; 
 
 	@media (max-width:767px) {
 		padding-top: 80px;
-		padding-bottom: 80px;
+	}
+
+	@media (max-width:499px) {
+		padding-bottom: 120px;
 	}
 
 	.col-1 {
@@ -717,14 +744,14 @@ footer {
 
 		@media (max-width:767px) {
 			text-align: center;
-			padding-bottom: 60px;
+			padding-top: 60px;
 		}
 	}
 
 	.col-2 {
 
 		> ul {
-			float: right;
+			float: left;
 			padding: 0px;
 			margin: 0px;
 
@@ -807,5 +834,52 @@ footer {
 	@media (max-width:767px) {
 		padding-top: 120px;
 		padding-bottom: 120px;	
+	}
+}
+
+/* DATA TABLE */
+
+ul.data-table {
+	display: table;
+	padding: 0px;
+	margin: 0px;
+	width: 100%;
+	border-top: 1px solid #ccc;
+	border-right: 1px solid #ccc;
+
+	li {
+		display: table-row;
+		padding: 0px;
+		margin: 0px;	
+
+		span {
+			display: table-cell;
+			padding: 5px;
+			margin: 0px;
+			border-bottom: 1px solid #ccc;
+			border-left: 1px solid #ccc;
+			color: #000000 !important;
+			font-size: 14px;
+
+			vertical-align: middle; 
+
+			a {
+				font-size: 20px;
+			}
+
+		}
+
+		&:first-child {
+			span {
+				background: #eee !important;
+			}
+		}
+
+		&:hover {
+			span {
+				background: #eeeeee;
+			}
+		}
+
 	}
 }

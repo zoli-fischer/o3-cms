@@ -145,7 +145,7 @@ class o3_email {
 	 * @param o3_email_data $o3_email_data Email data
 	 * @return boolean True if the email is sent
 	 */	
-	function send( $o3_email_data ) {
+	function send( &$o3_email_data ) {
 		
 		$to = $o3_email_data->to;
 		$cc = $o3_email_data->cc;
@@ -256,6 +256,10 @@ class o3_email {
 			$cc = '';
 			$bcc = '';
 		}
+
+		//store sent email data
+		$o3_email_data->sent_message = $message;
+		$o3_email_data->sent_subject = $subject;
 		
 		//send email		
 		return o3_send_mail( $to, $subject, $message, $from, $cc, $bcc, $files, $content_type );
@@ -402,6 +406,12 @@ class o3_email_data {
 	* $o3_email_data->add_replace( '__name__', 'John' );
 	*/
 	public $replace = array();
+
+	/** string Sent email message */
+	public $sent_message = '';
+
+	/** string Sent email subject */
+	public $sent_subject = '';
 	
 	//files - can be 1 o3_email_attachment or array of o3_email_attachment 
 	

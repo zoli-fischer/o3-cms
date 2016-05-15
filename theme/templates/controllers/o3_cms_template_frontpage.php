@@ -1,12 +1,12 @@
 <?php
 
 //Require theme controller class
-require_once(O3_CMS_THEME_DIR.'/classes/snafer_template_controller.php');
+require_once(O3_CMS_THEME_DIR.'/classes/snapfer_template_controller.php');
 
 //Require transfers class
-require_once(O3_CMS_THEME_DIR.'/classes/snafer_transfers.php');
+require_once(O3_CMS_THEME_DIR.'/classes/snapfer_transfers.php');
 
-class o3_cms_template_frontpage extends snafer_template_controller {
+class o3_cms_template_frontpage extends snapfer_template_controller {
 
 	public function init() {
 
@@ -14,22 +14,22 @@ class o3_cms_template_frontpage extends snafer_template_controller {
 		parent::init( func_get_args() );
 		
 		//check for logout
-		if ( isset($_GET['snafer-sign-out']) ) {
+		if ( isset($_GET['snapfer-sign-out']) ) {
 
 			//log out user
 			$this->logged_user()->set_logged_out();
 			
 			//reload admin page
 			o3_redirect("/");
-		}		
+		}
  
 	}
 
-	/*
+	/**
 	* Ajax call handler for sign out
 	*/
-	public function ajax_sign_up() {
-		
+	public function ajax_sign_up() {		
+
 		//log out user if is logged
 		if ( $this->logged_user()->is_logged() )
 			$this->logged_user()->set_logged_out();
@@ -49,7 +49,7 @@ class o3_cms_template_frontpage extends snafer_template_controller {
 		);
 		
 		//check if username available
-		if ( o3_with(new snafer_users())->get_by_username( $this->ajax_result->value('username') ) !== false ) {
+		if ( o3_with(new snapfer_users())->get_by_username( $this->ajax_result->value('username') ) !== false ) {
 
 			$this->ajax_result->data('username',true);
 
@@ -58,7 +58,7 @@ class o3_cms_template_frontpage extends snafer_template_controller {
 		};
 
 		//check if email available
-		if ( o3_with(new snafer_users())->get_by_email( $this->ajax_result->value('email') ) !== false ) {
+		if ( o3_with(new snapfer_users())->get_by_email( $this->ajax_result->value('email') ) !== false ) {
 
 			$this->ajax_result->data('email',true);
 
@@ -67,7 +67,7 @@ class o3_cms_template_frontpage extends snafer_template_controller {
 		};
 
 		//insert user
-		$id = o3_with(new snafer_users())->insert( $values );
+		$id = o3_with(new snapfer_users())->insert( $values );
 
 		if ( $id !== false && $id > 0 ) {
 
@@ -75,7 +75,7 @@ class o3_cms_template_frontpage extends snafer_template_controller {
 			$this->logged_user()->set_logged( $this->ajax_result->value('username'), $this->ajax_result->value('password') );			
 
 			//if premium sign up, set premium/trial period, else send welcome free
-			if ( $this->ajax_result->value('sign_up_type') == SNAFER_PREMIUM ) {
+			if ( $this->ajax_result->value('sign_up_type') == SNAPFER_PREMIUM ) {
 				$this->logged_user()->set_premium_subscription();
 			} else {
 				$this->logged_user()->send_free_subscription_notification();
@@ -86,9 +86,10 @@ class o3_cms_template_frontpage extends snafer_template_controller {
 			$this->ajax_result->data('username',$this->logged_user->get('username'));
 			$this->ajax_result->data('subsciption_type',$this->logged_user->get('subsciption_type'));
 			$this->ajax_result->data('allow_trial',$this->logged_user->allow_trial());
+			$this->ajax_result->data('storage_free',$this->logged_user->storage_free());
 
 			//redirect user to add payment
-			if ( $this->logged_user->get('subsciption_type') == SNAFER_PREMIUM )
+			if ( $this->logged_user->get('subsciption_type') == SNAPFER_PREMIUM )
 				$this->ajax_result->redirect( $this->o3_cms()->page_url(UPDATE_PAYMENT_METHOD_PAGE_ID) );	
 
 			//send success
@@ -97,7 +98,7 @@ class o3_cms_template_frontpage extends snafer_template_controller {
 
 	}
 
-	/*
+	/**
 	* Ajax call handler for go premium
 	*/
 	public function ajax_go_premium() {
@@ -139,7 +140,7 @@ class o3_cms_template_frontpage extends snafer_template_controller {
 		}
 	}
 
-	/*
+	/**
 	* Ajax call handler for sign out
 	*/
 	public function ajax_sign_out() {
@@ -151,7 +152,7 @@ class o3_cms_template_frontpage extends snafer_template_controller {
 		$this->ajax_result->success();
 	}
 
-	/*
+	/**
 	* Ajax call handler for sign in
 	*/
 	public function ajax_sign_in() {
@@ -170,6 +171,7 @@ class o3_cms_template_frontpage extends snafer_template_controller {
 			$this->ajax_result->data('username',$this->logged_user->get('username'));
 			$this->ajax_result->data('subsciption_type',$this->logged_user->get('subsciption_type'));
 			$this->ajax_result->data('allow_trial',$this->logged_user->allow_trial());
+			$this->ajax_result->data('storage_free',$this->logged_user->storage_free());
 
 			//user is logged
 			$this->ajax_result->success();
@@ -179,35 +181,100 @@ class o3_cms_template_frontpage extends snafer_template_controller {
 
 	}	
 
-	/*
+	/**
 	* Ajax call handler for create transfer
 	*/
 	public function ajax_create_transfer() {
 		$user_id = null;
-		$type = SNAFER_NONE;
+		$type = SNAPFER_NONE;
 		$way = $this->ajax_result->value('way');
 		$email = $this->ajax_result->value('email');
 		$message = $this->ajax_result->value('message');
 		$recipients = $this->ajax_result->value('recipients');
+		$size = $this->ajax_result->value('size');
 		$files = array();
 		
 		if ( $this->logged_user()->is() ) {
 			$user_id = $this->logged_user()->get('id');
 			$type = $this->logged_user()->get('subsciption_type');
+			$email = $this->logged_user()->get('email');
 		}
 
-		//create transfer
-		$transfer = o3_with(new snafer_transfers())->create( $user_id, $type, $way, $email, $message, $recipients, $files );
-		if ( $transfer->is() ) {
-			//return url
-			$this->ajax_result->data('url', $transfer->url() );
+		if ( $this->logged_user()->is() && $this->logged_user()->is_premium() && $size > $this->logged_user()->storage_free() ) {
+			
+			//return storage_free
+			$this->ajax_result->data('storage_free', $this->logged_user()->storage_free() );
 
-			//return caninical id
-			$this->ajax_result->data('id', $transfer->get('canonical_id') );
+			//return error
+			$this->ajax_result->error();
 
-			//return success
-			$this->ajax_result->success();
+		} else {
+
+			//create transfer
+			$transfer = o3_with(new snapfer_transfers())->create( $user_id, $type, $way, $email, $message, $recipients, $files );
+			if ( $transfer !== false && $transfer->is() ) {
+				//return url
+				$this->ajax_result->data('url', $transfer->url() );
+
+				//return caninical id
+				$this->ajax_result->data('id', $transfer->get('canonical_id') );
+
+				//return success
+				$this->ajax_result->success();
+			}
+		
+		}	
+	}
+
+	/**
+	* Ajax call handler for create transfer
+	*/
+	public function ajax_finalize_transfer() {
+		//create transfer instance and load from canonical id 
+		$transfer = new snapfer_transfer();
+		$transfer->load_canonical( $this->ajax_result->value('id') );
+
+		//check if transfer exists and owner is the same as logged user, if no logged user should be no owner of transfer
+		if ( $transfer->is() && $transfer->is_temp() && intval($transfer->get('user_id')) == intval($this->logged_user()->get('id')) ) {
+			
+			//finalize transfer and return success
+			if ( $transfer->finalize() ) {
+
+				//update user storage
+				$this->ajax_result->data('storage_free',$this->logged_user->storage_free());
+
+				//return success
+				$this->ajax_result->success();
+			}
+			
 		}
+	}
+
+	/**
+	* Add file to transfer
+	*/
+	public function ajax_upload_file() { 
+
+		//create transfer and load from canonical id 
+		$transfer = new snapfer_transfer();
+		$transfer->load_canonical( $this->ajax_result->value('id') );
+
+		//handle file if transfer exists and file uploaded
+		if ( $transfer->is() && $_FILES['file']['error'] == 0 ) {
+			$name = $_FILES['file']['name'];
+			$tmp_name = $_FILES['file']['tmp_name'];
+			$size = $_FILES['file']['size'];
+
+			//add file to transfer
+			if ( $transfer->add_file( $name, $tmp_name, $size ) ) {
+				
+				//file uploaded
+				$this->ajax_result->success();
+				
+			}
+
+		}
+
 		
 	}
 

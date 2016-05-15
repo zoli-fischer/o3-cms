@@ -203,7 +203,7 @@
 		</div>
 
 		<footer>
-			snafer.co - <a href="mailto:contact@snafer.co">contact@snafer.co</a>
+			snapfer.co - <a href="mailto:contact@snapfer.co">contact@snapfer.co</a>
 		</footer>
 
 	</div>

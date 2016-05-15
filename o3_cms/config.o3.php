@@ -31,6 +31,9 @@ o3\config\def( "O3_ADMIN_PASSWORD", "test" );
 /** Allow js & css compression */
 o3\config\def('O3_MINI_MINIMIZE', O3_CMS_MINI_MINIMIZE );
 
+/** Allow minimizeing of html output */
+o3\config\def('O3_MINI_HTML_OUTPUT', O3_CMS_MINI_HTML_OUTPUT );
+
 /** Compress javascript */
 o3\config\def('O3_MINI_JS', O3_CMS_MINI_JS );
 

@@ -8,7 +8,7 @@
 		$this->view( 'o3_cms_template_view_html_head' );
 
 		//load change password app
-		$this->parent->body_js(O3_CMS_THEME_DIR.'/js/snafer/snafer.edit.billing.info.app.js');
+		$this->parent->body_js(O3_CMS_THEME_DIR.'/js/snapfer/snapfer.edit.billing.info.app.js');
 
 	?>
 

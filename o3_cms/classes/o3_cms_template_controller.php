@@ -12,10 +12,7 @@ require_once(O3_CMS_DIR.'/classes/o3_cms_template_view_controller.php');
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
-class o3_cms_template_controller extends o3_template_controller {
-
-	//page title
-	protected $page_title = ''; 
+class o3_cms_template_controller extends o3_template_controller {	
 
 	//global o3
 	protected $o3 = null;
@@ -34,9 +31,6 @@ class o3_cms_template_controller extends o3_template_controller {
 
 		//o3 cms ref
 		$this->o3_cms = &$o3_cms;	
-
-		//set title from page title
-		$this->page_title = $this->page()->get('title');	
 	}
 
 	/*
@@ -103,7 +97,28 @@ class o3_cms_template_controller extends o3_template_controller {
 	* Get page title 
 	*/
 	public function page_title() {
-		return $this->page_title;
+		return $this->page()->is() ? $this->page()->get('title') : false;
+	}
+
+	/*
+	* Get page description 
+	*/
+	public function page_description() {
+		return $this->page()->is() ? $this->page()->get('description') : false;
+	}
+
+	/*
+	* Get page keywords 
+	*/
+	public function page_keywords() {
+		return $this->page()->is() ? $this->page()->get('keywords') : false;
+	}
+
+	/*
+	* Get page image 
+	*/
+	public function page_image() {		
+		return $this->page()->is() ? $this->page()->get('image') : false;
 	}
 
 	/*

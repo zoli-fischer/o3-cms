@@ -8,10 +8,10 @@
 		$this->view( 'o3_cms_template_view_html_head' );
 
 		//load create transfer app
-		$this->parent->body_js(O3_CMS_THEME_DIR.'/js/snafer/snafer.upload.app.js');
+		$this->parent->body_js(O3_CMS_THEME_DIR.'/js/snapfer/snapfer.upload.app.js');
 
 		//load transfer file app
-		$this->parent->body_js(O3_CMS_THEME_DIR.'/js/snafer/snafer.upload.file.app.js');
+		$this->parent->body_js(O3_CMS_THEME_DIR.'/js/snapfer/snapfer.upload.file.app.js');
 
 	?>
 
@@ -22,7 +22,7 @@
 		
 		//load header
 		$this->view( 'o3_cms_template_view_header' );
-
+	
 	?>
 
 	<div class="container-fluid">
@@ -49,7 +49,7 @@
 		            								<div data-bind="style: { width: ( 100 - upload.uploading_percent() )+'%' }"></div>
 		            							</div>
 
-		            							<p data-bind="o3_fadeVisible: upload.uploading_percent() > 0"><span data-bind="text: o3_bytes_display( upload.uploading_percent() * upload.files_size() / 100, 0 )"></span> of <span data-bind="text: o3_bytes_display( upload.files_size(), 0 )"></span> completed</p>
+		            							<p data-bind="o3_fadeVisible: upload.uploading_percent() > 0"><span data-bind="text: o3_bytes_display( upload.uploading_percent() * upload.files_size() / 100, 1 )"></span> of <span data-bind="text: o3_bytes_display( upload.files_size(), 1 )"></span> completed</p>
 												<p data-bind="text: upload.estimated_display(), o3_fadeVisible: upload.estimated_seconds() > 0"></p>
 
 		            						</div>
@@ -68,19 +68,19 @@
 
 		            					<div>	
 
-											<div class="align-center">
-		            							<big><i class="fa fa-check-circle"></i> Success!</big>
+											<div class="align-center big">
+		            							<i class="fa fa-check-circle"></i> Success!
 		            						</div>
 
-		            						<div class="align-center" data-bind="o3_slideVisible: upload.is_type( SNAFER_TRANSFER_EMAIL )">		            						
+		            						<div class="align-center" data-bind="o3_slideVisible: upload.is_type( SNAPFER_TRANSFER_EMAIL )">		            						
 		            							The download link was sent to the recepients.<br>
 		            							<small><i class="fa fa-info-circle"></i> A confirmation email is sent to you.</small>
 		            						</div>
 
-		            						<div class="from" data-bind="o3_slideVisible: upload.is_type( SNAFER_TRANSFER_DOWNLOAD )">
+		            						<div class="from" data-bind="o3_slideVisible: upload.is_type( SNAPFER_TRANSFER_DOWNLOAD )">
 				            					<span>Copy your download link:</span>
 								 				<div class="form-group">
-								 					<input class="form-control download-link" type="input" readonly="readonly" data-bind="value: upload.transfer_url" onclick="jQuery(this).focus(), jQuery(this).select()" />
+								 					<input class="form-control download-link" type="text" readonly="readonly" data-bind="value: upload.transfer_url" onclick="jQuery(this).focus(), jQuery(this).select()" />
 												</div>
 												<span class="clearfix-sm"></span>
 												<div class="align-center">
@@ -88,7 +88,7 @@
 					            				</div>
 				            				</div>
 
-				            				<div class="align-center" data-bind="o3_slideVisible: upload.is_type( SNAFER_TRANSFER_SOCIAL )">
+				            				<div class="align-center" data-bind="o3_slideVisible: upload.is_type( SNAPFER_TRANSFER_SOCIAL )">
 				            					<button class="btn btn-facebook" data-bind="click: function(){ upload.share('facebook') }"><i class="fa fa-facebook"></i> Share on Facebook</button>
 												<div class="clearfix-sm"></div>
 
@@ -110,10 +110,11 @@
 
 			            			<div data-bind="o3_slideVisible: !upload.uploading() && !upload.transfered()">
 			            				<h2>Send up to <span data-bind="text: upload.max_upload_size_display()"></span></h2>
+			            				<p>It's 100% Free! Try it out now.</p>
 			            				<small class="anchors" data-bind="visible: !logged_user.is_premium()">
 			            					<br>
-			            					<a href="/#premium" data-bind="visible: !logged_user.is_free()">Register free</a> if you want to upload up to <?php echo o3_html(SNAFER_TRANSFER_FREE_MAXSIZE_GB); ?>.<br>
-			            					<a href="/#premium">Go Premium</a> if you want to upload up to <?php echo o3_html(SNAFER_TRANSFER_PREMIUM_MAXSIZE_GB); ?>.
+			            					<a href="/#premium" data-bind="visible: !logged_user.is_free()">Register free</a> if you want to upload up to <?php echo o3_html(SNAPFER_TRANSFER_FREE_MAXSIZE_GB); ?>.<br>
+			            					<a href="/#premium">Go Premium</a> if you want to upload up to <?php echo o3_html(SNAPFER_TRANSFER_PREMIUM_MAXSIZE_GB); ?>.
 			            				</small>
 
 			            				<span class="clearfix-sm"></span>
@@ -122,13 +123,13 @@
 
 			            					<div class="form-group">
 												<div class="radio-1st">
-													<a href="#" class="radio" data-bind="click: function(){ upload.type(SNAFER_TRANSFER_EMAIL); }, css: { 'active': upload.is_type( SNAFER_TRANSFER_EMAIL ) }"><span><i class="fa fa-circle"></i></span> Send by email</a>
+													<a href="#" class="radio" data-bind="click: function(){ upload.type(SNAPFER_TRANSFER_EMAIL); }, css: { 'active': upload.is_type( SNAPFER_TRANSFER_EMAIL ) }"><span><i class="fa fa-circle"></i></span> Send by email</a>
 												</div>	
 												<div class="radio-2nd">
-													<a href="#" class="radio" data-bind="click: function(){ upload.type(SNAFER_TRANSFER_DOWNLOAD); }, css: { 'active': upload.is_type( SNAFER_TRANSFER_DOWNLOAD ) }"><span><i class="fa fa-circle"></i></span> Grab a download link</a>
+													<a href="#" class="radio" data-bind="click: function(){ upload.type(SNAPFER_TRANSFER_DOWNLOAD); }, css: { 'active': upload.is_type( SNAPFER_TRANSFER_DOWNLOAD ) }"><span><i class="fa fa-circle"></i></span> Grab a download link</a>
 												</div>
 												<div class="radio-3rd">
-													<a href="#" class="radio" data-bind="click: function(){ upload.type(SNAFER_TRANSFER_SOCIAL); }, css: { 'active': upload.is_type( SNAFER_TRANSFER_SOCIAL ) }"><span><i class="fa fa-circle"></i></span> Share on social media</a>
+													<a href="#" class="radio" data-bind="click: function(){ upload.type(SNAPFER_TRANSFER_SOCIAL); }, css: { 'active': upload.is_type( SNAPFER_TRANSFER_SOCIAL ) }"><span><i class="fa fa-circle"></i></span> Share on social media</a>
 												</div>
 
 												<div class="clearfix"></div>
@@ -145,15 +146,16 @@
 									                       		beforeRemove: upload.hideElement,
 									                      		afterAdd: upload.showElement 
 									                      	}">
-			            						<li><span data-bind="text: name()"></span> <a href="#" data-bind="click: $root.upload.remove_file"><i class="fa fa-minus-circle"></i></a></li>
+			            						<li><span data-bind="text: name()+' ('+o3_bytes_display(size(),2)+')'"></span> <a href="#" data-bind="click: $root.upload.remove_file"><i class="fa fa-minus-circle"></i></a></li>
 			            					</ul>
 
 			            					<a href="#" class="btn" data-bind="click: upload.select_file"><i class="fa fa-plus-square"></i> <span data-bind="text: upload.files().length > 0 ? 'Add more' : 'Add files'"></span><small data-bind="text: ' ('+o3_bytes_display(upload.remianing_size(),2)+' left)', visible: upload.files_size() > 0"></small></a>
 			            					<input multiple="multiple" type="file" />
+			            					<span data-bind="visible: !o3_is_device_mobile()">or just drop them here</span>
 
 			            				</div>
 
-			            				<div class="receivers" data-bind="o3_slideVisible: upload.is_type( SNAFER_TRANSFER_EMAIL )">
+			            				<div class="receivers" data-bind="o3_slideVisible: upload.is_type( SNAPFER_TRANSFER_EMAIL )">
 			            					<!--<span>Recipients</span>-->
 							 				<div class="form-group">
 							 					<textarea class="form-control" placeholder="Recipient(s)"
@@ -162,7 +164,7 @@
 											</div>     					
 			            				</div>
 
-			            				<div class="from" data-bind="o3_slideVisible: upload.is_type( SNAFER_TRANSFER_EMAIL )">
+			            				<div class="from" data-bind="o3_slideVisible: upload.is_type( SNAPFER_TRANSFER_EMAIL ) && logged_user.is_none()">
 			            					<!--<span>Your email</span>-->
 							 				<div class="form-group">
 							 					<input class="form-control" placeholder="Your email" value="" name="email" type="email" 
@@ -171,7 +173,7 @@
 											</div>
 			            				</div>
 
-			            				<div class="message" data-bind="o3_slideVisible: upload.is_type( SNAFER_TRANSFER_EMAIL )">
+			            				<div class="message" data-bind="o3_slideVisible: upload.is_type( SNAPFER_TRANSFER_EMAIL )">
 			            					<!--<span>Message</span>-->
 							 				<div class="form-group">
 							 					<textarea class="form-control" placeholder="Message" data-bind="value: upload.message"></textarea>				
@@ -181,15 +183,15 @@
 
 			            				<div class="align-center">
 		
-											<div data-bind="o3_slideVisible: upload.is_type( SNAFER_TRANSFER_EMAIL )">		            					
+											<div data-bind="o3_slideVisible: upload.is_type( SNAPFER_TRANSFER_EMAIL )">		            					
 			            						<button class="btn btn-primary" data-bind="click: upload.submit"><i class="fa fa-paper-plane"></i> Send files</button>
 			            					</div>
 
-			            					<div data-bind="o3_slideVisible: upload.is_type( SNAFER_TRANSFER_DOWNLOAD )">
+			            					<div data-bind="o3_slideVisible: upload.is_type( SNAPFER_TRANSFER_DOWNLOAD )">
 												<button class="btn btn-primary" data-bind="click: upload.submit"><i class="fa fa-link"></i> Get download link</button>
 											</div>
 
-											<div data-bind="o3_slideVisible: upload.is_type( SNAFER_TRANSFER_SOCIAL )">
+											<div data-bind="o3_slideVisible: upload.is_type( SNAPFER_TRANSFER_SOCIAL )">
 												<button class="btn btn-facebook" data-bind="click: function(){ upload.share('facebook') }"><i class="fa fa-facebook"></i> Share on Facebook</button>
 												<div class="clearfix-sm"></div>
 
@@ -204,17 +206,24 @@
 
 			            					<div class="clearfix-sm"></div>
 			            					
-			            					<small class="anchors"><i class="fa fa-info-circle"></i> The file(s) will be kept for 
-			            						<span data-bind="visible: logged_user.is_none()"><?php echo snafer_transfers::display_period( SNAFER_TRANSFER_LIFETIME_DAYS ); ?></span>
-			            						<span data-bind="visible: logged_user.is_free()"><?php echo snafer_transfers::display_period( SNAFER_TRANSFER_LIFETIME_FREE_DAYS ); ?></span>
-			            						<span data-bind="visible: logged_user.is_premium()"><?php echo snafer_transfers::display_period( SNAFER_TRANSFER_LIFETIME_PREMIUM_DAYS ); ?></span>
-			            					.<br>
-
-
-			            					<span data-bind="visible: !logged_user.is_premium()">
-				            					<span data-bind="visible: !logged_user.is_free()"><a href="/#premium">Register free</a> if you want to keep files up to <?php echo snafer_transfers::display_period( SNAFER_TRANSFER_LIFETIME_FREE_DAYS ); ?>.<br></span>
-				            					<a href="/#premium">Go Premium</a> if you want to keep files up to <?php echo snafer_transfers::display_period( SNAFER_TRANSFER_LIFETIME_PREMIUM_DAYS ); ?>.</small>
-				            				</span>
+			            					<small class="anchors" data-bind="visible: !logged_user.is_premium()">
+			            						<i class="fa fa-info-circle"></i> The file(s) will be kept for 
+			            						<span data-bind="visible: logged_user.is_none()">
+			            							<?php echo snapfer_transfers::display_period( SNAPFER_TRANSFER_LIFETIME_DAYS ); ?>
+			            						</span>
+			            						<span data-bind="visible: logged_user.is_free()">
+			            							<?php echo snapfer_transfers::display_period( SNAPFER_TRANSFER_LIFETIME_FREE_DAYS ); ?>
+			            						</span>.
+			            						<br>			            						
+			            						<span data-bind="visible: !logged_user.is_premium()">
+				            						<span data-bind="visible: !logged_user.is_free()">
+				            							<a href="/#premium">Register free</a> 
+				            							if you want to keep files up to <?php echo snapfer_transfers::display_period(SNAPFER_TRANSFER_LIFETIME_FREE_DAYS ); ?>.
+				            							<br>
+				            						</span>
+				            						<a href="/#premium">Go Premium</a> if you want to keep files without expiration date.
+				            					</span>
+				            				</small>
 			            				</div>
 
 			            			</div>
@@ -236,12 +245,20 @@
 				<div class="row">
 					<div class="col-md-8 col-md-offset-2">
 
-						<h2>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas in suscipit leo.</h2>
-						<br /><br /><br />
-						<h3>Cras convallis faucibus ex, sed eleifend elit rhoncus et. Nunc molestie volutpat eleifend. </h3>
-						<br />
-						<p>Donec volutpat tempus sapien et vehicula. Nullam nec tempus erat. Maecenas vitae egestas velit. Suspendisse potenti. Suspendisse potenti. Sed blandit mauris a felis commodo, eget iaculis ligula gravida. Integer luctus erat purus, et maximus quam facilisis eu.</p>
-					
+						<h1>Send files up to <?php echo o3_html( SNAPFER_TRANSFER_PREMIUM_MAXSIZE_GB ); ?> to unlimited number of recipients with no expiration date!</h1> 
+						
+						<p>&nbsp;</p>
+						<p>&nbsp;</p>
+
+						<h2>Ultimate file sending and sharing experience with Snapfer from all devices.</h2>
+						
+						<p>&nbsp;</p>
+						<p>Using Snapfer you can send, store and share your files securly in no time. Share your images, musics, videos and documents on Facebook, Twitter, Google Plus and LinkedIn with one click.</p>
+
+						<p>&nbsp;</p>
+						<p>Recipients can downloaded each file separately or all together. Send pictures, musics, videos and documents with preview so you recipients can open you files even without an associated program or app. </p>
+											
+
 					</div>
 				</div>
 
@@ -265,30 +282,55 @@
 				<div class="row">
 					<div class="col-md-12">
 
-						<h2>Cras consequat aliquam ex sed laoreet. Nunc posuere enim eu rutrum auctor.</h2>
+						<h2>Why use Snapfer?</h2>
 						
 						<div class="clearfix-xl"></div>
 						<div class="row">
-							<div class="col-md-4 item-1 wow fadeInUp" data-wow-duration="1s" data-wow-delay=".3s">
+							<div class="col-md-4 item-5 wow fadeInUp" data-wow-duration="1s" data-wow-delay=".3s">
 								<div class="circle">
-									<i class="fa fa-clock-o"></i>
+									<i class="fa fa-users"></i>
 								</div>
 								<div class="clearfix-m"></div>
-								<h5>Real-Time Device Intelligence</h5>
+								<h5>Unlimited number of recepients</h5>
 							</div>	
-							<div class="col-md-4 item-2 wow fadeInUp" data-wow-duration="1s" data-wow-delay=".5s">
+							<div class="col-md-4 item-1 wow fadeInUp" data-wow-duration="1s" data-wow-delay=".5s">
 								<div class="circle">
 									<i class="fa fa-cloud"></i>
 								</div>
 								<div class="clearfix-m"></div>
-								<h5>Mobile Publishing</h5>
+								<h5><?php echo o3_html( SNAPFER_PREMIUM_CLOUD_STORAGE_GB ); ?> long term cloud storage</h5>
 							</div>
 							<div class="col-md-4 item-3 wow fadeInUp" data-wow-duration="1s" data-wow-delay=".7s">
 								<div class="circle">
 									<i class="fa fa-list-alt"></i>
 								</div>
 								<div class="clearfix-m"></div>
-								<h5>Mobile Specific Domain</h5>
+								<h5>Share your photos, music, videos and documents with preview</h5>
+							</div>
+						</div> 
+						<div class="clearfix-lg"></div>
+						<div class="row">
+							<div class="col-md-4 item-4 wow fadeInUp" data-wow-duration="1s" data-wow-delay=".4s">
+								<div class="circle">
+									<i class="fa fa-thumbs-o-up"></i>
+								</div>
+								<div class="clearfix-m"></div>
+								<h5>Friendly pricing, get Premium for <?php echo o3_html($this->country()->monthly_price()); ?> a month</h5>
+							</div>	
+							<div class="col-md-4 item-2 wow fadeInUp" data-wow-duration="1s" data-wow-delay=".6s">
+								<div class="circle">
+									<i class="fa fa-bullseye"></i>
+								</div>
+								<div class="clearfix-m"></div>
+								<!--<h5>Make a great impression with your own logo and background</h5>-->
+								<h5>Unlimited number of transfers</h5>
+							</div>
+							<div class="col-md-4 item-6 wow fadeInUp" data-wow-duration="1s" data-wow-delay=".8s">
+								<div class="circle">
+									<i class="fa fa-lock"></i>
+								</div>
+								<div class="clearfix-m"></div>
+								<h5>High security</h5>
 							</div>
 						</div>
 
@@ -298,14 +340,14 @@
 		</div>
 		
 		<div>
+			<h3>Works on all major devices and web browsers.</h3>
+			<div class="clearfix-sm"></div>
+			<p>Let your friends to see your photos, listen to you music, vatch your videos and open your document on all devices.</p>
+		</div>
+
+		<div>				
 			<div class="container">
-				<!--
-				<div class="row">
-					<div class="col-md-10 col-md-offset-1 desc">						
-						<p>Works on all major devices and web browsers</p>
-					</div>
-				</div>
-				-->
+									
 				<div class="row items">
 					<div class="col-xs-1 col-xs-offset-2">
 						<i class="fa fa-windows"></i>
@@ -342,7 +384,7 @@
 			<div class="row">
 				
 				<div class="col-lg-8 col-lg-offset-2">
-					<h2>Upload for <b>free</b> or subscribe to <b>Snafer Premium.</b></h2>
+					<h2>Upload for <b>free</b> or subscribe to <b>Snapfer Premium.</b></h2>
 				</div>
 			
 			</div>
@@ -355,19 +397,22 @@
 						<small data-bind="visible: !logged_user.is_logged() || logged_user.allow_trial()">&nbsp;</small>
 						<hr />
 						<ul>
-							<li class="active"><i class="fa fa-check"></i> Send up to <?php echo o3_html(SNAFER_TRANSFER_FREE_MAXSIZE_GB); ?> per upload</li>
-							<li><i class="fa fa-check"></i> Transfer expire in <?php echo snafer_transfers::display_period( SNAFER_TRANSFER_LIFETIME_FREE_DAYS ); ?></li>
-							<li><i class="fa fa-check"></i> Transfer history up to <?php echo snafer_transfers::display_period( SNAFER_TRANSFER_KEEP_FREE_DAYS ); ?></li>
+							<li class="active"><i class="fa fa-check"></i> Send up to <?php echo o3_html(SNAPFER_TRANSFER_FREE_MAXSIZE_GB); ?> per upload</li>
+							<li><i class="fa fa-check"></i> Transfer expire in <?php echo snapfer_transfers::display_period( SNAPFER_TRANSFER_LIFETIME_FREE_DAYS ); ?></li>
+							<li><i class="fa fa-check"></i> Transfer history up to <?php echo snapfer_transfers::display_period( SNAPFER_TRANSFER_KEEP_FREE_DAYS ); ?></li>
 							<li class="hidden-sm"><br></li>
 							<li class="hidden-sm"><br></li>
+							<!--
 							<li class="hidden-sm"><br></li>
+							<li class="hidden-sm"><br></li>
+							-->
 						</ul>
 						<hr />
-						<a href="/#sign-in" onclick="show_sign_up_form(SNAFER_FREE)" class="btn active" data-bind="visible: !logged_user.is_logged()">Get Free</a>
+						<a href="/#sign-in" onclick="show_sign_up_form(SNAPFER_FREE)" class="btn active" data-bind="visible: !logged_user.is_logged()">Get Free</a>
 						
 						<!--<a href="<?php echo $this->o3_cms()->page_url( CANCEL_SUBSCRIPTION_PAGE_ID ); ?>" class="btn active" data-bind="visible: logged_user.is_logged() && logged_user.is_premium()">Get back to Free</a>-->
 
-						<span data-bind="visible: logged_user.is_logged() && !logged_user.is_premium()"><i class="fa fa-check"></i> You're currently Snafer Free</span>
+						<span data-bind="visible: logged_user.is_logged() && !logged_user.is_premium()"><i class="fa fa-check"></i> You're currently Snapfer Free</span>
 					</div>
 
 				</div>
@@ -382,17 +427,20 @@
 						<small data-bind="visible: !logged_user.is_logged() || logged_user.allow_trial()">Start your 30 day free trial</small>						
 						<hr />
 						<ul>
-							<li class="active"><i class="fa fa-check"></i> Send up to <?php echo o3_html(SNAFER_TRANSFER_PREMIUM_MAXSIZE_GB); ?> per upload</li>
-							<li><i class="fa fa-check"></i> Transfer expire in <?php echo snafer_transfers::display_period( SNAFER_TRANSFER_LIFETIME_PREMIUM_DAYS ); ?></li>
-							<li><i class="fa fa-check"></i> Transfer history up to <?php echo snafer_transfers::display_period( SNAFER_TRANSFER_KEEP_PREMIUM_DAYS ); ?></li>
+							<li class="active"><i class="fa fa-check"></i> Send up to <?php echo o3_html(SNAPFER_TRANSFER_PREMIUM_MAXSIZE_GB); ?> per upload</li>
+							<li><i class="fa fa-check"></i> Transfer never expires</li>
+							<li><i class="fa fa-check"></i> <?php echo o3_html( SNAPFER_PREMIUM_CLOUD_STORAGE_GB ); ?> cloud storage</li>
+							<li><i class="fa fa-check"></i> Transfer history </li>
 							<li><i class="fa fa-check"></i> Ad free</li>
+							<!--
 							<li><i class="fa fa-check"></i> Secure transfer with password</li>
 							<li><i class="fa fa-check"></i> Customize transfer</li>
+							-->
 						</ul>
 						<hr />
-						<a href="/#sign-in" onclick="show_sign_up_form(SNAFER_PREMIUM)" class="btn btn-primary active" data-bind="visible: !logged_user.is_logged()">Get Premium</a>
+						<a href="/#sign-in" onclick="show_sign_up_form(SNAPFER_PREMIUM)" class="btn btn-primary active" data-bind="visible: !logged_user.is_logged()">Get Premium</a>
 						<a href="/#get-premium" class="btn btn-primary active" data-bind="visible: logged_user.is_logged() && !logged_user.is_premium()">Get  Premium</a>
-						<span data-bind="visible: logged_user.is_logged() && logged_user.is_premium()"><i class="fa fa-check"></i> You're currently Snafer Premium</span>
+						<span data-bind="visible: logged_user.is_logged() && logged_user.is_premium()"><i class="fa fa-check"></i> You're currently Snapfer Premium</span>
 					</div>	
 
 				</div>
@@ -406,11 +454,11 @@
 			<div class="row">
 				<form id="get-premium-form" class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2" data-bind="submit: sign_in_up.go_premium_submit">
 
-					<h2>Go Premium</h2>	
+					<h2>Go Premium</h2>	 
 
 					<p>Premium - <?php echo o3_html($this->country()->monthly_price()); ?><small>/month</small></p>
 
-					<div class="clearfix clearfix-sm"></div>					
+					<div class="clearfix clearfix-m"></div>					
 
 					<div class="error-msg" data-bind="text: sign_in_up.go_premium_error_msg(), css: { block: sign_in_up.go_premium_error_msg() != '' }"></div>					
 
@@ -474,7 +522,7 @@
 
 					<p><br></p>
 
-					<p class="text-left"><small>By clicking on Go Premium, you agree to <a href="<?php echo $this->o3_cms()->page_url( TERMS_PAGE_ID ); ?>" target="_blank">Snafer's terms & conditions and privacy policy</a></small></p>
+					<p class="text-left"><small>By clicking on Go Premium, you agree to <a href="<?php echo $this->o3_cms()->page_url( TERMS_PAGE_ID ); ?>" target="_blank">Snapfer's terms & conditions and privacy policy</a></small></p>
 
 					<p><br></p>
 
@@ -491,7 +539,8 @@
 					
 				<form id="sign-in-form" class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2" data-bind="submit: sign_in_up.sign_in_submit">
 
-					<h2>Sign in</h2>
+					<h2>Sign in to your Snafer account</h2>
+					<div class="clearfix-lg"></div>
 
 					<div class="error-msg" data-bind="text: sign_in_up.sign_in_error_msg(), css: { block: sign_in_up.sign_in_error_msg() != '' }"></div>
 
@@ -532,15 +581,17 @@
 				<form id="sign-up-form" class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2" data-bind="submit: sign_in_up.sign_up_submit">
 					
 					<h2>Sign up</h2>
+					<p>Register your new Snapfer account</p>
+					<div class="clearfix-lg"></div>
 
 					<div class="error-msg" data-bind="text: sign_in_up.sign_up_error_msg(), css: { block: sign_in_up.sign_up_error_msg() != '' }"></div>
 
 					<div class="form-group">
 						<div class="float-left radio-1st">
-							<a href="#" class="radio" data-bind="click: function(){ sign_in_up.sign_up_form_type(SNAFER_FREE) }, css: { 'active': sign_in_up.sign_up_form_type() != SNAFER_PREMIUM }"><span><i class="fa fa-circle"></i></span> Free - <?php echo o3_html($this->country()->format_price(0)); ?><small>/month</small></a>
+							<a href="#" class="radio" data-bind="click: function(){ sign_in_up.sign_up_form_type(SNAPFER_FREE) }, css: { 'active': sign_in_up.sign_up_form_type() != SNAPFER_PREMIUM }"><span><i class="fa fa-circle"></i></span> Free - <?php echo o3_html($this->country()->format_price(0)); ?><small>/month</small></a>
 						</div>	
 						<div class="float-left radio-2nd">
-							<a href="#" class="radio" data-bind="click: function(){ sign_in_up.sign_up_form_type(SNAFER_PREMIUM) }, css: { 'active': sign_in_up.sign_up_form_type() == SNAFER_PREMIUM }"><span><i class="fa fa-circle"></i></span> Premium - <?php echo o3_html($this->country()->monthly_price()); ?><small>/month</small></a>
+							<a href="#" class="radio" data-bind="click: function(){ sign_in_up.sign_up_form_type(SNAPFER_PREMIUM) }, css: { 'active': sign_in_up.sign_up_form_type() == SNAPFER_PREMIUM }"><span><i class="fa fa-circle"></i></span> Premium - <?php echo o3_html($this->country()->monthly_price()); ?><small>/month</small></a>
 						</div>
 
 						<div class="clearfix"></div>
@@ -632,7 +683,7 @@
 
 					<div class="clearfix clearfix-sm"></div>
 
-					<div data-bind="visible: sign_in_up.sign_up_form_type() == SNAFER_PREMIUM">
+					<div data-bind="visible: sign_in_up.sign_up_form_type() == SNAPFER_PREMIUM">
 						<h3 class="text-left">Billing information</h3>
 						
 
@@ -691,7 +742,7 @@
 
 					<p><br></p>
 
-					<p class="text-left"><small>By clicking on Sign up, you agree to <a href="<?php echo $this->o3_cms()->page_url( TERMS_PAGE_ID ); ?>" target="_blank">Snafer's terms & conditions and privacy policy</a></small></p>
+					<p class="text-left"><small>By clicking on Sign up, you agree to <a href="<?php echo $this->o3_cms()->page_url( TERMS_PAGE_ID ); ?>" target="_blank">Snapfer's terms & conditions and privacy policy</a></small></p>
 
 					<p><br></p>
 

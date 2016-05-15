@@ -321,34 +321,14 @@ function o3_date( format, timestamp ) {
 };
 
 //format sql date
-function o3_sqldate( format, mysqld ){ 
-	var parts = mysqld.split(' '),
-			data_obj = new Date(); 	
-	if ( parts.length <= 2 ) {
-		var date_parts = parts[0].split('-'),
-				Y = 0,
-				m = 0,
-				d = 0,
-				H = 0,
-				i = 0,
-				s = 0;			
-		//check date
-		if ( date_parts.length == 3 ) {
-			Y = Number(date_parts[0]);
-			m = Number(date_parts[1]);
-			d = Number(date_parts[2]);
-		};
-		//check hour
-		if ( parts.length == 2 ) {
-			var hour_parts = parts[1].split(':');							
-			H = Number(hour_parts[0]);
-			i = Number(hour_parts[1]);
-			s = Number(hour_parts[2]);
-		};		
-		if ( Y > 0 && m > 0 && d > 0 ) {
-			data_obj.setFullYear( Y, m, d, H, i, s);
-			return o3_date( format, data_obj.getTime() / 1000 );
-		};
-	};
-	return '';
+function o3_sqldate( format, sqld ){ 
+  return o3_date( format, o3_sqldate_2_linuxstamp( sqld ) );
+};
+
+//sql date 2 linux time stamp
+function o3_sqldate_2_linuxstamp( sqld ){  
+  var sqld = sqld.split(/[- :]|[-]/),
+      data_obj = new Date();
+  data_obj.setFullYear( parseInt(sqld[0]), parseInt(sqld[1])-1, parseInt(sqld[2]), sqld.length > 3 ? parseInt(sqld[3]) : 0, sqld.length > 4 ? parseInt(sqld[4]) : 0, sqld.length > 5 ? parseInt(sqld[5]) : 0 );
+  return Math.round(data_obj.getTime() / 1000);
 };

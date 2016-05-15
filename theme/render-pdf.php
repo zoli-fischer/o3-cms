@@ -1,5 +1,10 @@
 <?php
 
+/**
+* Rendering the invoice PDF
+* Invoice is rendered as HTML and converted to PDF  
+*/
+
 $id = o3_get('id');
 $download = o3_get('download',0); // 0 - inline pdf, 1 - download pdf, 2 - html
 $type = o3_get('render-pdf');
@@ -42,7 +47,7 @@ if ( trim(strlen($pdf_content)) == 0 ) {
 		die($pdf_content);
 
 	//file name from html title
-	$filename = get_title_from_html( $pdf_content );
+	$filename = get_title_from_html( $pdf_content ).'.pdf';
 
 	//load dom pdf
 	require_once( O3_CMS_THEME_DIR.'/lib/dompdf/dompdf_config.inc.php' );
@@ -63,7 +68,7 @@ if ( trim(strlen($pdf_content)) == 0 ) {
 
 }
 
-
+//stop the script
 die();
 
 ?>

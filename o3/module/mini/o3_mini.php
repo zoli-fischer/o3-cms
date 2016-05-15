@@ -40,6 +40,9 @@ class o3_mini {
 	/** boolean Allow minimize js */
 	public $minimize_js = O3_MINI_JS;
 
+	/** boolean Allow minimize html */
+	public $minimize_html_output = O3_MINI_HTML_OUTPUT;
+
 	/** integer CSS cache file uniq id */
 	public $cache_uniqid_css = 'mini';
 
@@ -73,6 +76,16 @@ class o3_mini {
 	 */
 	public function allow_mini_js( $value = true ) {
 		$this->minimize_js = $value;
+	}
+
+	/**
+	 * Allow minimize html output	 
+	 * @param boolean $value (optional) Default value: true
+	 *
+	 * @return void
+	 */
+	public function allow_mini_html_output( $value = true ) {
+		$this->minimize_html_output = $value;
 	}
 
 	/**
@@ -643,7 +656,34 @@ class o3_mini {
 	public function set_css_cache_lifetime( $value = 1209600 ) {
 		$this->lifetime_css = $value;
 	}
-     
+ 
+  	/**
+	 * Minify HTML string
+	 *
+	 * @param string $string HTML String
+	 * @param array $options 
+	 *
+	 * @return string
+	 */	
+	public function html( $html, $options = array( 'cleanComments' => false ) ) {
+		require_once('o3_html_compressor.php');
+		return o3\module\mini\o3_html_compressor::minify( $html, $options );
+	}
+
+	/**
+	 * Minify HTML output
+	 *
+	 * @param string $string HTML String
+	 * @param array $options 
+	 *
+	 * @return string
+	*/
+	public function mini_html_output( $buffer, $options = array( 'cleanComments' => false ) ) {
+		if ( $this->minimize && $this->minimize_html_output )
+			$buffer = $this->html( $buffer, $options );
+		return $buffer;
+	}
+
 }
 
 ?>

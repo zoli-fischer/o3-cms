@@ -15,6 +15,9 @@ use o3\config as config;
 /** Allow minimizeing of files */
 config\def('O3_MINI_MINIMIZE',false);
 
+/** Allow minimizeing of html output */
+config\def('O3_MINI_HTML_OUTPUT',false);
+
 /** Allow minimizeing of js files */
 config\def('O3_MINI_JS',true);
 

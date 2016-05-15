@@ -8,8 +8,21 @@
 		padding-top: 127px;
 		text-align: center;
 
-		p {
-			color: #769532;
+		h1 {
+			color: #ffffff;
+			font-size: 50px; 
+			@media (max-width:767px) {
+				font-size: 36px;
+			}
+		}
+
+		h2 {
+			color: #51545a;
+			font-size: 30px;
+			font-family: 'Slabo 13px', sans-serif;
+			@media (max-width:767px) {
+				font-size: 22px;
+			}
 		}
 
 
@@ -77,6 +90,25 @@
 			}
 		}
 
+		.item-4 {
+			.circle {
+				background: #1bcad4;
+			}
+		}
+
+		.item-5 {
+			.circle {
+				background: #4ac5e3;
+			}
+		}
+
+		.item-6 {
+			.circle {
+				background: #ff5e5e;
+			}
+		}
+		
+
 		@media (max-width:992px) {
 			padding-top: 80px;
 			padding-bottom: 0px;
@@ -88,6 +120,12 @@
 	}
 
 	> div:nth-child(3) {
+		text-align: center;
+		padding-top: 60px;
+		padding-bottom: 60px;
+	}
+
+	> div:nth-child(4) {
 		background: #f0f0f0;
 
 		.desc {
@@ -225,8 +263,12 @@
 	
 	h2 {
 		color: #51545a; 
-		text-align: center;
-		margin-bottom: 80px;
+		text-align: center; 
+		font-size: 36px;
+		@media (max-width:767px) {
+			font-size: 26px;
+		}
+
 	}
  
 }
@@ -257,8 +299,8 @@
 #upload-form {
 	visibility: hidden;
 	background: #fff;
-	border: 3px solid #333;
-	border-radius: 15px;
+	border: 2px solid #333;
+	border-radius: 5px;
 	padding: 30px 0 10px 0;
 	-webkit-box-shadow: 3px 3px 5px rgba(0,0,0,0.5);
 	-moz-box-shadow: 3px 3px 5px rgba(0,0,0,0.5);
@@ -305,7 +347,7 @@
 		text-align: center;
 	}	
 
-	big {
+	.big {
 		font-size: 56px;
 		font-family: 'Slabo 13px',sans-serif;
 		color: #aad051;
@@ -351,6 +393,9 @@
 			margin: 0px;
 			padding: 0px;
 			display: block; 
+			max-height: 188px;
+			overflow-y: auto;
+			-webkit-overflow-scrolling: touch;
 
 			> li {
 				margin: 0px;
@@ -421,8 +466,8 @@
 	transition: all 0.2s ease-in;
 
 	> div {
-		border: 5px dashed #fff;
-		border-radius: 10px;
+		border: 3px dashed #fff;
+		border-radius: 5px;
 		width: 100%;
 		height: 100%;
 		display: table;
@@ -441,6 +486,8 @@
 				vertical-align: middle;
 				color: #fff;
 				font-size: 32px;
+				padding-left: 40px;
+				padding-right: 40px;
 				/*
 				text-shadow: 1px 1px 3px rgba(0,0,0,0.9);
 				*/

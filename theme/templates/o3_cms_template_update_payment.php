@@ -8,7 +8,7 @@
 		$this->view( 'o3_cms_template_view_html_head' );
 
 		//load update payment app
-		$this->parent->body_js(O3_CMS_THEME_DIR.'/js/snafer/snafer.update.payment.app.js');		
+		$this->parent->body_js(O3_CMS_THEME_DIR.'/js/snapfer/snapfer.update.payment.app.js');		
 
 	?>
 
@@ -192,7 +192,7 @@
 
 				<div class="col-md-6 col-md-offset-3">
 
-					Snafer will make an authorization on your card to verify it. This is an authorization only and NOT a charge. You hereby authorise Snafer to charge you automatically every month until you cancel your subscription. 
+					Snapfer will make an authorization on your card to verify it. This is an authorization only and NOT a charge. You hereby authorise Snapfer to charge you automatically every month until you cancel your subscription. 
 
 					<div class="clearfix-m"></div>
 

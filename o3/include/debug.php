@@ -253,10 +253,21 @@ class o3_debug {
 				//split html at head tag
 				$matches = preg_split('/(<head.*?>)/i', $buffer, 0, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE ); 
 				if ( count($matches) > 1 ) {
-					//assemble the html output back with the script code in it
-					$buffer = $matches[0] . $matches[1] . ( !preg_match( '/(<header)/i', $matches[1]) ? $scriptCode : '' );
-					for ( $i = 2; $i < count($matches); $i++ )
-						$buffer .= $matches[$i];
+
+					$title_matches = preg_split('/(<\/title.*?>)/i', $buffer, 0, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE); 	
+					if ( count($title_matches) > 1 ) {
+						
+						$buffer = $title_matches[0] . $title_matches[1] . $scriptCode;
+						for ( $i = 2; $i < count($title_matches); $i++ )
+							$buffer .= $title_matches[$i];	
+
+					} else {
+						//assemble the html output back with the script code in it
+						$buffer = $matches[0] . $matches[1] . ( !preg_match( '/(<header)/i', $matches[1]) ? $scriptCode : '' );
+						for ( $i = 2; $i < count($matches); $i++ )
+							$buffer .= $matches[$i];							
+					}
+					
 				}
 			}
 		}

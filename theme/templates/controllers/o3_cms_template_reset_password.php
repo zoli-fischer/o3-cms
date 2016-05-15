@@ -1,12 +1,12 @@
 <?php
 
 //Require theme controller class
-require_once(O3_CMS_THEME_DIR.'/classes/snafer_template_controller.php');
+require_once(O3_CMS_THEME_DIR.'/classes/snapfer_template_controller.php');
 
 //Require reset password request class
-require_once(O3_CMS_THEME_DIR.'/classes/snafer_reset_password.php');
+require_once(O3_CMS_THEME_DIR.'/classes/snapfer_reset_password.php');
 
-class o3_cms_template_reset_password extends snafer_template_controller {
+class o3_cms_template_reset_password extends snapfer_template_controller {
 
 	protected $reset_password_request;
 
@@ -25,7 +25,7 @@ class o3_cms_template_reset_password extends snafer_template_controller {
 		}
 
 		//load request from url
-		$this->reset_password_request = new snafer_reset_password( $this->o3_cms()->page()->get('id') == RESET_USER_PASSWORD_PAGE_ID ? o3_get('request') : '' );
+		$this->reset_password_request = new snapfer_reset_password( $this->o3_cms()->page()->get('id') == RESET_USER_PASSWORD_PAGE_ID ? o3_get('request') : '' );
 	}
 
 	public function ajax_reset_password() {
@@ -35,7 +35,7 @@ class o3_cms_template_reset_password extends snafer_template_controller {
 			$this->ajax_result->redirect( $this->o3_cms()->page_url(HOME_PAGE_ID)  );
 		} else {
 			//check if exists and load request 
-			$reset_password_request = new snafer_reset_password( $this->ajax_result->value('id') );
+			$reset_password_request = new snapfer_reset_password( $this->ajax_result->value('id') );
 			if ( $reset_password_request->is() ) {
 
 				//check if password reset request expired 
@@ -43,7 +43,7 @@ class o3_cms_template_reset_password extends snafer_template_controller {
 					$this->ajax_result->data('expired','1');
 				} else {
 					//check if exists and load user 
-					$user = new snafer_user( $reset_password_request->get('user_id') );
+					$user = new snapfer_user( $reset_password_request->get('user_id') );
 					if ( $user->is() ) {
 						//update user's password
 						$user->set_password( $this->ajax_result->value('password'), false );
@@ -65,7 +65,7 @@ class o3_cms_template_reset_password extends snafer_template_controller {
 		if ( $this->logged_user()->is() ) {
 			$this->ajax_result->redirect( $this->o3_cms()->page_url(HOME_PAGE_ID)  );
 		} else {
-			$users = new snafer_users();
+			$users = new snapfer_users();
 			$userdata = false;
 
 			if ( ( $userdata = $users->get_by_username( $this->ajax_result->value('username') ) ) !== false ) {
@@ -75,7 +75,7 @@ class o3_cms_template_reset_password extends snafer_template_controller {
 			}
 
 			if ( $userdata !== false ) {
-				$reset_password_request = new snafer_reset_password();
+				$reset_password_request = new snapfer_reset_password();
 				$reset_password_request->request( $userdata->id );
 				
 				//send email with password reset link

@@ -30,6 +30,9 @@ if ( isset($o3_module_data['minimize_js']) )
 if ( isset($o3_module_data['minimize_css']) )
 	$this->mini->allow_mini_css(  $o3_module_data['minimize_css'] );
 
+if ( isset($o3_module_data['minimize_html_output']) )
+	$this->mini->allow_mini_html_output(  $o3_module_data['minimize_html_output'] );
+
 if ( isset($o3_module_data['livetime_js']) )
 	$this->mini->set_js_cache_lifetime( $o3_module_data['livetime_js'] );
 

@@ -70,6 +70,9 @@ if ( O3_CMS_TESTMODE ) {
 def('O3_CMS_MINI_MINIMIZE', true );
 
 //Compress javascript
+def('O3_CMS_MINI_HTML_OUTPUT', true );
+
+//Compress javascript
 def('O3_CMS_MINI_JS', true );
 
 //Compress css

@@ -93,8 +93,8 @@ function o3_bytes_display( $format, $size ) {
   									 "@(^|[^\\\\])(U)@",
   									 "@(\\\\){1}(U){1}@" );
   $replacements = array( "\${1}".$v, "$2",
-  											 "\${1}".$u_l, "$2",
-  											 "\${1}".$u_u, "$2"	);
+						 "\${1}".$u_l, "$2",
+						 "\${1}".$u_u, "$2"	);
   $va = preg_replace( $patterns, $replacements, $format );
   //$va = str_replace( "\\", "", $va );
   return $va; 
@@ -247,4 +247,18 @@ function o3_is_utf8( $string ) {
         )+%xs', $string);  
 }
 	
+/**
+* Check if strings is HTML
+*
+* Returns true if the string is valid HTML code
+*
+* @param string $string String to check
+*
+* @return boolean
+*/
+function o3_is_html( $string ) {
+	return preg_match('/^<html.*>.*<\/html>$/i', trim($string));  
+}
+
+
 ?>
