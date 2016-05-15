@@ -243,6 +243,11 @@ class o3_cms_template_frontpage extends snapfer_template_controller {
 				//update user storage
 				$this->ajax_result->data('storage_free',$this->logged_user->storage_free());
 
+				//return share title and desc
+				$this->ajax_result->data('share_title',$transfer->share_title());
+				$this->ajax_result->data('share_desc',$transfer->share_desc());
+
+
 				//return success
 				$this->ajax_result->success();
 			}

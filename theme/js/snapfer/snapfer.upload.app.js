@@ -95,6 +95,12 @@ function snapferUploadApp( opts ) {
 	//transfer url
 	self.transfer_url = ko.observable('');
 
+	//transfer title
+	self.transfer_title = ko.observable('');
+
+	//transfer desc
+	self.transfer_desc = ko.observable('');
+
 	//transfer canonical id
 	self.transfer_id = ko.observable(0);
 
@@ -251,7 +257,10 @@ function snapferUploadApp( opts ) {
 
 		//if transfered than share else transfer
 		if ( self.transfered() ) {
-			//todo
+			
+			//share url
+	    	share( self.transfer_url(), social_type, self.transfer_title(), self.transfer_desc()  );
+
 		} else {
 			self.submit();
 		};
@@ -268,10 +277,10 @@ function snapferUploadApp( opts ) {
 		while ( self.files().length > 0 )
 			self.files.pop();
 
-		//set transfer url
+		//clear transfer data
 		self.transfer_url('');
-		
-		//set transfer canonical id
+		self.transfer_name('');
+		self.transfer_desc('');		
 		self.transfer_id('');
 
 		//clear uploading
@@ -289,10 +298,10 @@ function snapferUploadApp( opts ) {
 		//show uploading
 		self.uploading( false );
 
-		//set transfer url
+		//clear transfer data
 		self.transfer_url('');
-		
-		//set transfer canonical id
+		self.transfer_name('');
+		self.transfer_desc('');
 		self.transfer_id('');
 
 		//cancel uploads
@@ -361,6 +370,10 @@ function snapferUploadApp( opts ) {
 			'finalize_transfer',
 			data,
 			function(event){
+
+				//set title and description
+				self.transfer_title(event.data.share_title);
+				self.transfer_desc(event.data.share_desc);
 
 				//update storage
 				self.parent().logged_user.storage_free(event.data.storage_free);

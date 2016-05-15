@@ -98,7 +98,7 @@ class snapfer_convert {
 	/**
 	* Get pdf pages
 	*/	
-	public function pdf_pages( $source ) {
+	public static function pdf_pages( $source ) {
 		$info = self::pdf_info( $source );		
 		if ( $info !== false ) {
 			foreach ( $info as $value ) 
@@ -111,7 +111,7 @@ class snapfer_convert {
 	/**
 	* Get doc pages if converted to pdf
 	*/
-	public function doc_pages( $source ) {
+	public static function doc_pages( $source ) {
 		$convert2pdf = strtolower(o3_extension($source)) != 'pdf';
 		$pages = false;
 		if ( $convert2pdf ) {
@@ -345,7 +345,7 @@ class snapfer_convert {
 	/**
 	* Create montage from a list of files
 	*/
-	public function montage( $sources, $destination, $rows, $cols, $padding = 2, $width = 1024, $height = 768, $flags = null, $quality = 90, $dpi = O3_IMAGE_WEB_DPI, $background = '' ) {
+	public static function montage( $sources, $destination, $rows, $cols, $padding = 2, $width = 1024, $height = 768, $flags = null, $quality = 90, $dpi = O3_IMAGE_WEB_DPI, $background = '' ) {
 		$return = false;
 		if ( count($sources) > 0 ) {
 			$dirname = o3_dirname($destination);
