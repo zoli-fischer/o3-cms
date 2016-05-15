@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 > **This project is in beta version**
 
 # Snapfer - Bachelor Project
@@ -32,3 +33,6 @@ pdftoppm (http://linux.die.net/man/1/pdftoppm)
 qt-faststart (http://manpages.ubuntu.com/manpages/wily/man1/qt-faststart.1.html)
 pngcrush (http://manpages.ubuntu.com/manpages/trusty/en/man1/pngcrush.1.html)
 jpegoptim (http://manpages.ubuntu.com/manpages/wily/man1/jpegoptim.1.html)
+
+
+
