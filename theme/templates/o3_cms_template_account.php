@@ -192,7 +192,7 @@
 						?>
 						
 
-							<p>You're currently Snapfer Free. With Free, your transfers'll have ads, and you won't be able to upload up to 20GB, or customize your transfers. Upgrade to Premium anytime you like. </p>
+							<p>You're currently Snapfer Free. With Free, your transfers'll have ads, and you won't be able to upload up to <?php echo o3_html(SNAPFER_TRANSFER_PREMIUM_MAXSIZE_GB); ?>, or customize your transfers. Upgrade to Premium anytime you like. </p>
 						
 							<hr>
 

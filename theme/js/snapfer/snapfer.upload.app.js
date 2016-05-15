@@ -10,7 +10,7 @@ function snapferUploadApp( opts ) {
 		parent: null
 	}, opts );
 
-	//set parent, pt_page object
+	//set parent
 	self.parent = function() {
 		return self.opts.parent;
 	};

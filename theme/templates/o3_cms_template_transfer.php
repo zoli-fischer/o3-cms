@@ -7,6 +7,14 @@
 		//load html head
 		$this->view( 'o3_cms_template_view_html_head' );
 
+
+		//load transfer viewer app
+		$this->parent->body_js(O3_CMS_THEME_DIR.'/js/snapfer/snapfer.viewer.app.js');
+		
+		//load transfer viewer item app
+		$this->parent->body_js(O3_CMS_THEME_DIR.'/js/snapfer/snapfer.viewer.item.app.js');
+
+
 	?>
 
 </head>
@@ -25,7 +33,15 @@
 					<div class="col-sm-12">
 
 						<h1><?php echo $this->page_title(); ?></h1>
+						
+						<?php 
+							echo $this->ad_tag();
+						?>						
 
+					</div>
+
+					<div>
+						
 					</div>
 				</div>			
 			</div>
@@ -80,8 +96,18 @@
 														<span class="clearfix"></span>
 													</div>
 													<div class="body">
-														<div>
-															<a href="<?php echo o3_html($file->preview_url(1)); ?>" title="<?php echo o3_html($file->get('name')); ?>" style="background-image: url('<?php echo o3_html($file->thumb_url(1)); ?>')"></a>
+														<div class="<?php echo $file->has_thumb(1) ? '' : 'no-thumb'; ?> <?php echo $file->has_preview(1) ? '' : 'no-preview'; ?>">
+															<a href="<?php echo $file->has_preview(1) ? o3_html($file->preview_url(1)) : 'javascript:{}'; ?>" 
+																title="<?php echo o3_html($file->get('name')); ?>"
+																data-download="<?php echo o3_html($file->url()); ?>"
+																data-preview="<?php echo $file->has_preview(2) ? o3_html($file->preview_url(2)) : ''; ?>"
+																data-type="<?php echo o3_html($file->get('type')); ?>"
+																data-size="<?php echo o3_html($file->size()); ?>"
+																data-ext="<?php echo o3_html($file->extension()); ?>"
+																data-ref="transfer-viewer"
+																style="background-image: url('<?php echo $file->has_thumb(1) ? o3_html($file->thumb_url(1)) : ''; ?>')">
+																<i class="fa fa-picture-o"></i>
+															</a>
 														</div>
 													</div>
 													<div class="foot">
@@ -119,11 +145,20 @@
 														<span class="clearfix"></span>
 													</div>
 													<div class="body">
-														<div>
-															<a href="<?php echo o3_html($file->preview_url(1)); ?>" title="<?php echo o3_html($file->get('name')); ?>" style="background-image: url('<?php echo o3_html($file->thumb_url(1)); ?>')">
-																<i></i>
+														<div class="<?php echo $file->has_thumb(1) ? '' : 'no-thumb'; ?> <?php echo $file->has_preview(1) ? '' : 'no-preview'; ?>">
+															<a href="<?php echo $file->has_preview(1) ? o3_html($file->preview_url(1)) : 'javascript:{}'; ?>" 
+																title="<?php echo o3_html($file->get('name')); ?>"
+																data-download="<?php echo o3_html($file->url()); ?>"
+																data-preview="<?php echo $file->has_preview(2) ? o3_html($file->preview_url(2)) : ''; ?>"
+																data-type="<?php echo o3_html($file->get('type')); ?>"
+																data-size="<?php echo o3_html($file->size()); ?>"
+																data-ext="<?php echo o3_html($file->extension()); ?>"
+																data-ref="transfer-viewer"
+																style="background-image: url('<?php echo $file->has_thumb(1) ? o3_html($file->thumb_url(1)) : ''; ?>')">
+																<i class="fa fa-video-camera"></i>
+																<u></u>
 																<b></b>
-																<span style="background-image: url('<?php echo o3_html($file->thumb_url(2)); ?>')"></span>
+																<span style="background-image: url('<?php echo $file->has_thumb(2) ? o3_html($file->thumb_url(2)) : ''; ?>')"></span>
 															</a>	
 														</div>
 													</div>
@@ -162,7 +197,7 @@
 														<span class="clearfix"></span>
 													</div>
 													<div class="body audio-player">
-														<div>
+														<div class="<?php echo $file->has_preview(1) ? '' : 'no-preview'; ?>">
 															<audio>
 																<source src="<?php echo o3_html($file->preview_url(1)); ?>" type="audio/mpeg">
 																<p class="no-html5-audio">Your browser does not support the audio element.</p>
@@ -206,8 +241,19 @@
 														<span class="clearfix"></span>
 													</div>
 													<div class="body">
-														<div>
-															<a href="<?php echo o3_html($file->url()); ?>" title="<?php echo o3_html($file->get('name')); ?>" style="background-image: url('<?php echo o3_html($file->thumb_url(1)); ?>')"></a>
+														<div class="<?php echo $file->has_thumb(1) ? '' : 'no-thumb'; ?> <?php echo $file->has_preview(1) ? '' : 'no-preview'; ?>">
+															<a href="<?php echo $file->has_preview(1) ? o3_html($file->preview_url(1)) : 'javascript:{}'; ?>" 
+																title="<?php echo o3_html($file->get('name')); ?>" 
+																data-download="<?php echo o3_html($file->url()); ?>"
+																data-preview="<?php echo $file->has_preview(2) ? o3_html($file->preview_url(2)) : ''; ?>"
+																data-pages="<?php echo o3_html($file->get('pages')); ?>"
+																data-type="<?php echo o3_html($file->get('type')); ?>"
+																data-size="<?php echo o3_html($file->size()); ?>"
+																data-ext="<?php echo o3_html($file->extension()); ?>"
+																data-ref="transfer-viewer"
+																style="background-image: url('<?php echo $file->has_thumb(1) ? o3_html($file->thumb_url(1)) : ''; ?>')">
+																<i class="fa fa-book"></i>
+															</a>
 														</div>
 													</div>
 													<div class="foot">
@@ -319,6 +365,64 @@
 		$this->view( 'o3_cms_template_view_footer' );
 
 	?>
+
+	<!--Transfer viewer-->
+	<div id="transfer-viewer" data-bind="css: { 'visible': viewer.visible(), 'with-bottom': viewer.current_item().is_doc() }">
+		<div class="overlay"></div>
+		<div class="top">
+			<div>
+				<a href="#" title="Download" class="download icon green" data-bind="attr: { href: viewer.current_item().url }"><i class="fa fa-cloud-download"></i></a>
+				<span class="title" data-bind="text: viewer.current_item().title+' - '+o3_bytes_display(viewer.current_item().size,2)"></span>					
+				<span class="index"><u data-bind="text: viewer.current() + 1"></u> of <u data-bind="text: viewer.items().length"></u></span>
+				<span class="close icon" data-bind="click: viewer.hide"><i class="fa fa-times"></i></span>				
+			</div>
+		</div>
+		<div class="bottom">
+			<div class="zoom">
+				<select data-bind="value: viewer.zoom, valueUpdate: 'keyup'">
+					<option value="1">100%</option>
+					<option value="1.5">150%</option>
+					<option value="2">200%</option>
+				</select>
+			</div>
+			<div class="pages">
+				<span class="up icon" data-bind="click: viewer.current_item().prev_page, css: { 'disabled': !viewer.current_item().allow_prev_page() }"><i class="fa fa-angle-up"></i></span>	
+				<span class="page"><u data-bind="text: viewer.current_item().current_page() + 1"></u> of <u data-bind="text: viewer.current_item().pages"></u></span>
+				<span class="down icon" data-bind="click: viewer.current_item().next_page, css: { 'disabled': !viewer.current_item().allow_next_page() }"><i class="fa fa-angle-down"></i></span>	
+			</div>
+		</div>
+		<div class="body">
+
+			<div class="image" 
+				data-bind="visible: viewer.current_item().is_image() && viewer.current_item().loaded(), 
+							style: { 
+								'background-image': viewer.current_item().is_image() ? 'url(\''+viewer.current_item().image_url()+'\')' : '',
+								'background-size': viewer.image_bg_size()
+							}"></div>
+
+			<div class="video" data-bind="
+				visible: viewer.current_item().is_video(),
+				html: viewer.video_tag()">
+				<video ></video>
+			</div>
+
+			<div class="document" data-bind="visible: viewer.current_item().is_doc() && viewer.current_item().loaded()">
+				<img data-bind="attr: { 
+									src: viewer.current_item().is_doc() ? viewer.current_item().image_url() : ''									
+								},
+								css: {
+									'scale-15': viewer.zoom() == 1.5,
+									'scale-20': viewer.zoom() == 2
+								}"/>
+			</div>
+
+			<div class="loader" data-bind="css: { 'show': ( viewer.current_item().is_image() || viewer.current_item().is_doc() ) && !viewer.current_item().loaded() }"></div>
+
+		</div>
+		<span class="left icon" data-bind="click: viewer.prev, css: { 'disabled': !viewer.allow_prev() }"><i class="fa fa-angle-left"></i></span>
+		<span class="right icon" data-bind="click: viewer.next, css: { 'disabled': !viewer.allow_next() }"><i class="fa fa-angle-right"></i></span>
+
+	</div>
 
 </body>
 </html>

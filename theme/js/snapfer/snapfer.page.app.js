@@ -34,6 +34,9 @@ function snapferPageApp() {
 
 	//feedback
 	self.feedback = typeof snapferFeedbackApp == 'function' ? new snapferFeedbackApp({ parent: self }) : null;
+
+	//viewer
+	self.viewer = typeof snapferViewerApp == 'function' ? new snapferViewerApp({ parent: self }) : null;
 	
 	//utils
 

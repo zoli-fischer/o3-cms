@@ -89,12 +89,72 @@ class o3_cms_template_transfer extends snapfer_template_controller {
 		return '';
 	}
 
+	/**
+	* Set page meta image width
+	* Facebook recomands: 1200 x 630 or 600 x 315
+	*/
+	public function page_image_width() {
+		if ( !$this->transfer->is_expired() ) {
+			$file = $this->transfer->image_path();
+			$imagesize = getimagesize($file);
+			if ( getimagesize($file) !== false )
+				return $imagesize[0];
+		} else {
+			return parent::page_image_width();
+		}
+	}	
+
+	/**
+	* Set page meta image height
+	* Facebook recomands: 1200 x 630 or 600 x 315
+	*/
+	public function page_image_height() {
+		if ( !$this->transfer->is_expired() ) {
+			$file = $this->transfer->image_path();
+			$imagesize = getimagesize($file);
+			if ( getimagesize($file) !== false )
+				return $imagesize[1];
+		} else {
+			return parent::page_image_height();
+		}
+	}
+
+	/**
+	* Set page meta image	
+	*/
+	public function page_image() {
+		if ( !$this->transfer->is_expired() ) {
+			return $this->transfer->image_url();
+		} else {
+			return parent::page_image();
+		}
+	}		
+
+	/**
+	* Set page meta image height
+	* Facebook recomands: 1200 x 630 or 600 x 315
+	*/
+	public function page_url() {
+		if ( !$this->transfer->is_expired() ) {
+			return $this->transfer->url();
+		} else {
+			return o3_current_url();
+		}
+	}
+
 	public function show_group_headers() {
 		return ( ( count($this->images) > 0 ? 1 : 0 ) +
 			   ( count($this->videos) > 0 ? 1 : 0 ) +
 			   ( count($this->audio) > 0 ? 1 : 0 ) +
 			   ( count($this->docs) > 0 ? 1 : 0 ) +
 			   ( count($this->others) > 0 ? 1 : 0 ) ) > 1;
+	}
+
+	public function ad_tag() {
+		$leaderboard_files = array( '1.jpg', '2.gif', '3.jpg', '4.jpg', '5.jpg' );
+		$mobilebanner_files = array( '1.jpg', '2.jpg', '3.gif', '4.gif', '5.jpg' );
+		echo '<img src="/res/ad/leaderboard/'.$leaderboard_files[rand(1,5)-1].'" width="728" height="90" class="leaderboard-ad" alt="Google Ad placeholder - Leaderboard (728x90)" onclick="alert(\'Google Ad placeholder - Leaderboard (728x90)\');" />
+			  <img src="/res/ad/mobile/'.$mobilebanner_files[rand(1,5)-1].'" width="320" height="100" class="mobilebanner-ad" alt="Google Ad placeholder - Mobile banner (320x100)" onclick="alert(\'Google Ad placeholder - Mobile banner (320x100)\');" />';
 	}
 }
 

@@ -13,11 +13,11 @@ require_once(O3_CMS_THEME_DIR.'/classes/snapfer_helper.php');
  */
 
 //File type groups
-snapfer_helper::define('SNAPFER_FILE_IMAGE','image');
-snapfer_helper::define('SNAPFER_FILE_VIDEO','video');
-snapfer_helper::define('SNAPFER_FILE_AUDIO','audio');
-snapfer_helper::define('SNAPFER_FILE_DOC','doc');
-snapfer_helper::define('SNAPFER_FILE_OTHER','other');
+snapfer_helper::define('SNAPFER_FILE_IMAGE','image',true);
+snapfer_helper::define('SNAPFER_FILE_VIDEO','video',true);
+snapfer_helper::define('SNAPFER_FILE_AUDIO','audio',true);
+snapfer_helper::define('SNAPFER_FILE_DOC','doc',true);
+snapfer_helper::define('SNAPFER_FILE_OTHER','other',true);
 
 //Temp path for transfer
 snapfer_helper::def('SNAPFER_TRANSFERS_PATH',O3_CMS_ROOT_DIR.'/transf3rs');
@@ -28,6 +28,13 @@ snapfer_helper::def('SNAPFER_TRANSFERS_SENDFILE','transf3rs');
 class snapfer_files {
 
 	/**URL START**/
+
+	/**
+	* Get transfer image url
+	*/
+	public static function image_url( $canonical_id ) { 				
+		return strlen(trim($canonical_id)) > 0 ? ( o3_get_host().'/?dl='.$canonical_id.'&fl=image' ) : false;
+	}
 
 	/**
 	* Get zip download url
@@ -396,6 +403,24 @@ class snapfer_files {
 	}
 
 	/**TRANSFER PATH STRUCTURE END**/
+
+	/**TRANSFER IMAGE START**/
+
+	/**
+	* Get transfer zip path
+	*/
+	public static function transfer_image_path( $transfer_id ) {
+		return self::transfer_path( $transfer_id, 'image.jpg' );
+	}
+
+	/**
+	* Get transfer zip sendfile path
+	*/
+	public static function transfer_image_sendfile( $transfer_id ) {
+		return self::transfer_sendfile( $transfer_id, 'image.jpg' );
+	}
+
+	/**TRANSFER IMAGE END**/
 
 	/**ZIP START**/
 

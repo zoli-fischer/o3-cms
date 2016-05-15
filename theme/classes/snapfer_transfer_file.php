@@ -153,6 +153,13 @@ class snapfer_transfer_file extends o3_cms_object {
 	}
 
 	/**
+	* Check if it has thumb
+	*/
+	public function has_thumb( $index ) {
+		return $this->is() ? ( $this->get('thumb'.$index) > 0 && file_exists($this->thumb_file_path($index)) ) : false;
+	}
+	
+	/**
 	* Get preview file url
 	*/
 	public function preview_url( $index ) {
@@ -162,22 +169,29 @@ class snapfer_transfer_file extends o3_cms_object {
 	/**
 	* Get preview file name
 	*/
-	public function preview_file( $index ) {
-		return $this->is() ? $this->generate_preview( $index, true ) : false;
+	public function preview_file( $index, $page = 1 ) {
+		return $this->is() ? $this->generate_preview( $index, true, $page ) : false;
 	}
 
 	/**
 	* Get preview file path
 	*/
-	public function preview_file_path( $index ) {
-		return $this->is() ? snapfer_files::assets_path( $this->get('transfer_id'), $this->preview_file( $index ) ) : false;
+	public function preview_file_path( $index, $page = 1 ) {
+		return $this->is() ? snapfer_files::assets_path( $this->get('transfer_id'), $this->preview_file( $index, $page ) ) : false;
 	}
 
 	/**
 	* Get preview file sendfile path
 	*/
-	public function preview_file_sendfile( $index ) {
-		return $this->is() ? snapfer_files::assets_sendfile( $this->get('transfer_id'), $this->preview_file( $index ) ) : false;
+	public function preview_file_sendfile( $index, $page = 1 ) {
+		return $this->is() ? snapfer_files::assets_sendfile( $this->get('transfer_id'), $this->preview_file( $index, $page ) ) : false;
+	}
+
+	/**
+	* Check if it has preview
+	*/
+	public function has_preview( $index ) {
+		return $this->is() ? ( ( $this->is_doc() ? ( $this->get('pages') > 0 ) : true ) && $this->get('preview'.$index) > 0 && file_exists($this->preview_file_path($index)) ) : false;
 	}
 
 	/**
@@ -199,7 +213,8 @@ class snapfer_transfer_file extends o3_cms_object {
 			'thumb1' => $this->generate_thumb( 1 ) !== false ? filesize($this->thumb_file_path( 1 )) : 0,
 			'thumb2' => $this->generate_thumb( 2 ) !== false ? filesize($this->thumb_file_path( 2 )) : 0,
 			'preview1' => $this->generate_preview( 1 ) !== false ? filesize($this->preview_file_path( 1 )) : 0,
-			'preview2' => $this->generate_preview( 2 ) !== false ? filesize($this->preview_file_path( 2 )) : 0
+			'preview2' => $this->generate_preview( 2 ) !== false ? filesize($this->preview_file_path( 2 )) : 0,
+			'pages' => $this->is_doc() && file_exists($this->preview_file_path( 1 )) ? $this->get_page_number() : 0
 		);
 
 		//update database table row
@@ -321,12 +336,19 @@ class snapfer_transfer_file extends o3_cms_object {
 	*
 	* @param int $index Index of thumbnail 1 or 2 
 	* @param Boolean $only_filename If true the file is not generated just the filename 
+	* @param int $page Only for documents. Generate the preview for page. Starts from 1
 	*
 	* @return string $filename
 	*/
-	public function generate_preview( $index, $only_filename = false ) {
+	public function generate_preview( $index, $only_filename = false, $page = 1 ) {
 		if ( $this->is() ) {
 			$index = intval($index);
+			$page = intval($page);
+
+			//something wrong with the page number
+			if ( $page < 1 || ( $page > $this->get('pages') && $this->get('pages') > 0 ) )
+				return false;
+
 			$filename = $this->get('id').'-pv-'.$index;
 			//$fieldindex = 'preview'.$index;
 
@@ -337,13 +359,13 @@ class snapfer_transfer_file extends o3_cms_object {
 					switch ($this->get('type')) {
 						case SNAPFER_FILE_IMAGE:							
 							//add extension
-							$filename .= '.jpg'; 
+							$filename .= '.jpg'; 							
 
 							//geenrate preview
 							if ( !$only_filename ) {
 
 								//create image of max. 1920x1280 72 dpi and quality 70
-								if ( o3_image_resize( $this->path(), $this->preview_file_path( $index ), 1920, 1080, O3_IMAGE_SHRINK_LARGER | O3_IMAGE_OPTIMIZE, 70, O3_IMAGE_WEB_DPI ) ) {
+								if ( o3_image_resize( $this->path(), $this->preview_file_path( $index ), 1920, 1080, O3_IMAGE_SHRINK_LARGER | O3_IMAGE_OPTIMIZE | O3_IMAGE_FLATTEN, 70, O3_IMAGE_WEB_DPI ) ) {
 
 									return $filename;	
 								}
@@ -393,7 +415,7 @@ class snapfer_transfer_file extends o3_cms_object {
 							break;
 						case SNAPFER_FILE_DOC:
 							//add extension
-							$filename .= '.jpg'; 
+							$filename .= ( $page > 1 ? '-'.$page : '' ).'.jpg'; 
 
 							//geenrate thumb
 							if ( !$only_filename ) {
@@ -402,8 +424,8 @@ class snapfer_transfer_file extends o3_cms_object {
 								require_once(O3_CMS_THEME_DIR.'/classes/snapfer_convert.php');
 								
 								//create image of max. 1920x1920 72 dpi and quality 70 at 60 second of the movie
-								if ( snapfer_convert::doc2jpg( $this->path(), $this->preview_file_path( $index ), 1, 1920, 1920, O3_IMAGE_SHRINK_LARGER | O3_IMAGE_FILL_AREA | O3_IMAGE_FLATTEN | O3_IMAGE_OPTIMIZE, 90, O3_IMAGE_WEB_DPI ) ) {
-									
+								if ( snapfer_convert::doc2jpg( $this->path(), $this->preview_file_path( $index, $page ), $page, 1920, 1920, O3_IMAGE_SHRINK_LARGER | O3_IMAGE_FILL_AREA | O3_IMAGE_FLATTEN | O3_IMAGE_OPTIMIZE, 90, O3_IMAGE_WEB_DPI ) ) {
+
 									return $filename;	
 								}
 
@@ -415,17 +437,50 @@ class snapfer_transfer_file extends o3_cms_object {
 
 					break;			
 				case 2:	
+
+						//check file type
+						switch ($this->get('type')) {
+							case SNAPFER_FILE_VIDEO:							
+								//add extension
+								$filename .= '.jpg'; 
+
+								//geenrate preview
+								if ( !$only_filename ) {									
+									
+									//Require define class
+									require_once(O3_CMS_THEME_DIR.'/classes/snapfer_convert.php');
+
+									//create image of max. 1920x1280 72 dpi and quality 70
+									if ( snapfer_convert::video2img( $this->path(), $this->preview_file_path( $index ), 15, 1920, 1920, O3_IMAGE_SHRINK_LARGER | O3_IMAGE_FILL_AREA | O3_IMAGE_FLATTEN | O3_IMAGE_OPTIMIZE, 70, O3_IMAGE_WEB_DPI ) ) {
+
+										return $filename;	
+									}
+								} else {
+									return $filename;						
+								}
+								break;							
+						}
+
 					break;
 			}
 		}
 		return false;
 	}
 
+	/**
+	* Get document pages
+	*/
+	public function get_page_number() {
+		//Require define class
+		require_once(O3_CMS_THEME_DIR.'/classes/snapfer_convert.php');
+
+		return $this->is() ? snapfer_convert::doc_pages( $this->path() ) : false;
+	}
 }
 
 
 /*
-$file = new snapfer_transfer_file( 3 );
+$file = new snapfer_transfer_file( 136 );
 $file->generate();
 $file = new snapfer_transfer_file( 4 );
 $file->generate();
@@ -434,13 +489,16 @@ $file->generate();
 $file = new snapfer_transfer_file( 6 );
 $file->generate();
 */
+
 /*
-$file = new snapfer_transfer_file( 37 );
+$file = new snapfer_transfer_file( 72 );
 //echo $file->generate_thumb( 1 ) ? '! thumb1' : '? thumb1' ; echo '<br>';
 //echo $file->generate_thumb( 2 ) ? '! thumb2' : '? thumb2' ; echo '<br>';
-echo $file->generate_preview( 1 ) ? '! prev1' : '? prev1' ; echo '<br>';
+echo $file->get_page_number();
+//echo $file->generate_preview( 2 ) ? '! prev1' : '? prev1' ; echo '<br>';
 die();
 */
+
 
 ?>
 

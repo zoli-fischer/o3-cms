@@ -7,13 +7,12 @@
 	-->
 
 	<span class="o3-cms-logo">
-		Snapfer CMS
+		O3 CMS
 	</span>
 
 	<ul class="o3-cms-global-tools"><?php
 		if ( $this->o3_cms->logged_user()->is_logged() ) {
 		?>		
-		<!--
 		<li class="hidden-lg hidden-md hidden-sm hidden-xs o3-cms-dropdown">
 			<a href="#ids" data-o3-cms-toggle="open"><i class="fa fa-mobile"></i></a>
 
@@ -43,9 +42,7 @@
 
 		</li><li>
 			<a href="javascript:{}"><i class="fa fa-cog"></i></a>
-		</li>
-		-->
-		<?php
+		</li><?php
 		}
 		?><li class="o3-cms-dropdown">
 			<a href="#o3-cms-dropdown-languages" data-o3-cms-toggle="open"><i class="fa fa-language"></i></a>
@@ -90,7 +87,7 @@
 		</li>--><?php
 		}
 		?><li>
-			<a href="javascript:alert('Sorry this feature is under construction.')"><i class="fa fa-question"></i></a>
+			<a href="javascript:{}"><i class="fa fa-question "></i></a>
 		</li>
 	</ul>
 
@@ -102,14 +99,13 @@
 	?>
 	<ul class="o3-cms-secondary-tools">
 		<li>
-			<a href="javascript:alert('Sorry this feature is under construction.')"><i class="fa fa-file"></i> <span class="hidden-xs">Page info</span></a>
-		</li>
-		<li>
-			<a href="javascript:alert('Sorry this feature is under construction.')"><i class="fa fa-bars"></i> <span>Modules</span></a>
+			<a href=""><i class="fa fa-bars"></i> <span>Modules</span></a>
 		</li><li>
-			<a href="javascript:alert('Sorry this feature is under construction.')"><i class="fa fa-users"></i> <span class="hidden-xs">Users</span></a>
+			<a href=""><i class="fa fa-users"></i> <span class="hidden-xs">Users</span></a>
 		</li><li>
-			<a href="javascript:alert('Sorry this feature is under construction.')"><i class="fa fa-sitemap"></i> <span class="hidden-xs">Sitemap</span></a>
+			<a href=""><i class="fa fa-sitemap"></i> <span class="hidden-xs">Sitemap</span></a>
+		</li><li>
+			<a href=""><i class="fa fa-file"></i> <span class="hidden-xs">Page info</span></a>
 		</li>
 	</ul>
 	<?php
@@ -118,13 +114,13 @@
 
 	<ul class="o3-cms-secondary-tools">
 		<li>
-			<a href="/"><i class="fa fa-globe"></i> <span class="hidden-md hidden-sm hidden-xs">{o3_lang:o3-cms-frontpage}</span></a>
+			<a href="<?php echo $this->o3_cms->page_url(); ?>"><i class="fa fa-globe"></i> <span class="hidden-md hidden-sm hidden-xs">{o3_lang:o3-cms-frontpage}</span></a>
 		</li><?php
 		if ( $this->o3_cms->logged_user()->is_logged() ) {
 		?><li>
-			<a href="javascript:alert('Sorry this feature is under construction.')"><i class="fa fa-lightbulb-o"></i> <span class="hidden-md hidden-sm hidden-xs">Highlight</span></a>
+			<a href=""><i class="fa fa-lightbulb-o"></i> <span class="hidden-md hidden-sm hidden-xs">Highlight</span></a>
 		</li><li>
-			<a href="javascript:alert('Sorry this feature is under construction.')"><i class="fa fa-trash-o"></i> <span class="hidden-md hidden-sm hidden-xs">Trash</span></a>
+			<a href=""><i class="fa fa-trash-o"></i> <span class="hidden-md hidden-sm hidden-xs">Trash</span></a>
 		</li>	
 		<?php
 		}

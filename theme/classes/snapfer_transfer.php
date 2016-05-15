@@ -162,7 +162,7 @@ class snapfer_transfer extends o3_cms_object {
 		if ( $this->is() ) {
 			if ( $this->update(array(
 				'temp' => 0
-			) ) ) {
+			) ) ) {				
 				
 				$recipients = $this->recipients();
 				$recipients_count = count($recipients);
@@ -188,6 +188,9 @@ class snapfer_transfer extends o3_cms_object {
 					}
 
 				}
+
+				//create temp image
+				$this->create_image();
 
 				return true;
 			}
@@ -373,7 +376,7 @@ class snapfer_transfer extends o3_cms_object {
 	public function files() {
 		$files = array();
  		if ( $this->is() ) {
- 			$transfer_files = o3_with(new snapfer_transfer_files())->select( 'id',  ' transfer_id = '.$this->get('id'), ' id ' );
+ 			$transfer_files = o3_with(new snapfer_transfer_files())->select( 'id',  ' transfer_id = '.$this->get('id'), ' name, id ' );
  			if ( is_array($transfer_files) && count($transfer_files) > 0 )
 	 			foreach ( $transfer_files as $key => $value )
 	 				$files[] = new snapfer_transfer_file( $value->id );
@@ -410,7 +413,7 @@ class snapfer_transfer extends o3_cms_object {
 			} else {
 				
 				$is_asset = isset($_GET['ai']) || isset($_GET['at']); //check if is an asset or file
-				$disposition = $is_asset ? 'inline' : 'attachment'; //attachment or inline
+				$disposition = $is_asset ? 'inline' : 'attachment'; //attachment or inline				
 				
 				//if file requested send file else zip
 				if ( $file_id > 0 ) {
@@ -425,9 +428,17 @@ class snapfer_transfer extends o3_cms_object {
 									$file_sendfile = $file->thumb_file_sendfile( intval(o3_get('ai')) );
 									break;
 								case 'preview':
-									$file_path = $file->preview_file_path( intval(o3_get('ai')) );
-									$file_sendfile = $file->preview_file_sendfile( intval(o3_get('ai')) );
-									break;
+										
+									$page = isset($_GET['p']) ? ( $_GET['p'] + 1 ) : 1; //document file page									
+										
+									$file_path = $file->preview_file_path( intval(o3_get('ai')), $page );
+									$file_sendfile = $file->preview_file_sendfile( intval(o3_get('ai')), $page );
+
+									//check if document file and not first page and file no exists than creaete it
+									if ( $page > 1 && $page < $file->get('pages') - 1 && $file->is_doc() && !file_exists($file_path) )
+										$file->generate_preview( intval(o3_get('ai')), false, $page );
+
+									break;									
 							}							
 						} else {
 							$file_sendfile = $file->sendfile();
@@ -436,9 +447,15 @@ class snapfer_transfer extends o3_cms_object {
 					}
 
 				} else if ( !$is_asset ) { 
-					//if asset requested than for sure is not zip
-					$file_sendfile = $this->zip_sendfile();
-					$file_path = $this->zip_path();
+					if ( o3_get('fl') == 'image' ) {
+						//if asset requested than for sure is not zip
+						$file_sendfile = $this->image_sendfile();
+						$file_path = $this->image_path();
+					} else {
+						//if asset requested than for sure is not zip
+						$file_sendfile = $this->zip_sendfile();
+						$file_path = $this->zip_path();
+					}
 				}
 
 
@@ -537,6 +554,103 @@ class snapfer_transfer extends o3_cms_object {
 
 				return true;
 			}
+		}
+		return false;
+	}
+
+	/**
+	* Get image url
+	*/
+	public function image_url() {
+		return snapfer_files::image_url( $this->get('canonical_id') );
+	}
+
+	/**
+	* Get transfer image path
+	*/
+	public function image_path() {
+		return snapfer_files::transfer_image_path( $this->get('id') );
+	}
+
+	/**
+	* Get transfer image sendfile path
+	*/
+	public function image_sendfile() {
+		return snapfer_files::transfer_image_sendfile( $this->get('id') );
+	}
+
+	/**
+	* Create transfer image collage
+	*/
+	public function create_image() {
+		$files = $this->files();
+		$images = array();
+		$nr_max_images = 18; //max images to use
+		if ( count($files) > 0 ) {
+			$i = 0;
+			foreach ( $files as $file ) {	
+				$index = 0;			
+				switch ( $file->get('type') ) {
+					case SNAPFER_FILE_IMAGE:
+					case SNAPFER_FILE_DOC:
+						$index = 1;
+						break;
+					case SNAPFER_FILE_VIDEO:
+						$index = 2;
+						break;
+				}
+
+				if ( $index > 0 )
+					if ( $file->has_preview($index) && $file->preview_file_path($index) !== false )
+						$images[] = $file->preview_file_path($index);
+				
+				if ( $i > $nr_max_images - 3 )
+					break;
+
+				$i++;				
+			}						
+
+			//slit array
+			$images_split = array_chunk( $images, $nr_max_images );
+			$images = $images_split[0];
+
+			//add snapfer logo
+			$images[] = O3_CMS_THEME_DIR.'/res/snapfer-image.jpg';
+
+			//shuffler array
+			shuffle($images);
+			
+			//items count
+			$items = count($images);
+
+			$rows = 3;
+			$cols = 6;
+			if ( $items >= 15 && $items < 18 ) {
+				$rows = 3;
+				$cols = 5;	
+			} else if ( $items >= 12 && $items < 15 ) {
+				$rows = 3;
+				$cols = 4;	
+			} else if ( $items >= 8 && $items < 12 ) {
+				$rows = 2;
+				$cols = 4;	
+			} else if ( $items >= 4 && $items < 8 ) {
+				$rows = 2;
+				$cols = 2;	
+			} else if ( $items >= 2 && $items < 4 ) {
+				$rows = 1;
+				$cols = 2;	
+			} else if ( $items == 1 ) {
+				$rows = 1;
+				$cols = 2;	
+			}
+			$max_items = $rows * $cols;			
+ 
+			//Require define class
+			require_once(O3_CMS_THEME_DIR.'/classes/snapfer_convert.php');
+			
+			//create montage
+			return snapfer_convert::montage( $images, $this->image_path(), $cols, $rows, 2, 1200, 1200, O3_IMAGE_SHRINK_LARGER | O3_IMAGE_OPTIMIZE, 70, O3_IMAGE_WEB_DPI );		
 		}
 		return false;
 	}

@@ -28,14 +28,22 @@ a {
 
 body, html {
 	font-size: 16px;
-	font-family: 'Montserrat', sans-serif;	
+	font-family: 'Open Sans', sans-serif;	
+	width: auto;
+	height: auto;
 }
 
 html {
 	overflow: -moz-scrollbars-vertical;
-    overflow-y: scroll;
-    width: 100%;
-    height: 100%;
+    overflow-y: scroll; 
+}
+
+html.no-scroll {
+	overflow-y: hidden;
+
+	body {
+		overflow-y: hidden;
+	}
 }
 
 .nobr	{ white-space:nowrap; }
@@ -79,7 +87,7 @@ html {
 #o3-cms-wrapper {
 	width: 100%;
 	height: 100%;
-	/*overflow: hidden;*/
+	overflow: hidden;
 	padding-top: 56px;
 
 	@media (max-width:767px) {
@@ -90,6 +98,7 @@ html {
 /*HEADING*/
 
 h1 {
+	font-family: 'Montserrat', sans-serif;
 	color: #ffffff;
 	font-size: 60px; 
 	@media (max-width:767px) {
@@ -98,6 +107,7 @@ h1 {
 }
 
 h2 {
+	font-family: 'Montserrat', sans-serif;
 	color: #ffffff;
 	font-size: 50px; 
 	@media (max-width:767px) {
@@ -109,6 +119,15 @@ h3 {
 	color: #51545a;
 	font-size: 30px;
 	font-family: 'Slabo 13px', sans-serif;
+	@media (max-width:767px) {
+		font-size: 22px;
+	}
+}
+
+h4 {
+	color: #51545a;
+	font-size: 30px;	
+	font-family: 'Open Sans', sans-serif;
 	@media (max-width:767px) {
 		font-size: 22px;
 	}
@@ -141,6 +160,7 @@ h6 {
 	font-size: 16px;
 	background: #51545a;
 	border-radius: 0;
+	font-family: 'Montserrat', sans-serif;
 	
 	-webkit-transition: all 0.3s ease-in-out;
 	-moz-transition: all 0.3s ease-in-out;
@@ -525,6 +545,8 @@ header {
 
 	.header-menu {
 		nav {
+			font-family: 'Montserrat', sans-serif;
+
 			> ul {
 				display: block;
 				float: right;
@@ -708,6 +730,7 @@ footer {
 	padding-bottom: 190px;
 	background: #51545a;
 	color: #ffffff; 
+	font-family: 'Montserrat', sans-serif;
 
 	@media (max-width:767px) {
 		padding-top: 80px;
@@ -863,9 +886,11 @@ ul.data-table {
 
 			vertical-align: middle; 
 
+			/*
 			a {
 				font-size: 20px;
 			}
+			*/
 
 		}
 

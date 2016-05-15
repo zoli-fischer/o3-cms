@@ -27,6 +27,12 @@ snapfer_helper::define('SNAPFER_PDFTOPPM','pdftoppm');
 //Path to faststart converter
 snapfer_helper::define('SNAPFER_FASTSTART','qt-faststart');
 
+//Path to montage creator
+snapfer_helper::define('SNAPFER_MONTAGE','montage');
+
+//Path to PDF info retrieve
+snapfer_helper::define('PDF_INFO','pdfinfo');
+
 class snapfer_convert {
 	
 	/*
@@ -59,7 +65,7 @@ class snapfer_convert {
 	public static function pdf2jpg( $source, $destination, $page = 1, $width = 1024, $height = 768, $flags = null, $quality = 90, $dpi = O3_IMAGE_WEB_DPI ) {
 		$page = intval($page);
 		$filename = o3_filename($destination);
-		$dirname = o3_dirname($destination);		
+		$dirname = o3_dirname($destination);
 		$temp_file = $dirname.'/'.$filename.'.png';
 
 		$script = "cd \"".addslashes($dirname)."\"; ".SNAPFER_PDFTOPPM." -r 299 -cropbox -f ".$page." -singlefile -png \"".addslashes($source)."\" \"".addslashes($filename)."\"";
@@ -70,12 +76,58 @@ class snapfer_convert {
 			$return = o3_image_resize( $temp_file, $destination, $width, $height, $flags, $quality, $dpi );
 
 			//remove temp file
-			o3_unlink( $temp_file, 'png' );
+			o3_unlink( $temp_file );
 
 			return $return;
 		}
 
 		return false;
+	}
+
+	/**
+	* Get pdf info array
+	*/	
+	function pdf_info( $source ) {
+		$script = PDF_INFO." -l 50000 \"".addslashes($source)."\"";		
+		exec($script, $out, $rcode);
+		if ( $rcode === 0 && is_array($out) && !empty($out) )
+			return $out;		
+		return false;
+	}
+
+	/**
+	* Get pdf pages
+	*/	
+	public function pdf_pages( $source ) {
+		$info = self::pdf_info( $source );		
+		if ( $info !== false ) {
+			foreach ( $info as $value ) 
+				if ( strpos( $value, 'Pages:' ) === 0 )
+					return intval(str_replace('Pages:', '', $value));			
+		}
+		return false;		
+	}
+
+	/**
+	* Get doc pages if converted to pdf
+	*/
+	public function doc_pages( $source ) {
+		$convert2pdf = strtolower(o3_extension($source)) != 'pdf';
+		$pages = false;
+		if ( $convert2pdf ) {
+			//get temp pdf path
+			$temp_pdf = o3_temp_cache_file( 'doc_pages.pdf' );
+			
+			//create pdf and get pages
+			if ( self::doc2pdf( $source, $temp_pdf ) )
+				$pages = self::pdf_pages( $temp_pdf );
+
+			//remove temp pdf
+			//o3_unlink($temp_pdf);
+		} else {
+			$pages = self::pdf_pages( $source );
+		}
+		return $pages;
 	}
 
 	/**
@@ -89,12 +141,12 @@ class snapfer_convert {
 				$return = self::pdf2jpg( $temp_pdf, $destination, $page, $width, $height, $flags, $quality, $dpi );				
 				
 				//delete temp pdf
-				o3_unlink($temp_pdf,'pdf');
+				o3_unlink($temp_pdf);
 
 				return $return;
 			} else {
 				//delete temp pdf
-				o3_unlink($temp_pdf,'pdf');
+				o3_unlink($temp_pdf);
 			}
 		} else {			
 			return self::pdf2jpg( $source, $destination, $page, $width, $height, $flags, $quality, $dpi );
@@ -134,7 +186,7 @@ class snapfer_convert {
 		//return duration informat 00:00:04.99
 		$script = SNAPFER_AVCONV." -i \"".addslashes($source)."\" 2>&1 | grep 'Duration' | awk '{print $2}' | sed s/,//";
 		exec($script, $out, $rcode);		
-		if ( $out !== false ) {
+		if ( $rcode === 0 ) {
 			$arr = explode(":", $out[0]);
 			return $arr[0] * 3600 + $arr[1] * 60+ $arr[2];			
 		}
@@ -154,13 +206,14 @@ class snapfer_convert {
 		$from = $from > $videolength ? ( $videolength / 2 ) : $from;
 
 		$script = SNAPFER_AVCONV." -ss ".$from." -r 24 -i \"".addslashes($source)."\" -t 0.01 \"".addslashes($temp_file)."\"";
-		exec($script, $out, $rcode);		
+		exec($script, $out, $rcode);				
 		if ( $rcode === 0 ) {
+
 			//create final image
-			$return = o3_image_resize( $temp_file, $destination, $width, $height, $flags, $quality, $dpi, $background );;
-			
+			$return = o3_image_resize( $temp_file, $destination, $width, $height, $flags, $quality, $dpi, $background );
+
 			//remove temp file
-			o3_unlink( $temp_file, 'jpg' );
+			o3_unlink( $temp_file );
 			
 			return $return;
 		}
@@ -196,7 +249,7 @@ class snapfer_convert {
 			//remove temp files
 			$temp_files = glob(addslashes($dirname)."/".addslashes($filename)."-*.jpg");
 			foreach ( $temp_files as $file )
-				o3_unlink( $file, 'png' );			
+				o3_unlink( $file );			
 
 			if ( $rcode === 0 )
 				return $destination;
@@ -226,7 +279,7 @@ class snapfer_convert {
 			$temp_file = $dirname.'/'.$filename.'-indexed.mp4';
 			$script = SNAPFER_FASTSTART." \"".addslashes($destination)."\" \"".addslashes($temp_file)."\"";
 			exec($script, $out, $rcode);
-			if ( $out !== false ) {
+			if ( $rcode === 0 ) {
 				o3_unlink($destination);
 				rename($temp_file, $destination);
 			}
@@ -287,6 +340,62 @@ class snapfer_convert {
 
 		}
 		return false;
+	}
+
+	/**
+	* Create montage from a list of files
+	*/
+	public function montage( $sources, $destination, $rows, $cols, $padding = 2, $width = 1024, $height = 768, $flags = null, $quality = 90, $dpi = O3_IMAGE_WEB_DPI, $background = '' ) {
+		$return = false;
+		if ( count($sources) > 0 ) {
+			$dirname = o3_dirname($destination);
+			$temp_dir = $dirname.'/montage';
+			$temp_file = $temp_dir.'/montage.jpg';
+			
+			//create temp dir
+			if ( !file_exists($temp_dir) )
+				mkdir($temp_dir);
+
+			//check if temp dir writable
+			if ( is_writable($temp_dir) ) {
+
+				//space between images
+				$padding = intval($padding);
+				$rows = intval($rows);
+				$cols = intval($cols);
+
+				//number of items on a row
+				$max_items = $rows * $cols;				
+
+				$new_sources = array();
+				$i = 0;
+				foreach ( $sources as $source ) {
+					$new_source = $temp_dir.'/'.$i.'.'.o3_extension($source);
+					o3_image_resize( $source, $new_source, 300, 300, O3_IMAGE_SHRINK_LARGER | O3_IMAGE_ENLARGE_SMALLER | O3_IMAGE_CROP_CENTER, 90 );
+					
+					if ( $max_items - 2 < $i )
+						break;
+
+					$i++;
+				}
+
+				$script = "cd \"".addslashes($temp_dir)."\"; ".SNAPFER_MONTAGE." -geometry +".$padding."+".$padding." -tile ".$rows."x".$cols." *.* montage.jpg";
+				exec($script, $out, $rcode);
+				if ( $rcode === 0 ) {					
+						
+					//remove temp dir
+					o3_unlink($destination);
+					
+					//create final image
+					$return = o3_image_resize( $temp_file, $destination, $width, $height, O3_IMAGE_SHRINK_LARGER | O3_IMAGE_OPTIMIZE, 70 );				
+					
+				}
+				
+				//remove temp dir
+				o3_unlink_dir($temp_dir);				
+			}			
+		}
+		return $return;		
 	}
 
 }

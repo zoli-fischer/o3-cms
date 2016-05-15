@@ -68,6 +68,31 @@ class snapfer_template_controller extends o3_cms_template_controller {
 	public function page_image() {
 		return o3_get_host().'/res/snapfer-image.jpg';
 	}	
+
+	/**
+	* Set page meta image width
+	* Facebook recomands: 1200 x 630 or 600 x 315
+	*/
+	public function page_image_width() {
+		return 1024;
+	}	
+
+	/**
+	* Set page meta image height
+	* Facebook recomands: 1200 x 630 or 600 x 315
+	*/
+	public function page_image_height() {
+		return 768;
+	}	
+
+	/**
+	* Set page meta image height
+	* Facebook recomands: 1200 x 630 or 600 x 315
+	*/
+	public function page_url() {
+		return o3_get_host().'/'.$this->o3_cms->page_url();
+	}
+	
 }
 
 ?>

@@ -79,7 +79,7 @@
 														case SNAPFER_TRANSFER_EMAIL:
 															$recipients = $transfer->recipients();														
 															$recipients_count = count($recipients);
-															echo 'Sent via email to '.$recipients_count.' '.( $recipients_count == 1 ? 'recipient' : 'recipients' ).' on '.$this->logged_user()->format_date( $transfer->get('created'), true );
+															echo 'Sent via email to <a href="javascript:{}" title="Recipients list">'.$recipients_count.' '.( $recipients_count == 1 ? 'recipient' : 'recipients' ).'</a> on '.$this->logged_user()->format_date( $transfer->get('created'), true );
 															break;	
 														case SNAPFER_TRANSFER_SOCIAL:
 															echo 'Uploaded for sharing on social medias on '.$this->logged_user()->format_date($transfer->get('created'), true );
@@ -102,7 +102,7 @@
 												?>													
 												</span>
 												<span data-bind="visible: !logged_user.is_premium()"><?php echo $this->logged_user()->format_date($transfer->get('expire'), true ); ?></span>
-												<span class="text-right nobr hidden-xs"><?php echo $files.' '.( $files == 1 ? 'file' : 'files' ); ?></span>
+												<span class="text-right nobr hidden-xs"><a href="javascript:{}" title="Files list"><?php echo $files.' '.( $files == 1 ? 'file' : 'files' ); ?></a></span>
 												<span class="text-right nobr hidden-xs"><?php echo o3_bytes_display('vU',$transfer->size()); ?></span>
 												<span class="text-right nobr hidden-xs"><?php echo $transfer->downloads().' '.( $downloads == 1 ? 'download' : 'downloads' ); ?></span>
 												<span class="text-center">

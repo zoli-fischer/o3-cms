@@ -10,7 +10,7 @@ function snapferFeedbackApp( opts ) {
 		parent: null
 	}, opts );
 
-	//set parent, pt_page object
+	//set parent
 	self.parent = function() {
 		return self.opts.parent;
 	};
@@ -78,7 +78,41 @@ function snapferFeedbackApp( opts ) {
 			//set loading flag
 			self.loading( true );
 
-			
+			//create data
+			var data  = {};
+			for ( prop in self.fields )
+				data[prop] = self.fields[prop].value();
+
+			//send ajax request
+			self.parent().ajax(
+				'send_feedback',
+				data,
+				function( event ){
+
+					//set success message
+					alert("Your message was sent. Thank you.");
+
+					//reset form
+					self.reset_form();
+
+					//set loading flag
+					self.loading( false );
+				}, 
+				function( data ){ 
+					
+					//set loading flag
+					self.loading( false );					
+
+					alert('An error occurred. Please try again.');
+				}, 
+				function(){ 		
+
+					//set loading flag
+					self.loading( false );
+
+					alert('An error occurred. Please try again.');
+				}
+			);
 
 		};
 	};
@@ -89,8 +123,7 @@ function snapferFeedbackApp( opts ) {
 
 		//init fields
 		for ( prop in fields ) {
-			if ( typeof self.fields[prop].default !== 'undefined' )
-				fields[prop].value( self.fields[prop].default );			
+			fields[prop].value( '' );			
 			fields[prop].$.blur();	
 		} 
 
@@ -108,6 +141,7 @@ function snapferFeedbackApp( opts ) {
 				fields[prop].value(fields[prop].$.val());
 			};
 		};	
+
 	}(); 
 
 };

@@ -13,6 +13,12 @@
 		//load transfer file app
 		$this->parent->body_js(O3_CMS_THEME_DIR.'/js/snapfer/snapfer.upload.file.app.js');
 
+		//load file uploader
+		$this->parent->body_js(O3_CMS_THEME_DIR.'/js/snapfer/snapfer.file.uploader.app.js');
+
+		//load file streamer
+		$this->parent->body_js(O3_CMS_THEME_DIR.'/js/snapfer/snapfer.file.streamer.app.js');
+
 	?>
 
 </head>
