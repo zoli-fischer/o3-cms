@@ -25,7 +25,10 @@
 <body class="<?php echo o3_ua_body_classes(); ?>">	
 	
 	<?php
-		
+
+		//insert Google Analytics code
+		$this->ga_script();
+
 		//load header
 		$this->view( 'o3_cms_template_view_header' );
 	
