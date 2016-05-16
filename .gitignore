@@ -2,4 +2,4 @@
 ftpsync.settings
 /cache/*
 /transf3rs/*
-*.sql
+#*.sql
