@@ -57,7 +57,7 @@ jQuery(document).ready(function(){
 	    //set delete buttons
 	   	$transfers.find('.delete-link').click(function(event){	   		
 	   		var $this = $(this),
-	   			transfer_id = $this.data('transfer-id');
+	   			transfer_id = $this.parents('li').data('transfer-id');
 
 	   		//stop event devault
 	    	event.preventDefault();
@@ -80,7 +80,49 @@ jQuery(document).ready(function(){
  
 	    	};
 
-	   	});	   	
+	   	});	  
+
+	   	//set file list button 	
+	   	$transfers.find('.files-popup').click(function(event){	   		
+	   		var $this = $(this),
+	   			transfer_id = $this.parents('li').data('transfer-id');
+
+	   		//stop event devault
+	    	event.preventDefault();	    	
+
+	    	popup( 'transfer_files', 
+	    			{ 
+	    				transfer_id: transfer_id 
+	    			}, { 
+	    				width: 640, 
+	    				height: 480,
+	    				header: {
+	    					title: $this.attr('title')
+	    				}
+	    			} ).show();
+	    	
+	   	});
+
+	   	//set recipients list button 	
+	   	$transfers.find('.recipients-popup').click(function(event){	   		
+	   		var $this = $(this),
+	   			transfer_id = $this.parents('li').data('transfer-id');
+
+	   		//stop event devault
+	    	event.preventDefault();	    	
+
+	    	popup( 'transfer_recipients', 
+	    			{ 
+	    				transfer_id: transfer_id 
+	    			}, { 
+	    				width: 640, 
+	    				height: 480,
+	    				header: {
+	    					title: $this.attr('title')
+	    				}
+	    			} ).show();
+	    	
+	   	});
 
 	};
 

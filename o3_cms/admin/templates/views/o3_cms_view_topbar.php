@@ -11,7 +11,7 @@
 	</span>
 
 	<ul class="o3-cms-global-tools"><?php
-		if ( $this->o3_cms->logged_user()->is_logged() ) {
+		/*if ( $this->o3_cms->logged_user()->is_logged() ) {
 		?>		
 		<li class="hidden-lg hidden-md hidden-sm hidden-xs o3-cms-dropdown">
 			<a href="#ids" data-o3-cms-toggle="open"><i class="fa fa-mobile"></i></a>
@@ -44,6 +44,7 @@
 			<a href="javascript:{}"><i class="fa fa-cog"></i></a>
 		</li><?php
 		}
+		*/
 		?><li class="o3-cms-dropdown">
 			<a href="#o3-cms-dropdown-languages" data-o3-cms-toggle="open"><i class="fa fa-language"></i></a>
 
@@ -87,7 +88,7 @@
 		</li>--><?php
 		}
 		?><li>
-			<a href="javascript:{}"><i class="fa fa-question "></i></a>
+			<a href="javascript:{}" onclick="alert('Todo: Write help message');"><i class="fa fa-question "></i></a>
 		</li>
 	</ul>
 
@@ -99,7 +100,7 @@
 	?>
 	<ul class="o3-cms-secondary-tools">
 		<li>
-			<a href=""><i class="fa fa-bars"></i> <span>Modules</span></a>
+			<a href="#" data-bind="click: function(){ leftmenu( !leftmenu() ) }" class="btn-module"><i class="fa fa-bars"></i><i class="fa fa-arrow-left"></i> <span>Modules</span></a>
 		</li><li>
 			<a href=""><i class="fa fa-users"></i> <span class="hidden-xs">Users</span></a>
 		</li><li>
@@ -114,14 +115,14 @@
 
 	<ul class="o3-cms-secondary-tools">
 		<li>
-			<a href="<?php echo $this->o3_cms->page_url(); ?>"><i class="fa fa-globe"></i> <span class="hidden-md hidden-sm hidden-xs">{o3_lang:o3-cms-frontpage}</span></a>
+			<a href="/"><i class="fa fa-globe"></i> <span class="hidden-md hidden-sm hidden-xs">{o3_lang:o3-cms-frontpage}</span></a>
 		</li><?php
 		if ( $this->o3_cms->logged_user()->is_logged() ) {
 		?><li>
 			<a href=""><i class="fa fa-lightbulb-o"></i> <span class="hidden-md hidden-sm hidden-xs">Highlight</span></a>
-		</li><li>
+		</li><!--<li>
 			<a href=""><i class="fa fa-trash-o"></i> <span class="hidden-md hidden-sm hidden-xs">Trash</span></a>
-		</li>	
+		</li>-->
 		<?php
 		}
 		?>

@@ -1,24 +1,5 @@
 <?php
 
-/**
- * O3 CMS Objects interface
- *
- * @package o3 cms
- * @link    todo: add url
- * @author  Zotlan Fischer <zlf@web2it.dk>
- * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- */
-
-interface o3_cms_object_interface  {
-		
-	/*
-	* Load object with id
-	* @param id object id to select
-	*/
-	public function load( $id );
- 
-
-}
 
 /**
  * O3 CMS Object class
@@ -29,7 +10,7 @@ interface o3_cms_object_interface  {
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
-abstract class o3_cms_object implements o3_cms_object_interface {
+abstract class o3_cms_object {
 
 	/** array | boolean Data of the object. Null if no object data. */	
 	protected $data = null;
@@ -56,6 +37,12 @@ abstract class o3_cms_object implements o3_cms_object_interface {
 		if ( $id !== null )
 			$this->load( $id );
 	}
+	
+	/*
+	* Load object with id
+	* @param id object id to select
+	*/
+	abstract public function load( $id );
 
 	/*
 	* Re-load object with the current id

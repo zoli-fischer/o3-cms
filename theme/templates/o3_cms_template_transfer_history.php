@@ -75,14 +75,14 @@
 											$files = $transfer->files_count();
 											$downloads = $transfer->downloads();
 											?>
-											<li data-title="<?php echo o3_html($transfer->share_title()); ?>" data-desc="<?php echo o3_html($transfer->share_desc()); ?>" />
+											<li data-title="<?php echo o3_html($transfer->share_title()); ?>" data-desc="<?php echo o3_html($transfer->share_desc()); ?>" data-transfer-id="<?php echo o3_html($transfer->get('canonical_id')); ?>" />
 												<span>
 												<?php
 													switch ($transfer->get('way')) {
 														case SNAPFER_TRANSFER_EMAIL:
 															$recipients = $transfer->recipients();														
 															$recipients_count = count($recipients);
-															echo 'Sent via email to <a href="javascript:{}" title="Recipients list">'.$recipients_count.' '.( $recipients_count == 1 ? 'recipient' : 'recipients' ).'</a> on '.$this->logged_user()->format_date( $transfer->get('created'), true );
+															echo 'Sent via email to <a href="javascript:{}" class="recipients-popup" title="'.$recipients_count.' '.( $recipients_count == 1 ? 'recipient' : 'recipients' ).'">'.$recipients_count.' '.( $recipients_count == 1 ? 'recipient' : 'recipients' ).'</a> on '.$this->logged_user()->format_date( $transfer->get('created'), true );
 															break;	
 														case SNAPFER_TRANSFER_SOCIAL:
 															echo 'Uploaded for sharing on social medias on '.$this->logged_user()->format_date($transfer->get('created'), true );
@@ -105,7 +105,7 @@
 												?>													
 												</span>
 												<span data-bind="visible: !logged_user.is_premium()"><?php echo $this->logged_user()->format_date($transfer->get('expire'), true ); ?></span>
-												<span class="text-right nobr hidden-xs"><a href="javascript:{}" title="Files list"><?php echo $files.' '.( $files == 1 ? 'file' : 'files' ); ?></a></span>
+												<span class="text-right nobr hidden-xs"><a href="javascript:{}" class="files-popup" title="<?php echo $files.' '.( $files == 1 ? 'file' : 'files' ); ?>"><?php echo $files.' '.( $files == 1 ? 'file' : 'files' ); ?></a></span>
 												<span class="text-right nobr hidden-xs"><?php echo o3_bytes_display('vU',$transfer->size()); ?></span>
 												<span class="text-right nobr hidden-xs"><?php echo $transfer->downloads().' '.( $downloads == 1 ? 'download' : 'downloads' ); ?></span>
 												<span class="text-center">
@@ -119,7 +119,7 @@
 
 													<a href="<?php echo o3_html($transfer->zip_url()); ?>" title="Download all files" class="btn btn-small btn-primary"><i class="fa fa-cloud-download"></i></a>
 													<a href="<?php echo o3_html($transfer->url()); ?>" title="Open" target="_blank" class="btn btn-small open-link"><i class="fa fa-link"></i></a>
-													<a href="#" class="btn btn-small btn-danger delete-link" title="Delete" data-transfer-id="<?php echo o3_html($transfer->get('canonical_id')); ?>"><i class="fa fa-trash"></i></a>
+													<a href="#" class="btn btn-small btn-danger delete-link" title="Delete"><i class="fa fa-trash"></i></a>
 
 												</span>
 											</li>

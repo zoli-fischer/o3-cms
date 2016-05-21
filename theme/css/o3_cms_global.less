@@ -87,7 +87,6 @@ html.no-scroll {
 #o3-cms-wrapper {
 	width: 100%;
 	height: 100%;
-	overflow: hidden;
 	padding-top: 56px;
 
 	@media (max-width:767px) {
@@ -491,6 +490,41 @@ form,
 	}
 }
 
+/* O3 POP */
+
+.o3_popup_container_title {
+	background: #333;
+
+	span {
+		color: #fff;
+		text-shadow: none;
+		font-family: 'Slabo 13px', sans-serif;
+		font-size: 22px;
+	}
+}
+
+.o3_popup_container_close {
+	color: #ffffff;
+	font-size: 22px;
+
+	-webkit-transition: all .3s ease-in-out;
+	-moz-transition: all .3s ease-in-out;
+	-ms-transition: all .3s ease-in-out;
+	-o-transition: all .3s ease-in-out;
+	transition: all .3s ease-in-out;
+	
+	span {
+		position: relative;
+		top: -2px;
+	}
+
+	&:hover,
+	&:focus {
+		color: #333;
+		background: #fff;
+	}
+}
+
 /* CIRCLE ICONS */
 
 .circle {
@@ -883,6 +917,7 @@ ul.data-table {
 			border-left: 1px solid #ccc;
 			color: #000000 !important;
 			font-size: 14px;
+			background: #ffffff;
 
 			vertical-align: middle; 
 
@@ -897,6 +932,12 @@ ul.data-table {
 		&:first-child {
 			span {
 				background: #eee !important;
+			}
+		}
+
+		&:nth-child(2) {
+			span {
+				background: #ffffff;
 			}
 		}
 

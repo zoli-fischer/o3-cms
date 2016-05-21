@@ -59,3 +59,34 @@ function share( url, type, title, summary ) {
 			break;
 	};
 }
+
+//open inline popup
+function popup( name, param, options ) {
+
+	//extend options
+	options = jQuery.extend({
+			width: 420,
+			height: 500			
+		}, options );
+
+	//create url
+	var url = '/index.php?snapfer-popup-name='+name+'&snapfer_logged_user_id='+window.snapfer.logged_user.id();
+	for ( i in param )
+		url += '&'+i+'='+param[i];
+
+	//extend body options
+	options.body = jQuery.extend({
+			type: 'url',
+			src: url
+		}, options.body );
+
+	//extend footer options
+	options.footer = jQuery.extend({
+			visible: false
+		}, options.footer );
+
+	return new o3_popup(options);
+}
+
+//set global popup zindex to cover the fixed menu
+window.o3_popup_zindex = 999999999;

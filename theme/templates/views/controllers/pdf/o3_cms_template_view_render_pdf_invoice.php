@@ -1,9 +1,12 @@
 <?php
 
+//Require theme view controller class
+require_once(O3_CMS_THEME_DIR.'/classes/snapfer_view_controller.php');
+
 //Require payment class
 require_once(O3_CMS_THEME_DIR.'/classes/snapfer_payment.php');
 
-class o3_cms_template_view_render_pdf_invoice extends o3_cms_template_view_controller {
+class o3_cms_template_view_render_pdf_invoice extends snapfer_view_controller {
 
 	protected $payment = null;
 

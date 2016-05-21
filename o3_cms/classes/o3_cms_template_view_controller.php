@@ -30,11 +30,56 @@ class o3_cms_template_view_controller extends o3_template_view_controller {
 		$this->o3_cms = &$o3_cms;
 		
 	}
-	
+
 	/*
 	* On template initializations
 	*/
 	public function init() {}
+
+	/*
+	* On before template initializations
+	*/
+	public function before_load() {}
+
+	/*
+	* On after template initializations
+	*/
+	public function after_load() {
+
+		//handle ajax calls
+		//$this->ajax();
+
+	}
+
+	protected $ajax_result = null;
+
+	/**
+	* Ajax call handler
+	*/
+	public function ajax() {		
+		if ( isset($_POST['o3_cms_template_ajax']) ) {
+			$ajax_name = 'ajax_'.o3_post('o3_cms_template_ajax_name');
+
+			//todo - private, public
+
+			//ajax result
+			$this->ajax_result = new o3_ajax_result();
+
+			//set default as fail
+			$this->ajax_result->error();
+
+			if ( method_exists( $this, $ajax_name ) ) {
+				$this->{$ajax_name}();
+			} else {
+				//set default as fail
+				$this->o3->debug->_( "Method '$ajax_name' not defined in ".get_class($this)."." );
+			}
+
+			//flush
+			$this->ajax_result->flush();
+
+		}
+	}
 
 	/*
 	* Return o3 object

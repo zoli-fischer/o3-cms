@@ -8,7 +8,7 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <![endif]-->
 
-<title><?php echo o3_html($this->parent->page_title()); ?></title>
+<title data-bind="text: wnd.title()"><?php echo o3_html($this->parent->page_title()); ?></title>
 
 <!--[if lt IE 9]> 
 	<script src="https://html5shim.googlecode.com/svn/trunk/html5.js"></script> 
@@ -26,5 +26,10 @@
 	
 	//require template js and css/less
 	$this->parent->require_js_css();
+
+	//require admin app
+	$this->parent->parent->body_js(O3_CMS_ADMIN_DIR.'/js/o3_cms_admin_app/o3_cms_admin_app.js');
+	$this->parent->parent->body_js(O3_CMS_ADMIN_DIR.'/js/o3_cms_admin_app/o3_cms_admin_wnd_app.js');
+	$this->parent->parent->body_js(O3_CMS_ADMIN_DIR.'/js/o3_cms_admin_app/o3_cms_admin_content_app.js');
 
 ?>

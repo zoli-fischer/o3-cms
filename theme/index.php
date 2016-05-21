@@ -8,6 +8,10 @@ if ( isset($_REQUEST['render-pdf']))
 if ( isset($_REQUEST['cronjob-hourly']))
 	require_once('cronjob-hourly.php');
 
+//handle popups
+if ( isset($_REQUEST['snapfer-popup-name']))
+	require_once('popup.php');
+
 //handle file download request
 if ( isset($_GET['dl']) ) {
 

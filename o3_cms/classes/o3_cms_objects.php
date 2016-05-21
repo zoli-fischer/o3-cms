@@ -1,30 +1,5 @@
 <?php
 
-
-/**
- * O3 CMS Objects interface
- *
- * @package o3 cms
- * @link    todo: add url
- * @author  Zotlan Fischer <zlf@web2it.dk>
- * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- */
-
-interface o3_cms_objects_interface  {
-		
-	/*
-	* Use as a constructor
-	*/
-	public function init();
-
-	/*
-	* Use as a constructor
-	*/
-	public function tablename_index();
-
-}
-
-
 /**
  * O3 CMS Objects class
  *
@@ -34,7 +9,7 @@ interface o3_cms_objects_interface  {
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 
-abstract class o3_cms_objects implements o3_cms_objects_interface {
+abstract class o3_cms_objects {
 
 	//global o3
 	protected $o3 = null;
@@ -60,9 +35,19 @@ abstract class o3_cms_objects implements o3_cms_objects_interface {
 	}	
 
 	/*
-	* Get table name
+	* Use as a constructor
 	*/
-	function tablename() {
+	abstract public function init();
+
+	/*
+	* Get table name withour prefix assigned to the object
+	*/
+	abstract public function tablename_index();
+
+	/*
+	* Get table name assigned to the object
+	*/
+	public function tablename() {
 		return $this->o3->mysqli->tablename($this->tablename_index());
 	}
 

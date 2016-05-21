@@ -10,7 +10,7 @@
 	?>
 
 </head>
-<body class="<?php echo o3_ua_body_classes(); ?>">	
+<body class="<?php echo o3_ua_body_classes(); ?>" data-bind="css: { 'o3-cms-show-left-menu': leftmenu() }">	
 
 	<div id="o3-cms-wrapper">
 		<div class="o3-cms-table" id="o3-cms-main">
@@ -27,7 +27,7 @@
 				</div>
 			</div>
 			<div class="o3-cms-row">
-				<div class="o3-cms-cell o3-cms-valign-top o3-cms-bg-light-white o3-cms-show-left-menu" id="o3-cms-content">
+				<div class="o3-cms-cell o3-cms-valign-top o3-cms-bg-light-white" id="o3-cms-content">
 					<div>
 					
 						<div id="o3-cms-frame">
@@ -40,21 +40,26 @@
 							<a href=""><span class="fa fa-angle-up"></span>Modules</a>
 							<ul>
 								<li>
+									<a href=""><span></span>Snapfer users</a>
+									<a href=""><span></span>Snapfer transfers</a>
+								</li>
+							</ul>
+
+							<a href=""><span class="fa fa-angle-up"></span>System</a>
+							<ul>								
+								<li>
 									<a href=""><span></span>New page</a>
 								</li>
 								<li>
 									<a href=""><span></span>Files</a>
 								</li>
+								<!--
 								<li>
 									<a href=""><span></span>Categories</a>
-								</li>
+								</li>-->
 								<li>
-									<a href=""><span></span>Menu</a>
+									<a href=""><span></span>Menu groups</a>
 								</li>
-							</ul>
-
-							<a href=""><span class="fa fa-angle-up"></span>System</a>
-							<ul>
 								<li>
 									<a href=""><span></span>Templates</a>
 								</li>

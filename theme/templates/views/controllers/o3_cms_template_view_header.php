@@ -1,6 +1,9 @@
 <?php
 
-class o3_cms_template_view_header extends o3_cms_template_view_controller {
+//Require theme view controller class
+require_once(O3_CMS_THEME_DIR.'/classes/snapfer_view_controller.php');
+
+class o3_cms_template_view_header extends snapfer_view_controller {
 
 	public function init() {
 

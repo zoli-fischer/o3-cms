@@ -39,7 +39,7 @@ o3_popup = function( opts ) {
 						onbeforeclose: null,
 						onafterload: null,
 						onbeforeload: null,
-						onsubmit: null	
+						onsubmit: null
 					  }, opts );
 
 	t.opts.header = jQuery.extend({ visible: true, //is visible
